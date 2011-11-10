@@ -352,6 +352,12 @@ int main(int argc, char *const argv[]) {
 		}
 		syslog(LOG_NOTICE, "%s: PIN accepted", state.modem.tty);
 		umts_config_set(&state, "simstate", "ready");
+
+		// Wait a few seconds for the dongle to find a carrier.
+		// Some dongles apparently do not send a NO CARRIER reply to the
+		// dialing, but instead hang up directly after sending a CONNECT
+		// reply (Alcatel X060S / 1bbb:0000 showed this problem).
+		sleep_seconds(5);
 	}
 
 	if (app == UMTS_APP_UNLOCK)
