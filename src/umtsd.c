@@ -105,6 +105,11 @@ static void umts_exitcode(int code) {
 	exit(code);
 }
 
+static void sleep_seconds(int seconds) {
+	const struct timespec ts = {.tv_sec = seconds};
+	nanosleep(&ts, NULL);
+}
+
 int main(int argc, char *const argv[]) {
 	openlog("umtsd", LOG_PID | LOG_PERROR, LOG_USER);
 
@@ -412,7 +417,6 @@ int main(int argc, char *const argv[]) {
 	}
 
 	int status = -1;
-	const struct timespec ts = {.tv_sec = 15};
 	int logsteps = 4;	// Report RSSI / BER to syslog every LOGSTEPS intervals
 	char provider[64] = {0};
 
@@ -423,7 +427,7 @@ int main(int argc, char *const argv[]) {
 			umts_config_set(&state, "connected", "1");
 			ucix_save(state.uci, state.uciname);
 		} else {
-			nanosleep(&ts, NULL);
+			sleep_seconds(15);
 			if (signaled) break;
 		}
 
