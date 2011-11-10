@@ -349,6 +349,10 @@ int main(int argc, char *const argv[]) {
 		umts_config_set(&state, "simstate", "ready");
 	}
 
+	if (app == UMTS_APP_UNLOCK)
+		umts_exitcode(UMTS_OK); // We are done here.
+
+
 	int is_gsm = 0;
 	if (umts_tty_put(state.ctlfd, "AT+GCAP\r") >= 0
 	&& umts_tty_get(state.ctlfd, b, sizeof(b), 2500) == UMTS_AT_OK) {
@@ -364,9 +368,6 @@ int main(int argc, char *const argv[]) {
 	|| umts_tty_get(state.ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
 		syslog(LOG_CRIT, "%s: failed to set verbose provider info (%s)", state.modem.tty, b);
 	}
-
-	if (app == UMTS_APP_UNLOCK)
-		umts_exitcode(UMTS_OK); // We are done here.
 
 	// Setting network mode if GSM
 	if (is_gsm) {
