@@ -298,8 +298,11 @@ int main(int argc, char *const argv[]) {
 		// Reset PIN with PUK
 		if (simstate != 2)
 			umts_exitcode(UMTS_ESIM);
-		if (optind + 1 <= argc)
+		// Need two arguments
+		if (optind + 2 != argc) {
+			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.tty);
 			umts_exitcode(UMTS_EINVAL);
+		}
 
 		// Prepare command
 		const char *puk = argv[optind];
