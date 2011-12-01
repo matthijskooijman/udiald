@@ -76,7 +76,8 @@ int umts_dial_main(struct umts_state *state) {
 	for (int i = 0; i < 9; ++i) { // Wait 9 * 5s for network
 		tcflush(0, TCIFLUSH);
 		umts_tty_put(1, "ATD*99#\r");
-		if ((res = umts_tty_get(0, b, sizeof(b), 10000)) != UMTS_AT_NOCARRIER)
+		res = umts_tty_get(0, b, sizeof(b), 10000);
+		if (res != UMTS_AT_NOCARRIER && res != UMTS_AT_OK)
 			break;
 		syslog(LOG_NOTICE, "%s: No carrier. Waiting for network...", tty);
 		sleep(5);
