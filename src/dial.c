@@ -38,12 +38,14 @@ int umts_dial_main(struct umts_state *state) {
 	char b[512];
 
 	// Reset, unecho, ...
+	syslog(LOG_NOTICE, "%s: Preparing to dial", tty);
 	umts_tty_put(1, "ATE0\r");
 	if (umts_tty_get(0, b, sizeof(b), 2500) != UMTS_AT_OK) {
 		syslog(LOG_ERR, "%s: Error disabling echo (%s)",
 				tty, (b[0]) ? b : strerror(errno));
 		return UMTS_EDIAL;
 	}
+	syslog(LOG_NOTICE, "%s: Echo disabled", tty);
 
 	// Reset, unecho, ...
 	umts_tty_put(1, "ATH\r");
@@ -52,9 +54,11 @@ int umts_dial_main(struct umts_state *state) {
 				tty, (b[0]) ? b : strerror(errno));
 		return UMTS_EDIAL;
 	}
+	syslog(LOG_NOTICE, "%s: Modem reset", tty);
 
 	// Set PDP and APN
 	char *apn = umts_config_get(state, "umts_apn");
+
 	snprintf(b, sizeof(b), "AT+CGDCONT=1,\"IP\",\"%s\"\r",
 		(apn && !strpbrk(apn, "\"\r\n;")) ? apn : "");
 

@@ -272,7 +272,7 @@ int main(int argc, char *const argv[]) {
 	if (umts_tty_put(state.ctlfd, "AT+CPIN?\r") < 1
 	|| umts_tty_get(state.ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK
 	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
-		syslog(LOG_CRIT, "%s: Unable to get SIM status", state.modem.tty);
+		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state.modem.tty, b);
 		umts_config_set(&state, "simstate", "error");
 		umts_exitcode(UMTS_ESIM);
 	}
@@ -324,7 +324,7 @@ int main(int argc, char *const argv[]) {
 			umts_config_set(&state, "simstate", "ready");
 			umts_exitcode(UMTS_OK);
 		} else {
-			syslog(LOG_CRIT, "%s: Failed to reset PIN", state.modem.tty);
+			syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state.modem.tty, b);
 			umts_exitcode(UMTS_EUNLOCK);
 		}
 	}
@@ -347,7 +347,7 @@ int main(int argc, char *const argv[]) {
 		tcflush(state.ctlfd, TCIFLUSH);
 		if (umts_tty_put(state.ctlfd, b) < 0
 		|| umts_tty_get(state.ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
-			syslog(LOG_CRIT, "%s: PIN rejected", state.modem.tty);
+			syslog(LOG_CRIT, "%s: PIN rejected (%s)", state.modem.tty, b);
 			umts_exitcode(UMTS_EUNLOCK);
 		}
 		syslog(LOG_NOTICE, "%s: PIN accepted", state.modem.tty);
@@ -393,8 +393,8 @@ int main(int argc, char *const argv[]) {
 		if (state.modem.cfg->modecmd[mode][0]
 		&& (umts_tty_put(state.ctlfd, state.modem.cfg->modecmd[mode]) < 0
 		|| umts_tty_get(state.ctlfd, b, sizeof(b), 5000) != UMTS_AT_OK)) {
-			syslog(LOG_CRIT, "%s: Failed to set mode %s",
-				state.modem.tty, (m) ? m : "auto");
+			syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
+				state.modem.tty, (m) ? m : "auto", b);
 			free(m);
 			umts_exitcode(UMTS_EMODEM);
 		}

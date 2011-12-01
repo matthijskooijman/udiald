@@ -27,6 +27,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <syslog.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -140,6 +141,11 @@ int umts_modem_find(struct umts_modem *modem) {
 		}
 
 		globfree(&gl);
+		if (modem->cfg) {
+			syslog(LOG_NOTICE, "%s: Using control tty %d", modem->tty, modem->cfg->ctlidx);
+			syslog(LOG_NOTICE, "%s: Using data tty %d", modem->tty, modem->cfg->datidx);
+		}
+
 		return (modem->cfg) ? 0 : -ENODEV;
 	} else {
 		return umts_modem_identify(modem);
