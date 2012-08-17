@@ -80,16 +80,27 @@ enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
 	char *c = buf;
 	size_t rem = len - 1;
 
+	int err;
+
 	// Modems are evil, they might not send the complete answer when doing
 	// a read, so we read until we get a known AT status code (see top)
 	while (rem > 0) {
-		if (poll(&pfd, 1, timeout) < 1) {
+		err = poll(&pfd, 1, timeout);
+		if (err == 0) {
+			syslog(LOG_ERR, "Poll timed out");
 			errno = ETIMEDOUT;
+			return -1;
+		}
+		if (err < 0) {
+			syslog(LOG_ERR, "Poll failed: %s", strerror(errno));
 			return -1;
 		}
 
 		ssize_t rxed = read(fd, c, rem);
-		if (rxed < 1) return -1;
+		if (rxed < 1) {
+			syslog(LOG_ERR, "Read failed: %s", strerror(rxed));
+			return -1;
+		}
 
 		*(c + rxed) = 0;
 		if (verbose >= 2)
@@ -124,6 +135,7 @@ enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
 				return i;
 	}
 
+	syslog(LOG_ERR, "No complete response received within %zu bytes", len);
 	errno = ERANGE;
 	return -1;
 }

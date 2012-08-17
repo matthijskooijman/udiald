@@ -471,6 +471,7 @@ int main(int argc, char *const argv[]) {
 		}
 		ucix_save(state.uci, state.uciname);
 	}
+	syslog(LOG_NOTICE, "Received signal %d, disconnecting", signaled);
 
 	umts_config_revert(&state, "pid");
 	umts_config_revert(&state, "connected");
