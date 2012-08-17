@@ -36,6 +36,7 @@
 
 static volatile int signaled = 0;
 static struct umts_state state = {.uciname = "network", .profile = "wan"};
+int verbose = 0;
 
 
 static int umts_usage(const char *app) {
@@ -118,7 +119,6 @@ int main(int argc, char *const argv[]) {
 		UMTS_APP_UNLOCK, UMTS_APP_DIAL,
 		UMTS_APP_PINPUK
 	} app = UMTS_APP_CONNECT;
-	int verbose = 0;
 
 	int s;
 	while ((s = getopt(argc, argv, "csupden:vt")) != -1) {

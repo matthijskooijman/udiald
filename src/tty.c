@@ -65,6 +65,8 @@ int umts_tty_open(const char *tty) {
 }
 
 int umts_tty_put(int fd, const char *cmd) {
+	if (verbose >= 2)
+		syslog(LOG_DEBUG, "Writing: %s", cmd);
 	if (write(fd, cmd, strlen(cmd)) != strlen(cmd))
 		return -1;
 	return strlen(cmd);
@@ -89,8 +91,11 @@ enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
 		ssize_t rxed = read(fd, c, rem);
 		if (rxed < 1) return -1;
 
+		*(c + rxed) = 0;
+		if (verbose >= 2)
+			syslog(LOG_DEBUG, "Read: %s", c);
 		rem -= rxed;
-		*(c += rxed) = 0;
+		c += rxed;
 
 		// AT status codes end in \r(\n)
 		if ((c[-1] != '\r' && c[-1] != '\n') || &c[-2] <= buf)

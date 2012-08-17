@@ -83,6 +83,8 @@ struct umts_state {
 	pid_t pppd;
 };
 
+extern int verbose;
+
 int umts_modem_find(struct umts_modem *modem);
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
