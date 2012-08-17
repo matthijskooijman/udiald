@@ -167,7 +167,9 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	// We need to pass ourselve as connect script so get our path from /proc
 	memcpy(buf, "connect \"", 9);
 	ssize_t l = readlink("/proc/self/exe", buf + 9, sizeof(buf) - 10);
-	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -dn%s\"\n", state->profile);
+	/* Pass on verbosity options */
+	char *verbose_opts = (verbose == 0 ? "" : verbose == 1 ? " -v" : " -v -v");
+	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -dn%s%s\"\n", state->profile, verbose_opts);
 	fputs(buf, fp);
 
 	// Set linkname and ipparam
@@ -210,6 +212,12 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	s = umts_config_get(state, "umts_pass");
 	fprintf(fp, "password \"%s\"\n", (s && !strpbrk(s, "\"\r\n")) ? s : "");
 	free(s);
+
+	if (verbose) /* Log to stderr (as well as syslog) */
+		fputs("logfd 2\n", fp);
+
+	if (verbose >= 2) /* Include extra debug info */
+		fputs("debug\n", fp);
 
 	// Additional parameters
 	struct list_head opts = LIST_HEAD_INIT(opts);
