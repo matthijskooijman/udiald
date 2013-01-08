@@ -2,7 +2,7 @@
 #define UMTS_CONFIG_H_
 
 #include <libubox/list.h>
-#include <libubox/ucix.h>
+#include "ucix.h"
 
 static inline char* umts_config_get(struct umts_state *s, const char *key) {
 	return ucix_get_option(s->uci, s->uciname, s->profile, key);

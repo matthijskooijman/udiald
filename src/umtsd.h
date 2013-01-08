@@ -9,10 +9,10 @@
 #define UMTSD_H_
 
 #include <libubox/list.h>
-#include <libubox/ucix.h>
 #include <sys/types.h>
 #include <stdint.h>
 #include <errno.h>
+#include "ucix.h"
 
 #define UMTS_FLAG_TESTSTATE	0x01
 #define UMTS_FLAG_NOERRSTAT	0x02
