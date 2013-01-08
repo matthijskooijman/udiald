@@ -55,6 +55,26 @@ static struct umts_device {
 			},
 		},
 	},
+	{
+		.vendor = 0x12d1,	// Huawei
+		.device = 0x1433,	// E173
+		.cfg = {
+			.ctlidx = 2,
+			.datidx = 0,
+			.modecmd = {
+				// These haven't been well-tested (just
+				// copied from the Huawei generic
+				// config). Seems that the device
+				// doesn't get carrier after switching
+				// from (force-)gprs to umts.
+				[UMTS_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
+				[UMTS_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
+				[UMTS_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
+				[UMTS_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
+				[UMTS_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
+			},
+		},
+	},
 
 
 // VENDOR DEFAULT CONFIGS
