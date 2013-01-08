@@ -112,13 +112,12 @@ static void sleep_seconds(int seconds) {
 }
 
 int main(int argc, char *const argv[]) {
-	openlog("umtsd", LOG_PID | LOG_PERROR, LOG_USER);
-
 	enum umts_app {
 		UMTS_APP_CONNECT, UMTS_APP_SCAN,
 		UMTS_APP_UNLOCK, UMTS_APP_DIAL,
 		UMTS_APP_PINPUK
 	} app = UMTS_APP_CONNECT;
+	char *appname = "umtsd"; /* for syslog */
 
 	int s;
 	while ((s = getopt(argc, argv, "csupden:vt")) != -1) {
@@ -141,6 +140,7 @@ int main(int argc, char *const argv[]) {
 
 			case 'd':
 				app = UMTS_APP_DIAL;
+				appname = "umtsd-dialer";
 				break;
 
 			case 'e':
@@ -163,6 +163,9 @@ int main(int argc, char *const argv[]) {
 				return umts_usage(argv[0]);
 		}
 	}
+
+	openlog(appname, LOG_PID | LOG_PERROR, LOG_USER);
+
 
 	if (!verbose)
 		setlogmask(LOG_UPTO(LOG_NOTICE));
