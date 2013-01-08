@@ -25,6 +25,12 @@
 #include <libubox/list.h>
 #include <stdlib.h>
 
+#ifndef uci_to_delta
+// Support older version of uci, where this function was named
+// differently
+#define uci_add_delta_path uci_add_history_path
+#endif
+
 struct ucilist {
 	struct list_head list;
 	char *val;
