@@ -419,11 +419,8 @@ int main(int argc, char *const argv[]) {
 	sigaction(SIGCHLD, &sa, NULL);
 
 	// Start pppd to dial
-	if (!(state.pppd = umts_tty_pppd(&state))) {
-		syslog(LOG_CRIT, "%s: Failed to create pppd process (%s)",
-				state.modem.tty, strerror(errno));
+	if (!(state.pppd = umts_tty_pppd(&state)))
 		umts_exitcode(UMTS_EINTERNAL);
-	}
 
 	int status = -1;
 	int logsteps = 4;	// Report RSSI / BER to syslog every LOGSTEPS intervals

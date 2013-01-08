@@ -160,12 +160,24 @@ int umts_tty_cloexec(int fd) {
 pid_t umts_tty_pppd(struct umts_state *state) {
 	char cpath[16 + sizeof(state->profile)] = "/tmp/umtsd-pppd-";
 	strcat(cpath, state->profile);
-	unlink(cpath);
+	if (unlink(cpath) < 0 && errno != ENOENT) {
+		syslog(LOG_CRIT, "%s: Failed to clean up existing ppp config file: %s",
+				state->modem.tty, strerror(errno));
+		return 0;
+	}
 
 	// Create config file
 	FILE *fp;
 	int cfd = open(cpath, O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
-	if (cfd < 0 || !(fp = fdopen(cfd, "w"))) {
+	if (cfd < 0) {
+		syslog(LOG_CRIT, "%s: Failed to create ppp config file: %s",
+				state->modem.tty, strerror(errno));
+		return 0;
+	}
+
+	if (!(fp = fdopen(cfd, "w"))) {
+		syslog(LOG_CRIT, "%s: Failed to create FILE* for ppp config file: %s",
+				state->modem.tty, strerror(errno));
 		close(cfd);
 		return 0;
 	}
@@ -248,8 +260,12 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	pid_t pid = vfork();
 	if (pid == 0) {
 		execv(argv[0], argv);
+		syslog(LOG_CRIT, "%s: Failed to exec %s: %s",
+				state->modem.tty, argv[0], strerror(errno));
 		_exit(128);
 	} else if (pid == -1) {
+		syslog(LOG_CRIT, "%s: Failed to fork for pppd: %s",
+				state->modem.tty, strerror(errno));
 		return 0;
 	} else {
 		return pid;
