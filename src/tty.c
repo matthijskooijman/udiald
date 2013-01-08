@@ -30,8 +30,6 @@
 #include <stdio.h>
 #include <poll.h>
 #include <string.h>
-#include <libubox/ucix.h>
-#include <libubox/uapi.h>
 #include "umtsd.h"
 #include "config.h"
 
