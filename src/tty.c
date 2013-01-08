@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <poll.h>
 #include <string.h>
+#include <syslog.h>
 #include "umtsd.h"
 #include "config.h"
 
