@@ -4,6 +4,9 @@ BINARY:=umtsd
 SOURCES:=$(wildcard src/*.c)
 HEADERS:=$(wildcard src/*.h)
 
+# Allow locally setting CFLAGS etc, which is useful during development.
+-include Makefile.local
+
 all: $(BINARY)
 
 $(BINARY): $(SOURCES) $(HEADERS)
