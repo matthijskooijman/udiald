@@ -1,0 +1,43 @@
+config network wan
+# Generic UMTS options
+#	option umts_basetty	ttyACM0		#commented = autodetect first modem
+	option umts_pin		""
+	option umts_apn		""
+#	option umts_user	""
+#	option umts_pass	""
+#	option umts_mode	auto
+#	option umts_mtu		1500
+
+# Some additional PPP options (and default values)
+#	option defaultroute	1
+#	option replacedefaultroute	0
+#	option usepeerdns	1
+#	option unit		-1
+#	option persist		1
+#	option maxfail		1
+#	option holdoff		0
+	
+# Additional custom PPP options
+#	list umts_pppdopt "option line"
+	
+	
+# /var/state shadow draft
+#
+#config status wan
+# Set by every call (modem infos, capabilities)
+#	option modem_name	Ericsson F3507g R1B/1
+#	option modem_id		0bdb:1900
+#	option modem_driver	cdc_acm
+#	list modem_mode 	auto
+#	list modem_mode		force-umts
+#	list modem_mode 	force-gprs
+#
+# Set by every call except scan (last SIM status, last error)
+#	option simstate [ready|wantpin|wantpuk|error]
+#	option error [inval|internal|device|modem|sim|unlock|dial|auth|ppp|network]
+#
+# Set while connected
+# 	option pid		1234
+#	option connected 	1
+#	option provider		foobar
+#	option rssi		99
