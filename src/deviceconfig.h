@@ -19,7 +19,7 @@
  * When autoselecting a profile from this list, the first entry that has
  * all of its conditions (vendor, device, driver) matched will be used.
  */
-static struct umts_profile profiles[] = {
+static const struct umts_profile profiles[] = {
 	{
 		.name   = "Ericsson F3705G",
 		.vendor = 0x0bdb,
