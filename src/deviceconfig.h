@@ -16,14 +16,16 @@
  * all of its conditions (vendor, device, driver) matched will be used.
  */
 static struct umts_profile {
+	char *name;
 	uint16_t vendor;
 	uint16_t device;
 	char *driver;
 	const struct umts_config cfg;
 } profiles[] = {
 	{
-		.vendor = 0x0bdb,	// Ericsson
-		.device = 0x1900,	// F3705G
+		.name   = "Ericsson F3705G",
+		.vendor = 0x0bdb,
+		.device = 0x1900,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 0,
@@ -36,8 +38,9 @@ static struct umts_profile {
 	},
 
 	{
-		.vendor = 0x1bbb,	// alcatel
-		.device = 0x0000,	// X060s
+		.name   = "Alcatel X060s",
+		.vendor = 0x1bbb,
+		.device = 0x0000,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 2,
@@ -48,8 +51,9 @@ static struct umts_profile {
 	},
 
 	{
-		.vendor = 0x12d1,	// Huawei
-		.device = 0x1001,	// K3520
+		.name = "Huawei K3520",
+		.vendor = 0x12d1,
+		.device = 0x1001,
 		.cfg = {
 			.ctlidx = 2,
 			.datidx = 0,
@@ -63,8 +67,9 @@ static struct umts_profile {
 		},
 	},
 	{
-		.vendor = 0x12d1,	// Huawei
-		.device = 0x1433,	// E173
+		.name   = "Huawei E173",
+		.vendor = 0x12d1,
+		.device = 0x1433,
 		.cfg = {
 			.ctlidx = 2,
 			.datidx = 0,
@@ -86,7 +91,8 @@ static struct umts_profile {
 
 // VENDOR DEFAULT PROFILES
 	{
-		.vendor = 0x12d1,	// Huawei
+		.name   = "Huawei generic",
+		.vendor = 0x12d1,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 0,
@@ -100,7 +106,8 @@ static struct umts_profile {
 		},
 	},
 	{
-		.vendor = 0x19d2,	// ZTE
+		.name   = "ZTE generic",
+		.vendor = 0x19d2,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 2,
@@ -115,6 +122,7 @@ static struct umts_profile {
 	},
 // DRIVER PROFILES
 	{
+		.name   = "Option generic",
 		.driver = "option",
 		.cfg = {
 				.ctlidx = 1,
@@ -125,6 +133,7 @@ static struct umts_profile {
 		},
 	},
 	{
+		.name   = "Sierra generic",
 		.driver = "sierra",
 		.cfg = {
 				.ctlidx = 0,
@@ -135,6 +144,7 @@ static struct umts_profile {
 		},
 	},
 	{
+		.name   = "HSO generic",
 		.driver = "hso",
 		.cfg = {
 			.ctlidx = 0,

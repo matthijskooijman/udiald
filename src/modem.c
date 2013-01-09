@@ -105,9 +105,16 @@ static int umts_modem_identify(struct umts_modem *modem) {
 		&& (profiles[i].device == modem->device || !profiles[i].device)
 		&& (!profiles[i].driver || !strcmp(profiles[i].driver, modem->driver))) {
 			modem->cfg = &profiles[i].cfg;
+
+			if (profiles[i].vendor)
+				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->tty, profiles[i].vendor);
+			if (profiles[i].device)
+				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->tty, profiles[i].device);
+			if (profiles[i].driver)
+				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->tty, profiles[i].driver);
+			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->tty, profiles[i].name);
 			return 0;
 		}
-
 
 	return -ENODEV;
 }
