@@ -3,17 +3,24 @@
 
 #include "umtsd.h"
 
-/// *******************
-/// MODEM CONFIGURATION
-/// *******************
+/// ****************************
+/// MODEM CONFIGURATION PROFILES
+/// ****************************
 
 
-static struct umts_device {
+/* Make sure that the correct ordering of this array is observed: First
+ * specific devices, then generic per-vendor profiles and lastly generic
+ * per-driver profiles.
+ *
+ * When autoselecting a profile from this list, the first entry that has
+ * all of its conditions (vendor, device, driver) matched will be used.
+ */
+static struct umts_profile {
 	uint16_t vendor;
 	uint16_t device;
+	char *driver;
 	const struct umts_config cfg;
-} devices[] = {
-// DEVICE CONFIGS
+} profiles[] = {
 	{
 		.vendor = 0x0bdb,	// Ericsson
 		.device = 0x1900,	// F3705G
@@ -77,7 +84,7 @@ static struct umts_device {
 	},
 
 
-// VENDOR DEFAULT CONFIGS
+// VENDOR DEFAULT PROFILES
 	{
 		.vendor = 0x12d1,	// Huawei
 		.cfg = {
@@ -106,17 +113,9 @@ static struct umts_device {
 			},
 		},
 	},
-
-};
-
-
-// DRIVER DEFAULT CONFIGS
-static struct umts_driver {
-	const char *name;
-	const struct umts_config cfg;
-} drivers[] = {
+// DRIVER PROFILES
 	{
-		.name = "option",
+		.driver = "option",
 		.cfg = {
 				.ctlidx = 1,
 				.datidx = 0,
@@ -126,7 +125,7 @@ static struct umts_driver {
 		},
 	},
 	{
-		.name = "sierra",
+		.driver = "sierra",
 		.cfg = {
 				.ctlidx = 0,
 				.datidx = 2,
@@ -136,7 +135,7 @@ static struct umts_driver {
 		},
 	},
 	{
-		.name = "hso",
+		.driver = "hso",
 		.cfg = {
 			.ctlidx = 0,
 			.datidx = 3,

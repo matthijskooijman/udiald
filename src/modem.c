@@ -96,20 +96,18 @@ static int umts_modem_identify(struct umts_modem *modem) {
 	if (!c || strlen(c + 1) >= sizeof(modem->driver)) return -ENODEV;
 	memcpy(modem->driver, c + 1, strlen(c + 1) + 1);
 
-	// Try device and fallback to vendor defaults
-	for (size_t i = 0; i < (sizeof(devices) / sizeof(*devices)); ++i)
-		if (devices[i].vendor == modem->vendor
-		&& (devices[i].device == modem->device || !devices[i].device)) {
-			modem->cfg = &devices[i].cfg;
+	// Find the first profile that has all of its conditions
+	// matching. The array is ordered so that specific devices are
+	// matched first, then generic per-vendor profiles and then
+	// generic per-driver profiles.
+	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i)
+		if ((profiles[i].vendor == modem->vendor || !profiles[i].vendor)
+		&& (profiles[i].device == modem->device || !profiles[i].device)
+		&& (!profiles[i].driver || !strcmp(profiles[i].driver, modem->driver))) {
+			modem->cfg = &profiles[i].cfg;
 			return 0;
 		}
 
-	// Try driver defaults
-	for (size_t i = 0; i < (sizeof(drivers) / sizeof(*drivers)); ++i)
-		if (!strcmp(modem->driver, drivers[i].name)) {
-			modem->cfg = &drivers[i].cfg;
-			return 0;
-		}
 
 	return -ENODEV;
 }
