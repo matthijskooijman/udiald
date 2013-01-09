@@ -58,6 +58,17 @@ struct umts_config {
 	const char *modecmd[5];	/* Commands to enter modes */
 };
 
+/* Configuration profile, which combines a configuration with info about
+ * which device it supports.
+ */
+struct umts_profile {
+	char *name; /* A descriptive name for the profile */
+	uint16_t vendor; /* The USB vendor id, or 0x0 for a generic driver profile. */
+	uint16_t device; /* The USB product id, or 0x0 for a generic vendor profile. */
+	char *driver; /* The usb driver, or NULL for a device profile or generic vendor profile. */
+	const struct umts_config cfg;
+};
+
 struct umts_modem {
 	uint16_t vendor;
 	uint16_t device;

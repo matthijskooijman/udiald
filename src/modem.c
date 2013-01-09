@@ -100,21 +100,23 @@ static int umts_modem_identify(struct umts_modem *modem) {
 	// matching. The array is ordered so that specific devices are
 	// matched first, then generic per-vendor profiles and then
 	// generic per-driver profiles.
-	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i)
-		if ((profiles[i].vendor == modem->vendor || !profiles[i].vendor)
-		&& (profiles[i].device == modem->device || !profiles[i].device)
-		&& (!profiles[i].driver || !strcmp(profiles[i].driver, modem->driver))) {
-			modem->cfg = &profiles[i].cfg;
+	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
+		const struct umts_profile *p = &profiles[i];
+		if ((p->vendor == modem->vendor || !p->vendor)
+		&& (p->device == modem->device || !p->device)
+		&& (!p->driver || !strcmp(p->driver, modem->driver))) {
+			modem->cfg = &p->cfg;
 
-			if (profiles[i].vendor)
-				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->tty, profiles[i].vendor);
-			if (profiles[i].device)
-				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->tty, profiles[i].device);
-			if (profiles[i].driver)
-				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->tty, profiles[i].driver);
-			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->tty, profiles[i].name);
+			if (p->vendor)
+				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->tty, p->vendor);
+			if (p->device)
+				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->tty, p->device);
+			if (p->driver)
+				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->tty, p->driver);
+			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->tty, p->name);
 			return 0;
 		}
+	}
 
 	return -ENODEV;
 }
