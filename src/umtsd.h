@@ -76,6 +76,8 @@ struct umts_command {
 struct umts_state {
 	int ctlfd;
 	int flags;
+	int simstate;
+	int is_gsm;
 	struct umts_modem modem;
 	struct uci_context *uci;
 	char uciname[32];
