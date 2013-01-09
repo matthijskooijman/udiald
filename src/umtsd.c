@@ -212,7 +212,7 @@ static void umts_select_modem(struct umts_state *state) {
 	b[0] = '\0';
 	// Writing modestrings
 	const struct umts_config *cfg = state->modem.cfg;
-	for (size_t i = 0; i < sizeof(cfg->modecmd)/sizeof(*cfg->modecmd); ++i)
+	for (size_t i = 0; i < UMTS_NUM_MODES; ++i)
 		if (cfg->modecmd[i]) {
 			umts_config_append(state, "modem_mode", umts_modem_modestr(i));
 			strncat(b, umts_modem_modestr(i), sizeof(b) - strlen(b) - 2);

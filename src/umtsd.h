@@ -39,6 +39,7 @@ enum umts_mode {
 	UMTS_FORCE_GPRS,
 	UMTS_PREFER_UMTS,
 	UMTS_PREFER_GPRS,
+	UMTS_NUM_MODES /* This must always be the last entry. */
 };
 
 enum umts_atres {
@@ -55,7 +56,7 @@ enum umts_atres {
 struct umts_config {
 	uint8_t ctlidx;		/* Index of control TTY from first TTY */
 	uint8_t datidx;		/* Index of data TTY from first TTY */
-	const char *modecmd[5];	/* Commands to enter modes */
+	const char *modecmd[UMTS_NUM_MODES];	/* Commands to enter modes */
 };
 
 /* Configuration profile, which combines a configuration with info about
