@@ -6,6 +6,10 @@
 /// ****************************
 /// MODEM CONFIGURATION PROFILES
 /// ****************************
+//
+// Do not include this file from anywhere else than modem.c, since that
+// will cause this data to be duplicated in the final binary. If you
+// need anything from here, go through a function in modem.c.
 
 
 /* Make sure that the correct ordering of this array is observed: First
