@@ -190,6 +190,10 @@ static void umts_setup_uci(struct umts_state *state) {
 	if (!(state->uci = ucix_init(state->uciname, 1))) {
 		exit(UMTS_EINTERNAL);
 	}
+	/* Reset errno, when running umtsd unprivileged, setting up uci
+	 * might cause an ignored error, which could cloud debug
+	 * attempts */
+	errno = 0;
 }
 
 /**
