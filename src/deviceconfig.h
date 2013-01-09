@@ -158,6 +158,30 @@ static struct umts_profile {
 			},
 		},
 	},
+	{
+		.name   = "CDC generic",
+		.driver = "cdc_acm",
+		.cfg = {
+			/* These are just copied from the option generic
+			 * profile */
+			.ctlidx = 1,
+			.datidx = 0,
+			.modecmd = {
+				[UMTS_MODE_AUTO] = "",
+			},
+		},
+	},
+	{
+		.name   = "USB serial generic",
+		.driver = "usbserial",
+		.cfg = {
+			.ctlidx = 0,
+			.datidx = 2,
+			.modecmd = {
+				[UMTS_MODE_AUTO] = "",
+			},
+		},
+	},
 };
 
 #endif /* UMTS_DEVICECONFIG_H_ */
