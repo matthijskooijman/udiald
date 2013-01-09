@@ -102,6 +102,7 @@ extern int verbose;
 int umts_modem_find(struct umts_modem *modem);
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
+int umts_modem_list_profiles();
 
 int umts_tty_open(const char *tty);
 char* umts_tty_calc(const char *basetty, uint8_t index, char buf[static 24]);

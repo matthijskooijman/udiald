@@ -41,7 +41,7 @@ int verbose = 0;
 enum umts_app {
 		UMTS_APP_CONNECT, UMTS_APP_SCAN,
 		UMTS_APP_UNLOCK, UMTS_APP_DIAL,
-		UMTS_APP_PINPUK
+		UMTS_APP_PINPUK, UMTS_APP_LIST_PROFILES,
 };
 
 static int umts_usage(const char *app) {
@@ -54,8 +54,9 @@ static int umts_usage(const char *app) {
 			"	-s			Scan modem and reset state file\n"
 			"	-u			Same as scan but also try to unlock SIM\n"
 			" 	-p <PUK> <PIN>		Reset PIN of locked SIM using PUK\n"
-			"	-d			Dial (used internally)\n\n"
-			"Global Options:\n"
+			"	-d			Dial (used internally)\n"
+			"	-L                      List available configuration profiles\n"
+			"\nGlobal Options:\n"
 			"	-e			Don't write error state\n"
 			"	-n <name>		Use given profile instead of \"wan\"\n"
 			"	-v			Increase verbosity\n\n"
@@ -123,7 +124,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csupden:vt")) != -1) {
+	while ((s = getopt(argc, argv, "csupden:vtL")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -143,6 +144,10 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 
 			case 'd':
 				app = UMTS_APP_DIAL;
+				break;
+
+			case 'L':
+				app = UMTS_APP_LIST_PROFILES;
 				break;
 
 			case 'e':
@@ -546,6 +551,9 @@ int main(int argc, char *const argv[]) {
 	// Dial only needs an active UCI context
 	if (app == UMTS_APP_DIAL)
 		return umts_dial_main(&state);
+
+	if (app == UMTS_APP_LIST_PROFILES)
+		return umts_modem_list_profiles();
 
 	if (app == UMTS_APP_CONNECT && state.flags & UMTS_FLAG_TESTSTATE) {
 		if (umts_config_get_int(&state, "umts_error", UMTS_OK) == UMTS_EUNLOCK) {

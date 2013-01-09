@@ -159,4 +159,21 @@ int umts_modem_find(struct umts_modem *modem) {
 	}
 }
 
-
+/**
+ * Output a list of all known profiles on stdout.
+ */
+int umts_modem_list_profiles() {
+	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
+		const struct umts_profile *p = &profiles[i];
+		printf("Profile: %s\n", p->name);
+		if (p->driver) printf("\tDriver: %s\n", p->driver);
+		if (p->vendor) printf("\tVendor: 0x%x\n", p->vendor);
+		if (p->device) printf("\tProduct: 0x%x\n", p->device);
+		printf("\tControl: %d\n", p->cfg.ctlidx);
+		printf("\tData: %d\n", p->cfg.datidx);
+		for (int mode = 0; mode < UMTS_NUM_MODES; ++mode)
+			if (p->cfg.modecmd[mode]) printf("\tMode-%s: %s\n", umts_modem_modestr(mode), p->cfg.modecmd[mode]);
+		printf("\n");
+	}
+	return 0;
+}
