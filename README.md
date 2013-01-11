@@ -112,7 +112,7 @@ During the beginning of the 2013, the sources for `umtsd2` have been
 published under the GPL, to allow the OpenWRT project to also start
 using `umtsd2`.
 
-`umtsd2` is the successor to umtsd.lua, which is a rough `luaa`
+`umtsd2` is the successor to umtsd.lua, which is a rough `lua`
 implementation with the same goals that is shipped on the "fon-ng"
 firmware for the Fonera 2.0g and 2.0n.
 
