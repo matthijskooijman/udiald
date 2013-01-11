@@ -30,10 +30,11 @@
 #include <syslog.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <libgen.h>
 
 #include "deviceconfig.h"
 
-#define UMTS_TTY_SYSDIR "/sys/class/tty/"
+#define UMTS_SYS_USB_DEVICES "/sys/bus/usb/devices/*"
 
 static const char *modestr[] = {
 	[UMTS_MODE_AUTO] = "auto",
@@ -56,46 +57,86 @@ enum umts_mode umts_modem_modeval(const char *mode) {
 	return -1;
 }
 
-static int umts_modem_identify(struct umts_modem *modem) {
-	char buffer[128] = UMTS_TTY_SYSDIR;
-	char path[PATH_MAX];
+/**
+ * A version of glob that checks the return value and in case of error,
+ * reports a log message and returns an umts_errorcode instead.
+ *
+ * Compared to regular glob, the errfunc parameter is left out, but the
+ * activity parameter is added, which should be a string for use in
+ * error messages.
+ */
+static int checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity) {
+	int e = glob(pattern, flags, NULL, pglob);
 
-	// Detect real device sysfs-path
-	strcat(buffer, modem->tty);
-	if (!realpath(buffer, path)) return -ENODEV;
-	char *crap = strstr(path, "/tty");
-	if (!crap || (sizeof(path) - (crap - path)) < 16) return -ENODEV;
-	crap[0] = 0;
-
-	// Open and read modalias line for tty device
-	strcat(path, "/modalias");
-	int fd = open(path, O_RDONLY);
-	if (fd == -1) return -ENODEV;
-	if (read(fd, buffer, sizeof(buffer) - 1)) {
-		// Fix compiler warning
+	if (e == 0) {
+		return UMTS_OK;
+	} else if (e == GLOB_NOMATCH) {
+		return UMTS_ENODEV;
+	} else if (errno) {
+		syslog(LOG_CRIT, "Glob error while %s: %s", activity, strerror(errno));
+		return UMTS_EINTERNAL;
+	} else {
+		syslog(LOG_CRIT, "Unknown glob error while %s", activity);
+		return UMTS_EINTERNAL;
 	}
+}
+
+/**
+ * Read a 16 bit word from a file, converting it from a hex string to a
+ * real int.
+ *
+ * If an error occurs, a DEBUG message is logged, errno is reset and
+ * UMTS_EINVAL is returned.
+ */
+static int read_hex_word(const char *path, uint16_t *res) {
+	const int hex_bytes = sizeof(*res) * 2;
+	char buf[hex_bytes + 1];
+
+	int fd = open(path, O_RDONLY);
+	if (fd == -1) {
+		syslog(LOG_DEBUG, "%s: Failed to open: %s", path, strerror(errno));
+		errno = 0;
+		return UMTS_EINVAL;
+	}
+
+	int n = read(fd, buf, hex_bytes);
 	close(fd);
+	if (n != hex_bytes) {
+		syslog(LOG_DEBUG, "%s: Failed to read %d bytes (got %d): %s", path, hex_bytes, n, strerror(errno));
+		errno = 0;
+		return UMTS_EINVAL;
+	}
 
-	// Get vendor / product id from modalias
-	char *delim = strchr(buffer, ':');
-	if (!delim) return -ENODEV;
-	char *c = strchr(delim, 'v');
-	if (!c) return -ENODEV;
-	modem->vendor = strtol(c + 1, NULL, 16);
-	c = strchr(c, 'p');
-	if (!c || strlen(c) < 5) return -ENODEV;
-	c[5] = 0;
-	modem->device = strtol(c + 1, NULL, 16);
+	buf[hex_bytes] = '\0';
+	char *end;
+	*res = strtoul(buf, &end, 16);
+	if (*end != '\0') {
+		syslog(LOG_DEBUG, "%s: Failed to convert hex word (read: \"%s\")", path, buf);
+		return UMTS_EINVAL;
+	}
 
-	// Get driver name from driver symlink
-	strcpy(strstr(path, "/modalias"), "/driver");
-	ssize_t llen = readlink(path, buffer, sizeof(buffer) - 1);
-	if (llen < 0) return -ENODEV;
-	buffer[llen] = 0;
-	c = strrchr(buffer, '/');
-	if (!c || strlen(c + 1) >= sizeof(modem->driver)) return -ENODEV;
-	memcpy(modem->driver, c + 1, strlen(c + 1) + 1);
+	return UMTS_OK;
+}
 
+/**
+ * Reads the target of a symlink and returns the basename of that target
+ * in res.
+ */
+static void read_symlink_basename(const char *path, char *res, size_t size) {
+	char buf[PATH_MAX];
+	int n = readlink(path, buf, sizeof(buf));
+	buf[n] = '\0';
+	snprintf(res, size, "%s", basename(buf));
+}
+
+/**
+ * Find a profile matching the attributes passed. The configuration for
+ * this profile is stored in modem->cfg.
+ *
+ * Returns UMTS_OK when a profile was found or UMTS_ENODEV when there
+ * was no applicable profile.
+ */
+static int umts_modem_match_profile(struct umts_modem *modem) {
 	// Find the first profile that has all of its conditions
 	// matching. The array is ordered so that specific devices are
 	// matched first, then generic per-vendor profiles and then
@@ -114,49 +155,95 @@ static int umts_modem_identify(struct umts_modem *modem) {
 			if (p->driver)
 				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->tty, p->driver);
 			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->tty, p->name);
-			return 0;
+			return UMTS_OK;
 		}
 	}
 
-	return -ENODEV;
+	return UMTS_ENODEV;
 }
 
-int umts_modem_find(struct umts_modem *modem) {
-	if (!modem->tty[0]) {	// Auto-detect modem base tty
-		glob_t gl;
-		const char search1[] = UMTS_TTY_SYSDIR"ttyACM*";
-		const char search2[] = UMTS_TTY_SYSDIR"ttyHSO*";
-		const char search3[] = UMTS_TTY_SYSDIR"ttyUSB*";
-		modem->cfg = NULL;
+/**
+ * Scan the list of USB devices for any device that looks like a usable
+ * device.
+ *
+ * When func is NULL, detection stops at the first usable device, which
+ * is returned in *modem.
+ *
+ * When func is not null, it is called for every device detected. The
+ * contents of *modem are undefined when the function returns.
+ *
+ * When no modems were found, this function returns UMTS_ENODEV.
+ * If at least one modem was detected, it returns UMTS_OK.
+ */
+int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *)) {
+	if (func)
+		syslog(LOG_INFO, "Detecting usable devices");
+	else
+		syslog(LOG_INFO, "Detecting first usable device");
 
-		// glob all relevant tty-devices
-		int s1 = glob(search1, 0, NULL, &gl);
-		if (s1 && s1 != GLOB_NOMATCH) return -ENODEV;
-		int s2 = glob(search2, (!s1) ? GLOB_APPEND : 0, NULL, &gl);
-		if (s1 && s2 && s2 != GLOB_NOMATCH) return -ENODEV;
-		int s3 = glob(search3, (!s1 || !s2) ? GLOB_APPEND : 0, NULL, &gl);
-		if (s1 && s2 && s3) return -ENODEV;
+	bool found = false;
+	glob_t gl;
+	char buf[PATH_MAX + 1];
+	int e = checked_glob(UMTS_SYS_USB_DEVICES, GLOB_NOSORT, &gl, "listing USB devices");
+	if (e) return e;
 
+	for (size_t i = 0; i < gl.gl_pathc; ++i) {
+		char *path = gl.gl_pathv[i];
 
-		for (size_t i = 0; i < gl.gl_pathc; ++i) {
-			char *c = strrchr(gl.gl_pathv[i], '/') + 1;
-			if (strlen(c) < sizeof(modem->tty)) {
-				memcpy(modem->tty, c, strlen(c) + 1);
-				if (!umts_modem_identify(modem))
-					break;
-			}
+		/* Skip directories with a : in their name, which are
+		 * really subdevices / endpoints */
+		if (strchr(path, ':'))
+			continue;
+
+		/* Get the USB vidpid. */
+		snprintf(buf, sizeof(buf), "%s/%s", path, "idVendor");
+		if (read_hex_word(buf, &modem->vendor)) continue;
+		snprintf(buf, sizeof(buf), "%s/%s", path, "idProduct");
+		if (read_hex_word(buf, &modem->device)) continue;
+
+		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", strrchr(path, '/') + 1, modem->vendor, modem->device);
+
+		/* Find out how many tty devices this USB device
+		 * exports. */
+		snprintf(buf, sizeof(buf), "%s/*/tty*", path);
+		glob_t gl_tty;
+		int e = checked_glob(buf, 0, &gl_tty, "listing tty devices");
+		if (e) continue; /* No ttys or glob error */
+		syslog(LOG_DEBUG, "Found %zu tty device%s", gl_tty.gl_pathc, gl_tty.gl_pathc != 1 ? "s" : "" );
+
+		/* Split the matched filename into the subdevice name
+		 * and the tty name. e.g., into
+		 * "/sys/bus/usb/devices/1-1.1/1-1.1:1.0" and "ttyUSB0".
+		 */
+		const char *subdev = gl_tty.gl_pathv[0];
+		char *ttyname = strrchr(subdev, '/');
+		*ttyname = '\0';
+		ttyname++;
+
+		snprintf(modem->tty, sizeof(modem->tty), "%s", ttyname);
+
+		/* Read the driver name from the first subdev with a tty
+		 * (the main device just has driver "usb", so that won't
+		 * help us). */
+		snprintf(buf, sizeof(buf), "%s/driver", subdev);
+
+		read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
+		syslog(LOG_DEBUG, "%s uses driver \"%s\"", ttyname, modem->driver);
+
+		if (umts_modem_match_profile(modem) == UMTS_OK) {
+			syslog(LOG_INFO, "Found usable USB device (0x%04x:0x%04x)", modem->vendor, modem->device);
+			found = true;
+
+			/* Call the callback, if any. If there is no
+			 * callback, just return the first match. */
+			if (func)
+				func(modem);
+			else
+				break;
 		}
-
-		globfree(&gl);
-		if (modem->cfg) {
-			syslog(LOG_NOTICE, "%s: Using control tty %d", modem->tty, modem->cfg->ctlidx);
-			syslog(LOG_NOTICE, "%s: Using data tty %d", modem->tty, modem->cfg->datidx);
-		}
-
-		return (modem->cfg) ? 0 : -ENODEV;
-	} else {
-		return umts_modem_identify(modem);
 	}
+
+	return (found ? UMTS_OK : UMTS_ENODEV);
 }
 
 /**

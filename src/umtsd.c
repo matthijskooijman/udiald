@@ -68,7 +68,7 @@ static int umts_usage(const char *app) {
 			"	1			Syntax error\n"
 			"	2			Internal error\n"
 			"   	3			Terminated by signal\n"
-			"	4			Unknown modem\n"
+			"	4			No usable modem found\n"
 			"	5			Modem error\n"
 			"	6			SIM error\n"
 			"	7			SIM unlocking error (PIN failed etc.)\n"
@@ -200,16 +200,19 @@ static void umts_setup_uci(struct umts_state *state) {
  * Select the modem to use, depending on config or autodetection.
  */
 static void umts_select_modem(struct umts_state *state) {
+/* Temporarily disabled
 	// Find modem
 	char *basetty = umts_config_get(state, "umts_basetty");
 	if (basetty) {
 		strncpy(state->modem.tty, basetty, sizeof(state->modem.tty) - 1);
 		free(basetty);
 	}
-	/* Identify and/or autodetect the modem */
-	if (umts_modem_find(&state->modem)) {
-		syslog(LOG_CRIT, "Unknown modem");
-		umts_exitcode(UMTS_EDEVICE);
+*/
+	/* Autodetect the first available modem (if any) */
+	int e = umts_modem_find_devices(&state->modem, NULL);
+	if (e != UMTS_OK) {
+		syslog(LOG_CRIT, "No usable modem found");
+		umts_exitcode(e);
 	}
 	char b[512] = {0};
 	snprintf(b, sizeof(b), "%04x:%04x", state->modem.vendor, state->modem.device);

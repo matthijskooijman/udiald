@@ -23,7 +23,7 @@ enum umts_errcode {
 	UMTS_EINVAL,
 	UMTS_EINTERNAL,
 	UMTS_ESIGNALED,
-	UMTS_EDEVICE,
+	UMTS_ENODEV,
 	UMTS_EMODEM,
 	UMTS_ESIM,
 	UMTS_EUNLOCK,
@@ -99,9 +99,9 @@ struct umts_state {
 
 extern int verbose;
 
-int umts_modem_find(struct umts_modem *modem);
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
+int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *));
 int umts_modem_list_profiles();
 
 int umts_tty_open(const char *tty);
