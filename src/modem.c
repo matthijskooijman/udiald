@@ -247,6 +247,35 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 }
 
 /**
+ * Helper function to pint a modem to stdout.
+ */
+static void umts_modem_print(struct umts_modem *modem) {
+	printf("Device\n");
+	printf("\tVendor: 0x%04x\n", modem->vendor);
+	printf("\tProduct: 0x%04x\n", modem->device);
+	printf("\tDriver: %s\n", modem->driver);
+}
+
+/**
+ * Detect (potentially) usable devices and list them on stdout.
+ */
+int umts_modem_list_devices() {
+	syslog(LOG_NOTICE, "Listing usable devices");
+	/* Allocate some storage for umts_modem_find_devices to work */
+	struct umts_modem modem;
+	int e = umts_modem_find_devices(&modem, umts_modem_print);
+	if (e == UMTS_ENODEV) {
+		syslog(LOG_NOTICE, "No devices found");
+		return UMTS_OK;
+	} else if (e != UMTS_OK) {
+		syslog(LOG_ERR, "Error while detecting devices");
+		return e;
+	}
+
+	return UMTS_OK;
+}
+
+/**
  * Output a list of all known profiles on stdout.
  */
 int umts_modem_list_profiles() {

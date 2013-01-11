@@ -42,6 +42,7 @@ enum umts_app {
 		UMTS_APP_CONNECT, UMTS_APP_SCAN,
 		UMTS_APP_UNLOCK, UMTS_APP_DIAL,
 		UMTS_APP_PINPUK, UMTS_APP_LIST_PROFILES,
+		UMTS_APP_LIST_DEVICES,
 };
 
 static int umts_usage(const char *app) {
@@ -56,6 +57,7 @@ static int umts_usage(const char *app) {
 			" 	-p <PUK> <PIN>		Reset PIN of locked SIM using PUK\n"
 			"	-d			Dial (used internally)\n"
 			"	-L                      List available configuration profiles\n"
+			"	-l                      Detect and list usable devices\n"
 			"\nGlobal Options:\n"
 			"	-e			Don't write error state\n"
 			"	-n <name>		Use given profile instead of \"wan\"\n"
@@ -124,7 +126,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csupden:vtL")) != -1) {
+	while ((s = getopt(argc, argv, "csupden:vtlL")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -144,6 +146,10 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 
 			case 'd':
 				app = UMTS_APP_DIAL;
+				break;
+
+			case 'l':
+				app = UMTS_APP_LIST_DEVICES;
 				break;
 
 			case 'L':
@@ -561,6 +567,9 @@ int main(int argc, char *const argv[]) {
 
 	if (app == UMTS_APP_LIST_PROFILES)
 		return umts_modem_list_profiles();
+
+	if (app == UMTS_APP_LIST_DEVICES)
+		return umts_modem_list_devices();
 
 	if (app == UMTS_APP_CONNECT && state.flags & UMTS_FLAG_TESTSTATE) {
 		if (umts_config_get_int(&state, "umts_error", UMTS_OK) == UMTS_EUNLOCK) {
