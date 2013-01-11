@@ -91,6 +91,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "Huawei generic",
 		.vendor = 0x12d1,
+		.flags  = UMTS_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 0,
@@ -106,6 +107,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "ZTE generic",
 		.vendor = 0x19d2,
+		.flags  = UMTS_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 2,
@@ -122,6 +124,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "Option generic",
 		.driver = "option",
+		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
 				.ctlidx = 1,
 				.datidx = 0,
@@ -133,6 +136,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "Sierra generic",
 		.driver = "sierra",
+		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
 				.ctlidx = 0,
 				.datidx = 2,
@@ -144,6 +148,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "HSO generic",
 		.driver = "hso",
+		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 0,
 			.datidx = 3,
@@ -159,6 +164,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "CDC generic",
 		.driver = "cdc_acm",
+		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
 			/* These are just copied from the option generic
 			 * profile */
@@ -172,6 +178,7 @@ static const struct umts_profile profiles[] = {
 	{
 		.name   = "USB serial generic",
 		.driver = "usbserial",
+		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 0,
 			.datidx = 2,

@@ -59,13 +59,19 @@ struct umts_config {
 	const char *modecmd[UMTS_NUM_MODES];	/* Commands to enter modes */
 };
 
+enum umts_profile_flags {
+	UMTS_PROFILE_NOVENDOR = 1, /* The vendor field in this profile should be ignored */
+	UMTS_PROFILE_NODEVICE = 2, /* The device field in this profile should be ignored */
+};
+
 /* Configuration profile, which combines a configuration with info about
  * which device it supports.
  */
 struct umts_profile {
+	enum umts_profile_flags flags; /* Flags influencing profile selection */
 	char *name; /* A descriptive name for the profile */
-	uint16_t vendor; /* The USB vendor id, or 0x0 for a generic driver profile. */
-	uint16_t device; /* The USB product id, or 0x0 for a generic vendor profile. */
+	uint16_t vendor; /* The USB vendor id. */
+	uint16_t device; /* The USB product id. */
 	char *driver; /* The usb driver, or NULL for a device profile or generic vendor profile. */
 	const struct umts_config cfg;
 };

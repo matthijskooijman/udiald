@@ -143,8 +143,8 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
 	// generic per-driver profiles.
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct umts_profile *p = &profiles[i];
-		if ((p->vendor == modem->vendor || !p->vendor)
-		&& (p->device == modem->device || !p->device)
+		if (((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
+		&& ((p->flags & UMTS_PROFILE_NODEVICE) || p->device == modem->device)
 		&& (!p->driver || !strcmp(p->driver, modem->driver))) {
 			modem->cfg = &p->cfg;
 
