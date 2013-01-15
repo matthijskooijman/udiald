@@ -155,7 +155,8 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		glob_t gl_tty;
 		int e = umts_util_checked_glob(buf, 0, &gl_tty, "listing tty devices");
 		if (e) continue; /* No ttys or glob error */
-		syslog(LOG_DEBUG, "Found %zu tty device%s", gl_tty.gl_pathc, gl_tty.gl_pathc != 1 ? "s" : "" );
+		modem->num_ttys = gl_tty.gl_pathc;
+		syslog(LOG_DEBUG, "Found %zu tty device%s", modem->num_ttys, modem->num_ttys != 1 ? "s" : "" );
 
 		/* Split the matched filename into the subdevice name
 		 * and the tty name. e.g., into
@@ -202,6 +203,7 @@ static void umts_modem_print(struct umts_modem *modem) {
 	printf("\tVendor: 0x%04x\n", modem->vendor);
 	printf("\tProduct: 0x%04x\n", modem->device);
 	printf("\tDriver: %s\n", modem->driver);
+	printf("\tTTYCount: %zu\n", modem->num_ttys);
 }
 
 /**
