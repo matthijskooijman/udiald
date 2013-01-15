@@ -115,9 +115,11 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 	for (size_t i = 0; i < gl.gl_pathc; ++i) {
 		char *path = gl.gl_pathv[i];
 
-		/* Skip directories with a : in their name, which are
+		char *device_id = strrchr(path, '/') + 1;
+
+		/* Skip devices with a : in their id, which are
 		 * really subdevices / endpoints */
-		if (strchr(path, ':'))
+		if (strchr(device_id, ':'))
 			continue;
 
 		/* Get the USB vidpid. */
@@ -129,11 +131,11 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		/* Check commandline vidpid filter */
 		if (((filter->flags & UMTS_FILTER_VENDOR) && (filter->vendor != modem->vendor))
 		|| ((filter->flags & UMTS_FILTER_DEVICE) && (filter->device != modem->device))) {
-			syslog(LOG_DEBUG, "Skipping USB device %s (0x%04x:0x%04x) due to commandline filter", strrchr(path, '/') + 1, modem->vendor, modem->device);
+			syslog(LOG_DEBUG, "Skipping USB device %s (0x%04x:0x%04x) due to commandline filter", device_id, modem->vendor, modem->device);
 			continue;
 		}
 
-		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", strrchr(path, '/') + 1, modem->vendor, modem->device);
+		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", device_id, modem->vendor, modem->device);
 
 		/* Find out how many tty devices this USB device
 		 * exports. */
