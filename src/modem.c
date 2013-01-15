@@ -218,6 +218,8 @@ static void umts_modem_print(struct umts_modem *modem) {
 	printf("\tProduct: 0x%04x\n", modem->device);
 	printf("\tDriver: %s\n", modem->driver);
 	printf("\tTTYCount: %zu\n", modem->num_ttys);
+	printf("\tProfile: %s\n", modem->profile->name);
+	printf("\tProfiledesc: %s\n", modem->profile->desc);
 }
 
 /**
