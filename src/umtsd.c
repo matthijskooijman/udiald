@@ -226,14 +226,6 @@ static void umts_setup_uci(struct umts_state *state) {
  * Select the modem to use, depending on config or autodetection.
  */
 static void umts_select_modem(struct umts_state *state) {
-/* Temporarily disabled
-	// Find modem
-	char *basetty = umts_config_get(state, "umts_basetty");
-	if (basetty) {
-		strncpy(state->modem.tty, basetty, sizeof(state->modem.tty) - 1);
-		free(basetty);
-	}
-*/
 	/* Autodetect the first available modem (if any) */
 	int e = umts_modem_find_devices(&state->modem, NULL, &state->filter);
 	if (e != UMTS_OK) {
