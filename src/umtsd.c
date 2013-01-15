@@ -64,6 +64,8 @@ static int umts_usage(const char *app) {
 			"	-v			Increase verbosity\n\n"
 			"	-V <vendorid>		Only consider devices with the given vendor id (in hexadecimal)\n"
 			"	-P <productid>		Only consider devices with the given product id (in hexadecimal)\n"
+			"	-D <deviceid>		Only consider the device with the given id (as listed in sysfs,\n"
+			"				e.g. 1.2-1)\n"
 			"Connect Options:\n"
 			"	-t			Test state file for previous SIM-unlocking\n"
 			"				errors before attempting to connect\n\n"
@@ -128,7 +130,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csupden:vtlLV:P:")) != -1) {
+	while ((s = getopt(argc, argv, "csupden:vtlLV:P:D:")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -186,6 +188,9 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 					exit(UMTS_EINVAL);
 				}
 				state->filter.flags |= UMTS_FILTER_DEVICE;
+				break;
+			case 'D':
+				state->filter.device_id = optarg;
 				break;
 			default:
 				exit(umts_usage(argv[0]));

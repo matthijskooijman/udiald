@@ -89,6 +89,7 @@ struct umts_device_filter {
 	enum umts_filter_flags flags; /* Flags to determine validity of vendor and device fields */
 	uint16_t vendor; /* The USB vendor id. */
 	uint16_t device; /* The USB product id. */
+	char *device_id; /* The actual device id to use e.g., "1-1.5.3.7" */
 };
 
 struct umts_modem {

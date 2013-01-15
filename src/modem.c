@@ -105,6 +105,8 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		syslog(LOG_INFO, "Only considering devices with vendor id 0x%x", filter->vendor);
 	if (filter->flags & UMTS_FILTER_DEVICE)
 		syslog(LOG_INFO, "Only considering devices with product id 0x%x", filter->device);
+	if (filter->device_id)
+		syslog(LOG_INFO, "Only considering device with device id %s", filter->device_id);
 
 	bool found = false;
 	glob_t gl;
@@ -121,6 +123,16 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		 * really subdevices / endpoints */
 		if (strchr(device_id, ':'))
 			continue;
+
+		/* Check commandline device id. It's a bit inefficient
+		 * to list all devices and apply this filter, instead of
+		 * just constructing the right sysfs path from the
+		 * device id, but this keeps the code a bit simpler for
+		 * now. */
+		if (filter->device_id && strcmp(device_id, filter->device_id)) {
+			syslog(LOG_DEBUG, "Skipping USB device %s (wrong device id)", device_id);
+			continue;
+		}
 
 		/* Get the USB vidpid. */
 		snprintf(buf, sizeof(buf), "%s/%s", path, "idVendor");
