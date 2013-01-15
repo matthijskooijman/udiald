@@ -177,20 +177,26 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
-		if (umts_modem_match_profile(modem) == UMTS_OK) {
-			if (modem->profile->cfg.ctlidx >= modem->num_ttys || modem->profile->cfg.datidx >= modem->num_ttys) {
-				syslog(LOG_WARNING, "%s: Profile \"%s\" is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->profile->name, modem->profile->cfg.ctlidx, modem->profile->cfg.datidx, modem->num_ttys - 1);
-				globfree(&gl_tty);
-				continue;
-			}
+		/* Find an applicable profile */
+		umts_modem_match_profile(modem);
 
+		/* If a profile was found, find out the tty devices to
+		 * use. */
+		if (modem->profile) {
+			if (modem->profile->cfg.ctlidx < modem->num_ttys
+			&& modem->profile->cfg.datidx < modem->num_ttys) {
+				snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.ctlidx], '/') + 1);
+				snprintf(modem->dat_tty, sizeof(modem->dat_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.datidx], '/') + 1);
+				syslog(LOG_INFO, "%s: Using control tty \"%s\" and data tty \"%s\"", modem->device_id, modem->ctl_tty, modem->dat_tty);
+			} else {
+				syslog(LOG_WARNING, "%s: Profile \"%s\" is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->profile->name, modem->profile->cfg.ctlidx, modem->profile->cfg.datidx, modem->num_ttys - 1);
+				modem->profile = NULL;
+			}
+		}
+
+		if (modem->profile || !(filter->flags & UMTS_FILTER_PROFILE)) {
 			syslog(LOG_INFO, "%s: Found usable USB device (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
 			found = true;
-
-			snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.ctlidx], '/') + 1);
-			snprintf(modem->dat_tty, sizeof(modem->dat_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.datidx], '/') + 1);
-
-			syslog(LOG_INFO, "%s: Using control tty \"%s\" and data tty \"%s\"", modem->device_id, modem->ctl_tty, modem->dat_tty);
 
 			/* Call the callback, if any. If there is no
 			 * callback, just return the first match. */
@@ -218,8 +224,10 @@ static void umts_modem_print(struct umts_modem *modem) {
 	printf("\tProduct: 0x%04x\n", modem->device);
 	printf("\tDriver: %s\n", modem->driver);
 	printf("\tTTYCount: %zu\n", modem->num_ttys);
-	printf("\tProfile: %s\n", modem->profile->name);
-	printf("\tProfiledesc: %s\n", modem->profile->desc);
+	if (modem->profile) {
+		printf("\tProfile: %s\n", modem->profile->name);
+		printf("\tProfiledesc: %s\n", modem->profile->desc);
+	}
 }
 
 /**

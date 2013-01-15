@@ -81,6 +81,7 @@ struct umts_profile {
 enum umts_filter_flags {
 	UMTS_FILTER_VENDOR = 1, /* The vendor field in this filter is valid */
 	UMTS_FILTER_DEVICE = 2, /* The device field in this filter is valid */
+	UMTS_FILTER_PROFILE = 4, /* Only return devices with a valid profile */
 };
 
 /**

@@ -226,6 +226,9 @@ static void umts_setup_uci(struct umts_state *state) {
  * Select the modem to use, depending on config or autodetection.
  */
 static void umts_select_modem(struct umts_state *state) {
+	/* Only return a modem for which we have a valid configuration profile */
+	state->filter.flags |= UMTS_FILTER_PROFILE;
+
 	/* Autodetect the first available modem (if any) */
 	int e = umts_modem_find_devices(&state->modem, NULL, &state->filter);
 	if (e != UMTS_OK) {
