@@ -162,7 +162,7 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	strcat(cpath, state->profile);
 	if (unlink(cpath) < 0 && errno != ENOENT) {
 		syslog(LOG_CRIT, "%s: Failed to clean up existing ppp config file: %s",
-				state->modem.tty, strerror(errno));
+				state->modem.device_id, strerror(errno));
 		return 0;
 	}
 
@@ -171,13 +171,13 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	int cfd = open(cpath, O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 	if (cfd < 0) {
 		syslog(LOG_CRIT, "%s: Failed to create ppp config file: %s",
-				state->modem.tty, strerror(errno));
+				state->modem.device_id, strerror(errno));
 		return 0;
 	}
 
 	if (!(fp = fdopen(cfd, "w"))) {
 		syslog(LOG_CRIT, "%s: Failed to create FILE* for ppp config file: %s",
-				state->modem.tty, strerror(errno));
+				state->modem.device_id, strerror(errno));
 		close(cfd);
 		return 0;
 	}
@@ -261,11 +261,11 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	if (pid == 0) {
 		execv(argv[0], argv);
 		syslog(LOG_CRIT, "%s: Failed to exec %s: %s",
-				state->modem.tty, argv[0], strerror(errno));
+				state->modem.device_id, argv[0], strerror(errno));
 		_exit(128);
 	} else if (pid == -1) {
 		syslog(LOG_CRIT, "%s: Failed to fork for pppd: %s",
-				state->modem.tty, strerror(errno));
+				state->modem.device_id, strerror(errno));
 		return 0;
 	} else {
 		return pid;

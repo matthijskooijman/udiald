@@ -69,12 +69,12 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
 			modem->cfg = &p->cfg;
 
 			if (p->vendor)
-				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->tty, p->vendor);
+				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->device_id, p->vendor);
 			if (p->device)
-				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->tty, p->device);
+				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->device_id, p->device);
 			if (p->driver)
-				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->tty, p->driver);
-			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->tty, p->name);
+				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->device_id, p->driver);
+			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->device_id, p->name);
 			return UMTS_OK;
 		}
 	}
@@ -174,10 +174,12 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		snprintf(buf, sizeof(buf), "%s/driver", subdev);
 
 		umts_util_read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
-		syslog(LOG_DEBUG, "%s uses driver \"%s\"", ttyname, modem->driver);
+		syslog(LOG_DEBUG, "%s uses driver \"%s\"", device_id, modem->driver);
+
+		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
 		if (umts_modem_match_profile(modem) == UMTS_OK) {
-			syslog(LOG_INFO, "Found usable USB device (0x%04x:0x%04x)", modem->vendor, modem->device);
+			syslog(LOG_INFO, "Found usable USB device %s (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
 			found = true;
 
 			/* Call the callback, if any. If there is no
@@ -196,7 +198,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
  * Helper function to pint a modem to stdout.
  */
 static void umts_modem_print(struct umts_modem *modem) {
-	printf("Device\n");
+	printf("Device: %s\n", modem->device_id);
 	printf("\tVendor: 0x%04x\n", modem->vendor);
 	printf("\tProduct: 0x%04x\n", modem->device);
 	printf("\tDriver: %s\n", modem->driver);

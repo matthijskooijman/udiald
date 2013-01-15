@@ -96,6 +96,7 @@ struct umts_modem {
 	uint16_t vendor;
 	uint16_t device;
 	char driver[32];
+	char device_id[32];
 	char tty[16];
 	const struct umts_config *cfg;
 };

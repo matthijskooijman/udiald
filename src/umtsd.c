@@ -242,7 +242,7 @@ static void umts_select_modem(struct umts_state *state) {
 	}
 	char b[512] = {0};
 	snprintf(b, sizeof(b), "%04x:%04x", state->modem.vendor, state->modem.device);
-	syslog(LOG_NOTICE, "%s: Found %s modem %s", state->modem.tty,
+	syslog(LOG_NOTICE, "%s: Found %s modem %s", state->modem.device_id,
 			state->modem.driver, b);
 	umts_config_set(state, "modem_id", b);
 	umts_config_set(state, "modem_driver", state->modem.driver);
@@ -256,7 +256,7 @@ static void umts_select_modem(struct umts_state *state) {
 			strncat(b, umts_modem_modestr(i), sizeof(b) - strlen(b) - 2);
 			strcat(b, " ");
 		}
-	syslog(LOG_NOTICE, "%s: Supported modes: %s", state->modem.tty, b);
+	syslog(LOG_NOTICE, "%s: Supported modes: %s", state->modem.device_id, b);
 }
 
 /**
@@ -267,7 +267,7 @@ static void umts_open_control(struct umts_state *state) {
 	char ttypath[24];
 	umts_tty_calc(state->modem.tty, state->modem.cfg->ctlidx, ttypath);
 	if ((state->ctlfd = umts_tty_cloexec(umts_tty_open(ttypath))) == -1) {
-		syslog(LOG_CRIT, "%s: Unable to open terminal", state->modem.tty);
+		syslog(LOG_CRIT, "%s: Unable to open terminal", state->modem.device_id);
 		umts_exitcode(UMTS_EMODEM);
 	}
 }
@@ -292,7 +292,7 @@ static void umts_identify(struct umts_state *state) {
 	// Identify modem
 	if (umts_tty_put(state->ctlfd, "AT+CGMI;+CGMM\r") < 1
 	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
-		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.tty, b);
+		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.device_id, b);
 		umts_exitcode(UMTS_EMODEM);
 	}
 	char *saveptr;
@@ -302,7 +302,7 @@ static void umts_identify(struct umts_state *state) {
 		mi = strdup(mi);
 		mm = strdup(mm);
 		snprintf(b, sizeof(b), "%s %s", mi, mm);
-		syslog(LOG_NOTICE, "%s: Identified as %s", state->modem.tty, b);
+		syslog(LOG_NOTICE, "%s: Identified as %s", state->modem.device_id, b);
 		umts_config_set(state, "modem_name", b);
 		free(mi);
 		free(mm);
@@ -321,25 +321,25 @@ static void umts_check_sim(struct umts_state *state) {
 	if (umts_tty_put(state->ctlfd, "AT+CPIN?\r") < 1
 	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK
 	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
-		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.tty, b);
+		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, b);
 		umts_config_set(state, "simstate", "error");
 		umts_exitcode(UMTS_ESIM);
 	}
 
 	// Evaluate SIM state
 	if (!strcmp(c, "+CPIN: READY")) {
-		syslog(LOG_NOTICE, "%s: SIM card is ready", state->modem.tty);
+		syslog(LOG_NOTICE, "%s: SIM card is ready", state->modem.device_id);
 		umts_config_set(state, "simstate", "ready");
 		state->simstate = 0;
 	} else if (!strcmp(c, "+CPIN: SIM PIN")) {
 		umts_config_set(state, "simstate", "wantpin");
 		state->simstate = 1;
 	} else if (!strcmp(c, "+CPIN: SIM PUK")) {
-		syslog(LOG_WARNING, "%s: SIM requires PUK!", state->modem.tty);
+		syslog(LOG_WARNING, "%s: SIM requires PUK!", state->modem.device_id);
 		umts_config_set(state, "simstate", "wantpuk");
 		state->simstate = 2;
 	} else {
-		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.tty, c);
+		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, c);
 		umts_config_set(state, "simstate", "error");
 		state->simstate = -1;
 		umts_exitcode(UMTS_ESIM);
@@ -370,11 +370,11 @@ static void umts_enter_puk(struct umts_state *state, const char *puk, const char
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (umts_tty_put(state->ctlfd, b) >= 0
 	&& umts_tty_get(state->ctlfd, b, sizeof(b), 2500) == UMTS_AT_OK) {
-		syslog(LOG_NOTICE, "%s: PIN reset successful", state->modem.tty);
+		syslog(LOG_NOTICE, "%s: PIN reset successful", state->modem.device_id);
 		umts_config_set(state, "simstate", "ready");
 		umts_exitcode(UMTS_OK);
 	} else {
-		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.tty, b);
+		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, b);
 		umts_exitcode(UMTS_EUNLOCK);
 	}
 }
@@ -389,7 +389,7 @@ static void umts_enter_pin(struct umts_state *state) {
 	char *pin = umts_config_get(state, "umts_pin");
 	char b[512] = {0};
 	if (!pin) {
-		syslog(LOG_CRIT, "%s: PIN missing", state->modem.tty);
+		syslog(LOG_CRIT, "%s: PIN missing", state->modem.device_id);
 		umts_exitcode(UMTS_EUNLOCK);
 	}
 	if (strpbrk(pin, "\"\r\n;"))
@@ -401,10 +401,10 @@ static void umts_enter_pin(struct umts_state *state) {
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (umts_tty_put(state->ctlfd, b) < 0
 	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
-		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.tty, b);
+		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
 		umts_exitcode(UMTS_EUNLOCK);
 	}
-	syslog(LOG_NOTICE, "%s: PIN accepted", state->modem.tty);
+	syslog(LOG_NOTICE, "%s: PIN accepted", state->modem.device_id);
 	umts_config_set(state, "simstate", "ready");
 
 	// Wait a few seconds for the dongle to find a carrier.
@@ -425,7 +425,7 @@ static void umts_check_caps(struct umts_state *state) {
 		if (strstr(b, "CGSM")) {
 			state->is_gsm = 1;
 			umts_config_set(state, "modem_gsm", "1");
-			syslog(LOG_NOTICE, "%s: Detected a GSM modem", state->modem.tty);
+			syslog(LOG_NOTICE, "%s: Detected a GSM modem", state->modem.device_id);
 		}
 	}
 }
@@ -440,7 +440,7 @@ static void umts_set_mode(struct umts_state *state) {
 	char *m = umts_config_get(state, "umts_mode");
 	enum umts_mode mode = umts_modem_modeval((m) ? m : "auto");
 	if (mode == -1 || !state->modem.cfg->modecmd[mode]) {
-		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.tty, m);
+		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.device_id, m);
 		free(m);
 		umts_exitcode(UMTS_EINVAL);
 	}
@@ -449,11 +449,11 @@ static void umts_set_mode(struct umts_state *state) {
 	&& (umts_tty_put(state->ctlfd, state->modem.cfg->modecmd[mode]) < 0
 	|| umts_tty_get(state->ctlfd, b, sizeof(b), 5000) != UMTS_AT_OK)) {
 		syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
-			state->modem.tty, (m) ? m : "auto", b);
+			state->modem.device_id, (m) ? m : "auto", b);
 		free(m);
 		umts_exitcode(UMTS_EMODEM);
 	}
-	syslog(LOG_NOTICE, "%s: Mode set to %s", state->modem.tty, (m) ? m : "auto");
+	syslog(LOG_NOTICE, "%s: Mode set to %s", state->modem.device_id, (m) ? m : "auto");
 	free(m);
 }
 
@@ -492,7 +492,7 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 		&& (cops = strtok_r(cops, "\"", &saveptr))
 		&& strncmp(cops, provider, sizeof(provider) - 1)) {
 			syslog(LOG_NOTICE, "%s: Provider is %s",
-				state->modem.tty, cops);
+				state->modem.device_id, cops);
 			umts_config_revert(state, "provider");
 			umts_config_set(state, "provider", cops);
 			strncpy(provider, cops, sizeof(provider) - 1);
@@ -505,7 +505,7 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 			umts_config_set(state, "rssi", csq);
 			if ((status % logsteps) == 0)
 				syslog(LOG_NOTICE, "%s: RSSI is %s",
-					state->modem.tty, csq);
+					state->modem.device_id, csq);
 		}
 		ucix_save(state->uci, state->uciname);
 	}
@@ -525,38 +525,38 @@ static void umts_connect_finish(struct umts_state *state) {
 		kill(state->pppd, SIGTERM);
 		waitpid(state->pppd, &status, 0);
 		syslog(LOG_NOTICE, "%s: Terminated by signal %i",
-				state->modem.tty, signaled);
+				state->modem.device_id, signaled);
 		umts_exitcode(UMTS_ESIGNALED);
 	}
 
 	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 5) {
 		// pppd was termined externally, we won't treat this as an error
-		syslog(LOG_NOTICE, "%s: pppd terminated by signal", state->modem.tty);
+		syslog(LOG_NOTICE, "%s: pppd terminated by signal", state->modem.device_id);
 		umts_exitcode(UMTS_ESIGNALED);
 	}
 
 	switch (WEXITSTATUS(status)) {	// Exit codes from pppd (man pppd)
 		case 7:
 		case 16:
-			syslog(LOG_CRIT, "%s: pppd modem error", state->modem.tty);
+			syslog(LOG_CRIT, "%s: pppd modem error", state->modem.device_id);
 			umts_exitcode(UMTS_EMODEM);
 
 		case 8:
-			syslog(LOG_CRIT, "%s: pppd dialing error", state->modem.tty);
+			syslog(LOG_CRIT, "%s: pppd dialing error", state->modem.device_id);
 			umts_exitcode(UMTS_EDIAL);
 
 		case 0:
 		case 15:
-			syslog(LOG_CRIT, "%s: terminated by network", state->modem.tty);
+			syslog(LOG_CRIT, "%s: terminated by network", state->modem.device_id);
 			umts_exitcode(UMTS_ENETWORK);
 
 		case 19:
-			syslog(LOG_CRIT, "%s: invalid PPP credentials", state->modem.tty);
+			syslog(LOG_CRIT, "%s: invalid PPP credentials", state->modem.device_id);
 			umts_exitcode(UMTS_EAUTH);
 
 		default:
 			syslog(LOG_CRIT, "%s: PPP error (%i)",
-					state->modem.tty, WEXITSTATUS(status));
+					state->modem.device_id, WEXITSTATUS(status));
 			umts_exitcode(UMTS_EPPP);
 	}
 }
@@ -625,7 +625,7 @@ int main(int argc, char *const argv[]) {
 	} else if (app == UMTS_APP_PINPUK) {
 		// Need two arguments
 		if (optind + 2 != argc) {
-			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.tty);
+			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.device_id);
 			umts_exitcode(UMTS_EINVAL);
 		}
 
@@ -647,7 +647,7 @@ int main(int argc, char *const argv[]) {
 	// verbose provider info
 	if (umts_tty_put(state.ctlfd, "AT+CREG=2\r") < 1
 	|| umts_tty_get(state.ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
-		syslog(LOG_CRIT, "%s: failed to set verbose provider info (%s)", state.modem.tty, b);
+		syslog(LOG_CRIT, "%s: failed to set verbose provider info (%s)", state.modem.device_id, b);
 	}
 */
 
@@ -655,7 +655,7 @@ int main(int argc, char *const argv[]) {
 	if (state.is_gsm) {
 		umts_set_mode(&state);
 	} else {
-		syslog(LOG_NOTICE, "%s: Skipped setting mode on non-GSM modem", state.modem.tty);
+		syslog(LOG_NOTICE, "%s: Skipped setting mode on non-GSM modem", state.modem.device_id);
 	}
 
 	// Save state
