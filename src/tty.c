@@ -140,18 +140,6 @@ enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
 	return -1;
 }
 
-// Calculate actual control and data tty from basetty + index
-char* umts_tty_calc(const char *basetty, uint8_t index, char buf[static 24]) {
-	const char *c;
-	for (c = basetty; *c && (*c < '0' || *c > '9'); ++c);
-	const size_t slen = c - basetty;
-	if (slen > 15) return NULL;
-	memcpy(buf, "/dev/", 5);
-	memcpy(buf + 5, basetty, slen);
-	snprintf(buf + 5 + slen, 24 - 5 - slen, "%i", atoi(c) + index);
-	return buf;
-}
-
 int umts_tty_cloexec(int fd) {
 	fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC);
 	return fd;
@@ -184,7 +172,8 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 
 	char buf[256];
 
-	fputs(umts_tty_calc(state->modem.tty, state->modem.cfg->datidx, buf), fp);
+	fputs("/dev/", fp);
+	fputs(state->modem.dat_tty, fp);
 	fputs("\n460800\ncrtscts\nlock\n"
 		"noauth\nnoipdefault\nnovj\nnodetach\n", fp);
 

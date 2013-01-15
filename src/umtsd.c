@@ -257,7 +257,7 @@ static void umts_select_modem(struct umts_state *state) {
 static void umts_open_control(struct umts_state *state) {
 	// Open control connection
 	char ttypath[24];
-	umts_tty_calc(state->modem.tty, state->modem.cfg->ctlidx, ttypath);
+	snprintf(ttypath, sizeof(ttypath), "/dev/%s", state->modem.ctl_tty);
 	if ((state->ctlfd = umts_tty_cloexec(umts_tty_open(ttypath))) == -1) {
 		syslog(LOG_CRIT, "%s: Unable to open terminal", state->modem.device_id);
 		umts_exitcode(UMTS_EMODEM);

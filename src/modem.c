@@ -158,21 +158,19 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		modem->num_ttys = gl_tty.gl_pathc;
 		syslog(LOG_DEBUG, "Found %zu tty device%s", modem->num_ttys, modem->num_ttys != 1 ? "s" : "" );
 
-		/* Split the matched filename into the subdevice name
-		 * and the tty name. e.g., into
-		 * "/sys/bus/usb/devices/1-1.1/1-1.1:1.0" and "ttyUSB0".
-		 */
-		const char *subdev = gl_tty.gl_pathv[0];
-		char *ttyname = strrchr(subdev, '/');
-		*ttyname = '\0';
-		ttyname++;
 
-		snprintf(modem->tty, sizeof(modem->tty), "%s", ttyname);
+		/* Chop off the ttyUSB part, so we keep the path to the
+		 * subdevice, e.g., "/sys/bus/usb/devices/1-1.1/1-1.1:1.0".
+		 * We dup the string to prevent modifying original,
+		 * which is needed to extract the ttys below. */
+		char *subdev = strdup(gl_tty.gl_pathv[0]);
+		*(strrchr(subdev, '/')) = '\0';
 
 		/* Read the driver name from the first subdev with a tty
 		 * (the main device just has driver "usb", so that won't
 		 * help us). */
 		snprintf(buf, sizeof(buf), "%s/driver", subdev);
+		free(subdev);
 
 		umts_util_read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
 		syslog(LOG_DEBUG, "%s uses driver \"%s\"", device_id, modem->driver);
@@ -180,8 +178,18 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
 		if (umts_modem_match_profile(modem) == UMTS_OK) {
+			if (modem->cfg->ctlidx >= modem->num_ttys || modem->cfg->datidx >= modem->num_ttys) {
+				syslog(LOG_WARNING, "%s: Profile is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->cfg->ctlidx, modem->cfg->datidx, modem->num_ttys - 1);
+				continue;
+			}
+
 			syslog(LOG_INFO, "Found usable USB device %s (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
 			found = true;
+
+			snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->cfg->ctlidx], '/') + 1);
+			snprintf(modem->dat_tty, sizeof(modem->dat_tty), "%s", strrchr(gl_tty.gl_pathv[modem->cfg->datidx], '/') + 1);
+
+			syslog(LOG_INFO, "%s: Using control tty \"%s\" and data tty \"%s\"", modem->device_id, modem->ctl_tty, modem->dat_tty);
 
 			/* Call the callback, if any. If there is no
 			 * callback, just return the first match. */
