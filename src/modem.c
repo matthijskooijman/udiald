@@ -180,6 +180,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		if (umts_modem_match_profile(modem) == UMTS_OK) {
 			if (modem->cfg->ctlidx >= modem->num_ttys || modem->cfg->datidx >= modem->num_ttys) {
 				syslog(LOG_WARNING, "%s: Profile is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->cfg->ctlidx, modem->cfg->datidx, modem->num_ttys - 1);
+				globfree(&gl_tty);
 				continue;
 			}
 
@@ -193,12 +194,17 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 
 			/* Call the callback, if any. If there is no
 			 * callback, just return the first match. */
-			if (func)
+			if (func) {
 				func(modem);
-			else
+			} else {
+				globfree(&gl_tty);
 				break;
+			}
 		}
+		globfree(&gl_tty);
 	}
+
+	globfree(&gl);
 
 	return (found ? UMTS_OK : UMTS_ENODEV);
 }
