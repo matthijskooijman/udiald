@@ -95,11 +95,16 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
  * When no modems were found, this function returns UMTS_ENODEV.
  * If at least one modem was detected, it returns UMTS_OK.
  */
-int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *)) {
+int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter) {
 	if (func)
 		syslog(LOG_INFO, "Detecting usable devices");
 	else
 		syslog(LOG_INFO, "Detecting first usable device");
+
+	if (filter->flags & UMTS_FILTER_VENDOR)
+		syslog(LOG_INFO, "Only considering devices with vendor id 0x%x", filter->vendor);
+	if (filter->flags & UMTS_FILTER_DEVICE)
+		syslog(LOG_INFO, "Only considering devices with product id 0x%x", filter->device);
 
 	bool found = false;
 	glob_t gl;
@@ -120,6 +125,13 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		if (umts_util_read_hex_word(buf, &modem->vendor)) continue;
 		snprintf(buf, sizeof(buf), "%s/%s", path, "idProduct");
 		if (umts_util_read_hex_word(buf, &modem->device)) continue;
+
+		/* Check commandline vidpid filter */
+		if (((filter->flags & UMTS_FILTER_VENDOR) && (filter->vendor != modem->vendor))
+		|| ((filter->flags & UMTS_FILTER_DEVICE) && (filter->device != modem->device))) {
+			syslog(LOG_DEBUG, "Skipping USB device %s (0x%04x:0x%04x) due to commandline filter", strrchr(path, '/') + 1, modem->vendor, modem->device);
+			continue;
+		}
 
 		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", strrchr(path, '/') + 1, modem->vendor, modem->device);
 
@@ -179,11 +191,11 @@ static void umts_modem_print(struct umts_modem *modem) {
 /**
  * Detect (potentially) usable devices and list them on stdout.
  */
-int umts_modem_list_devices() {
+int umts_modem_list_devices(struct umts_device_filter *filter) {
 	syslog(LOG_NOTICE, "Listing usable devices");
 	/* Allocate some storage for umts_modem_find_devices to work */
 	struct umts_modem modem;
-	int e = umts_modem_find_devices(&modem, umts_modem_print);
+	int e = umts_modem_find_devices(&modem, umts_modem_print, filter);
 	if (e == UMTS_ENODEV) {
 		syslog(LOG_NOTICE, "No devices found");
 		return UMTS_OK;

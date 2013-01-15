@@ -77,6 +77,20 @@ struct umts_profile {
 	const struct umts_config cfg;
 };
 
+enum umts_filter_flags {
+	UMTS_FILTER_VENDOR = 1, /* The vendor field in this filter is valid */
+	UMTS_FILTER_DEVICE = 2, /* The device field in this filter is valid */
+};
+
+/**
+ * A set of limitations for device auto-detection.
+ */
+struct umts_device_filter {
+	enum umts_filter_flags flags; /* Flags to determine validity of vendor and device fields */
+	uint16_t vendor; /* The USB vendor id. */
+	uint16_t device; /* The USB product id. */
+};
+
 struct umts_modem {
 	uint16_t vendor;
 	uint16_t device;
@@ -97,6 +111,7 @@ struct umts_state {
 	int flags;
 	int simstate;
 	int is_gsm;
+	struct umts_device_filter filter;
 	struct umts_modem modem;
 	struct uci_context *uci;
 	char uciname[32];
@@ -108,9 +123,9 @@ extern int verbose;
 
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
-int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *));
+int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter);
 int umts_modem_list_profiles();
-int umts_modem_list_devices();
+int umts_modem_list_devices(struct umts_device_filter *filter);
 
 int umts_tty_open(const char *tty);
 char* umts_tty_calc(const char *basetty, uint8_t index, char buf[static 24]);

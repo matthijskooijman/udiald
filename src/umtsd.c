@@ -62,6 +62,8 @@ static int umts_usage(const char *app) {
 			"	-e			Don't write error state\n"
 			"	-n <name>		Use given profile instead of \"wan\"\n"
 			"	-v			Increase verbosity\n\n"
+			"	-V <vendorid>		Only consider devices with the given vendor id (in hexadecimal)\n"
+			"	-P <productid>		Only consider devices with the given product id (in hexadecimal)\n"
 			"Connect Options:\n"
 			"	-t			Test state file for previous SIM-unlocking\n"
 			"				errors before attempting to connect\n\n"
@@ -126,7 +128,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csupden:vtlL")) != -1) {
+	while ((s = getopt(argc, argv, "csupden:vtlLV:P:")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -171,7 +173,20 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 			case 't':
 				state->flags |= UMTS_FLAG_TESTSTATE;
 				break;
-
+			case 'V':
+				if (umts_util_parse_hex_word(optarg, &state->filter.vendor) != UMTS_OK) {
+					fprintf(stderr, "Failed to parse vendor id: \"%s\"\n", optarg);
+					exit(UMTS_EINVAL);
+				}
+				state->filter.flags |= UMTS_FILTER_VENDOR;
+				break;
+			case 'P':
+				if (umts_util_parse_hex_word(optarg, &state->filter.device) != UMTS_OK) {
+					fprintf(stderr, "Failed to parse product id: \"%s\"\n", optarg);
+					exit(UMTS_EINVAL);
+				}
+				state->filter.flags |= UMTS_FILTER_DEVICE;
+				break;
 			default:
 				exit(umts_usage(argv[0]));
 		}
@@ -215,7 +230,7 @@ static void umts_select_modem(struct umts_state *state) {
 	}
 */
 	/* Autodetect the first available modem (if any) */
-	int e = umts_modem_find_devices(&state->modem, NULL);
+	int e = umts_modem_find_devices(&state->modem, NULL, &state->filter);
 	if (e != UMTS_OK) {
 		syslog(LOG_CRIT, "No usable modem found");
 		umts_exitcode(e);
@@ -569,7 +584,7 @@ int main(int argc, char *const argv[]) {
 		return umts_modem_list_profiles();
 
 	if (app == UMTS_APP_LIST_DEVICES)
-		return umts_modem_list_devices();
+		return umts_modem_list_devices(&state.filter);
 
 	if (app == UMTS_APP_CONNECT && state.flags & UMTS_FLAG_TESTSTATE) {
 		if (umts_config_get_int(&state, "umts_error", UMTS_OK) == UMTS_EUNLOCK) {
