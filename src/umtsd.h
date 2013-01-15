@@ -100,7 +100,7 @@ struct umts_modem {
 	char ctl_tty[16];
 	char dat_tty[16];
 	size_t num_ttys;
-	const struct umts_config *cfg;
+	const struct umts_profile *profile;
 };
 
 struct umts_command {

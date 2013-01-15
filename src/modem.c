@@ -50,8 +50,8 @@ enum umts_mode umts_modem_modeval(const char *mode) {
 }
 
 /**
- * Find a profile matching the attributes passed. The configuration for
- * this profile is stored in modem->cfg.
+ * Find a profile matching the attributes passed. The found profile is
+ * stored in modem->profile.
  *
  * Returns UMTS_OK when a profile was found or UMTS_ENODEV when there
  * was no applicable profile.
@@ -66,7 +66,7 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
 		if (((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
 		&& ((p->flags & UMTS_PROFILE_NODEVICE) || p->device == modem->device)
 		&& (!p->driver || !strcmp(p->driver, modem->driver))) {
-			modem->cfg = &p->cfg;
+			modem->profile = p;
 
 			if (p->vendor)
 				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->device_id, p->vendor);
@@ -178,8 +178,8 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
 		if (umts_modem_match_profile(modem) == UMTS_OK) {
-			if (modem->cfg->ctlidx >= modem->num_ttys || modem->cfg->datidx >= modem->num_ttys) {
-				syslog(LOG_WARNING, "%s: Profile is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->cfg->ctlidx, modem->cfg->datidx, modem->num_ttys - 1);
+			if (modem->profile->cfg.ctlidx >= modem->num_ttys || modem->profile->cfg.datidx >= modem->num_ttys) {
+				syslog(LOG_WARNING, "%s: Profile is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->profile->cfg.ctlidx, modem->profile->cfg.datidx, modem->num_ttys - 1);
 				globfree(&gl_tty);
 				continue;
 			}
@@ -187,8 +187,8 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 			syslog(LOG_INFO, "%s: Found usable USB device (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
 			found = true;
 
-			snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->cfg->ctlidx], '/') + 1);
-			snprintf(modem->dat_tty, sizeof(modem->dat_tty), "%s", strrchr(gl_tty.gl_pathv[modem->cfg->datidx], '/') + 1);
+			snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.ctlidx], '/') + 1);
+			snprintf(modem->dat_tty, sizeof(modem->dat_tty), "%s", strrchr(gl_tty.gl_pathv[modem->profile->cfg.datidx], '/') + 1);
 
 			syslog(LOG_INFO, "%s: Using control tty \"%s\" and data tty \"%s\"", modem->device_id, modem->ctl_tty, modem->dat_tty);
 

@@ -241,7 +241,7 @@ static void umts_select_modem(struct umts_state *state) {
 
 	b[0] = '\0';
 	// Writing modestrings
-	const struct umts_config *cfg = state->modem.cfg;
+	const struct umts_config *cfg = &state->modem.profile->cfg;
 	for (size_t i = 0; i < UMTS_NUM_MODES; ++i)
 		if (cfg->modecmd[i]) {
 			umts_config_append(state, "modem_mode", umts_modem_modestr(i));
@@ -431,14 +431,14 @@ static void umts_set_mode(struct umts_state *state) {
 	char b[512] = {0};
 	char *m = umts_config_get(state, "umts_mode");
 	enum umts_mode mode = umts_modem_modeval((m) ? m : "auto");
-	if (mode == -1 || !state->modem.cfg->modecmd[mode]) {
+	if (mode == -1 || !state->modem.profile->cfg.modecmd[mode]) {
 		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.device_id, m);
 		free(m);
 		umts_exitcode(UMTS_EINVAL);
 	}
 	tcflush(state->ctlfd, TCIFLUSH);
-	if (state->modem.cfg->modecmd[mode][0]
-	&& (umts_tty_put(state->ctlfd, state->modem.cfg->modecmd[mode]) < 0
+	if (state->modem.profile->cfg.modecmd[mode][0]
+	&& (umts_tty_put(state->ctlfd, state->modem.profile->cfg.modecmd[mode]) < 0
 	|| umts_tty_get(state->ctlfd, b, sizeof(b), 5000) != UMTS_AT_OK)) {
 		syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
 			state->modem.device_id, (m) ? m : "auto", b);
