@@ -130,7 +130,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		 * device id, but this keeps the code a bit simpler for
 		 * now. */
 		if (filter->device_id && strcmp(device_id, filter->device_id)) {
-			syslog(LOG_DEBUG, "Skipping USB device %s (wrong device id)", device_id);
+			syslog(LOG_DEBUG, "%s: Skipping device (wrong device id)", device_id);
 			continue;
 		}
 
@@ -143,11 +143,11 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		/* Check commandline vidpid filter */
 		if (((filter->flags & UMTS_FILTER_VENDOR) && (filter->vendor != modem->vendor))
 		|| ((filter->flags & UMTS_FILTER_DEVICE) && (filter->device != modem->device))) {
-			syslog(LOG_DEBUG, "Skipping USB device %s (0x%04x:0x%04x) due to commandline filter", device_id, modem->vendor, modem->device);
+			syslog(LOG_DEBUG, "%s: Skipping device (0x%04x:0x%04x) due to commandline filter", device_id, modem->vendor, modem->device);
 			continue;
 		}
 
-		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", device_id, modem->vendor, modem->device);
+		syslog(LOG_DEBUG, "%s: Considering device (0x%04x:0x%04x)", device_id, modem->vendor, modem->device);
 
 		/* Find out how many tty devices this USB device
 		 * exports. */
@@ -156,7 +156,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		int e = umts_util_checked_glob(buf, 0, &gl_tty, "listing tty devices");
 		if (e) continue; /* No ttys or glob error */
 		modem->num_ttys = gl_tty.gl_pathc;
-		syslog(LOG_DEBUG, "Found %zu tty device%s", modem->num_ttys, modem->num_ttys != 1 ? "s" : "" );
+		syslog(LOG_DEBUG, "%s: Found %zu tty device%s", device_id, modem->num_ttys, modem->num_ttys != 1 ? "s" : "" );
 
 
 		/* Chop off the ttyUSB part, so we keep the path to the
@@ -173,7 +173,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		free(subdev);
 
 		umts_util_read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
-		syslog(LOG_DEBUG, "%s uses driver \"%s\"", device_id, modem->driver);
+		syslog(LOG_DEBUG, "%s: Detected driver \"%s\"", device_id, modem->driver);
 
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
@@ -184,7 +184,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 				continue;
 			}
 
-			syslog(LOG_INFO, "Found usable USB device %s (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
+			syslog(LOG_INFO, "%s: Found usable USB device (0x%04x:0x%04x)", modem->device_id, modem->vendor, modem->device);
 			found = true;
 
 			snprintf(modem->ctl_tty, sizeof(modem->ctl_tty), "%s", strrchr(gl_tty.gl_pathv[modem->cfg->ctlidx], '/') + 1);
