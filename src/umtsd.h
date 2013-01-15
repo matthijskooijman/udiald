@@ -70,7 +70,8 @@ enum umts_profile_flags {
  */
 struct umts_profile {
 	enum umts_profile_flags flags; /* Flags influencing profile selection */
-	char *name; /* A descriptive name for the profile */
+	char *name; /* A name to identify this profile. */
+	char *desc; /* A description of the device(s) supported by the profile */
 	uint16_t vendor; /* The USB vendor id. */
 	uint16_t device; /* The USB product id. */
 	char *driver; /* The usb driver, or NULL for a device profile or generic vendor profile. */

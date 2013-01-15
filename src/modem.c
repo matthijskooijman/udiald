@@ -74,7 +74,7 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
 				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->device_id, p->device);
 			if (p->driver)
 				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->device_id, p->driver);
-			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\"", modem->device_id, p->name);
+			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\" (%s)", modem->device_id, p->name, p->desc);
 			return UMTS_OK;
 		}
 	}
@@ -246,6 +246,7 @@ int umts_modem_list_profiles() {
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct umts_profile *p = &profiles[i];
 		printf("Profile: %s\n", p->name);
+		printf("\tDesc: %s\n", p->desc);
 		if (p->driver) printf("\tDriver: %s\n", p->driver);
 		if (p->vendor) printf("\tVendor: 0x%x\n", p->vendor);
 		if (p->device) printf("\tProduct: 0x%x\n", p->device);

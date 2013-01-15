@@ -18,10 +18,16 @@
  *
  * When autoselecting a profile from this list, the first entry that has
  * all of its conditions (vendor, device, driver) matched will be used.
+ *
+ * Also note that the name of a profile should never change, since
+ * users might have a profile selected for their device, which should
+ * remain working after an upgrade. The description can always be
+ * changed.
  */
 static const struct umts_profile profiles[] = {
 	{
-		.name   = "Ericsson F3705G",
+		.name   = "0BDB3705G",
+		.desc   = "Ericsson F3705G",
 		.vendor = 0x0bdb,
 		.device = 0x1900,
 		.cfg = {
@@ -36,7 +42,8 @@ static const struct umts_profile profiles[] = {
 	},
 
 	{
-		.name   = "Alcatel X060s",
+		.name   = "1BBB000",
+		.desc   = "Alcatel X060s",
 		.vendor = 0x1bbb,
 		.device = 0x0000,
 		.cfg = {
@@ -49,7 +56,8 @@ static const struct umts_profile profiles[] = {
 	},
 
 	{
-		.name = "Huawei K3520",
+		.name   = "12D11001",
+		.desc = "Huawei K3520",
 		.vendor = 0x12d1,
 		.device = 0x1001,
 		.cfg = {
@@ -65,7 +73,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "Huawei E173",
+		.name   = "12D11433",
+		.desc   = "Huawei E173",
 		.vendor = 0x12d1,
 		.device = 0x1433,
 		.cfg = {
@@ -89,7 +98,8 @@ static const struct umts_profile profiles[] = {
 
 // VENDOR DEFAULT PROFILES
 	{
-		.name   = "Huawei generic",
+		.name   = "12D1",
+		.desc   = "Huawei generic",
 		.vendor = 0x12d1,
 		.flags  = UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -105,7 +115,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "ZTE generic",
+		.name   = "19D2",
+		.desc   = "ZTE generic",
 		.vendor = 0x19d2,
 		.flags  = UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -122,7 +133,8 @@ static const struct umts_profile profiles[] = {
 	},
 // DRIVER PROFILES
 	{
-		.name   = "Option generic",
+		.name   = "option",
+		.desc   = "Option generic",
 		.driver = "option",
 		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -134,7 +146,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "Sierra generic",
+		.name   = "sierra",
+		.desc   = "Sierra generic",
 		.driver = "sierra",
 		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -146,7 +159,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "HSO generic",
+		.name   = "hso",
+		.desc   = "HSO generic",
 		.driver = "hso",
 		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -162,7 +176,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "CDC generic",
+		.name   = "cdc_acm",
+		.desc   = "CDC generic",
 		.driver = "cdc_acm",
 		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
@@ -176,7 +191,8 @@ static const struct umts_profile profiles[] = {
 		},
 	},
 	{
-		.name   = "USB serial generic",
+		.name   = "usbserial",
+		.desc   = "USB serial generic",
 		.driver = "usbserial",
 		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
 		.cfg = {
