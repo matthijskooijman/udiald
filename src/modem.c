@@ -20,17 +20,9 @@
  */
 
 #include "umtsd.h"
-#include <glob.h>
-#include <stdint.h>
 #include <limits.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <syslog.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <libgen.h>
 
 #include "deviceconfig.h"
 
@@ -55,78 +47,6 @@ enum umts_mode umts_modem_modeval(const char *mode) {
 		if (!strcmp(mode, modestr[i]))
 			return i;
 	return -1;
-}
-
-/**
- * A version of glob that checks the return value and in case of error,
- * reports a log message and returns an umts_errorcode instead.
- *
- * Compared to regular glob, the errfunc parameter is left out, but the
- * activity parameter is added, which should be a string for use in
- * error messages.
- */
-static int checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity) {
-	int e = glob(pattern, flags, NULL, pglob);
-
-	if (e == 0) {
-		return UMTS_OK;
-	} else if (e == GLOB_NOMATCH) {
-		return UMTS_ENODEV;
-	} else if (errno) {
-		syslog(LOG_CRIT, "Glob error while %s: %s", activity, strerror(errno));
-		return UMTS_EINTERNAL;
-	} else {
-		syslog(LOG_CRIT, "Unknown glob error while %s", activity);
-		return UMTS_EINTERNAL;
-	}
-}
-
-/**
- * Read a 16 bit word from a file, converting it from a hex string to a
- * real int.
- *
- * If an error occurs, a DEBUG message is logged, errno is reset and
- * UMTS_EINVAL is returned.
- */
-static int read_hex_word(const char *path, uint16_t *res) {
-	const int hex_bytes = sizeof(*res) * 2;
-	char buf[hex_bytes + 1];
-
-	int fd = open(path, O_RDONLY);
-	if (fd == -1) {
-		syslog(LOG_DEBUG, "%s: Failed to open: %s", path, strerror(errno));
-		errno = 0;
-		return UMTS_EINVAL;
-	}
-
-	int n = read(fd, buf, hex_bytes);
-	close(fd);
-	if (n != hex_bytes) {
-		syslog(LOG_DEBUG, "%s: Failed to read %d bytes (got %d): %s", path, hex_bytes, n, strerror(errno));
-		errno = 0;
-		return UMTS_EINVAL;
-	}
-
-	buf[hex_bytes] = '\0';
-	char *end;
-	*res = strtoul(buf, &end, 16);
-	if (*end != '\0') {
-		syslog(LOG_DEBUG, "%s: Failed to convert hex word (read: \"%s\")", path, buf);
-		return UMTS_EINVAL;
-	}
-
-	return UMTS_OK;
-}
-
-/**
- * Reads the target of a symlink and returns the basename of that target
- * in res.
- */
-static void read_symlink_basename(const char *path, char *res, size_t size) {
-	char buf[PATH_MAX];
-	int n = readlink(path, buf, sizeof(buf));
-	buf[n] = '\0';
-	snprintf(res, size, "%s", basename(buf));
 }
 
 /**
@@ -184,7 +104,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 	bool found = false;
 	glob_t gl;
 	char buf[PATH_MAX + 1];
-	int e = checked_glob(UMTS_SYS_USB_DEVICES, GLOB_NOSORT, &gl, "listing USB devices");
+	int e = umts_util_checked_glob(UMTS_SYS_USB_DEVICES, GLOB_NOSORT, &gl, "listing USB devices");
 	if (e) return e;
 
 	for (size_t i = 0; i < gl.gl_pathc; ++i) {
@@ -197,9 +117,9 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 
 		/* Get the USB vidpid. */
 		snprintf(buf, sizeof(buf), "%s/%s", path, "idVendor");
-		if (read_hex_word(buf, &modem->vendor)) continue;
+		if (umts_util_read_hex_word(buf, &modem->vendor)) continue;
 		snprintf(buf, sizeof(buf), "%s/%s", path, "idProduct");
-		if (read_hex_word(buf, &modem->device)) continue;
+		if (umts_util_read_hex_word(buf, &modem->device)) continue;
 
 		syslog(LOG_DEBUG, "Considering USB device %s (0x%04x:0x%04x)", strrchr(path, '/') + 1, modem->vendor, modem->device);
 
@@ -207,7 +127,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		 * exports. */
 		snprintf(buf, sizeof(buf), "%s/*/tty*", path);
 		glob_t gl_tty;
-		int e = checked_glob(buf, 0, &gl_tty, "listing tty devices");
+		int e = umts_util_checked_glob(buf, 0, &gl_tty, "listing tty devices");
 		if (e) continue; /* No ttys or glob error */
 		syslog(LOG_DEBUG, "Found %zu tty device%s", gl_tty.gl_pathc, gl_tty.gl_pathc != 1 ? "s" : "" );
 
@@ -227,7 +147,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		 * help us). */
 		snprintf(buf, sizeof(buf), "%s/driver", subdev);
 
-		read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
+		umts_util_read_symlink_basename(buf, modem->driver, sizeof(modem->driver));
 		syslog(LOG_DEBUG, "%s uses driver \"%s\"", ttyname, modem->driver);
 
 		if (umts_modem_match_profile(modem) == UMTS_OK) {

@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <stdint.h>
 #include <errno.h>
+#include <glob.h>
 #include "ucix.h"
 
 #define UMTS_FLAG_TESTSTATE	0x01
@@ -120,5 +121,9 @@ pid_t umts_tty_pppd(struct umts_state *state);
 
 int umts_connect_main(struct umts_state *state);
 int umts_dial_main(struct umts_state *state);
+
+int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity);
+int umts_util_read_hex_word(const char *path, uint16_t *res);
+void umts_util_read_symlink_basename(const char *path, char *res, size_t size);
 
 #endif /* UMTSD_H_ */
