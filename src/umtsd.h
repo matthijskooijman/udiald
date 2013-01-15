@@ -118,8 +118,8 @@ struct umts_state {
 	struct umts_device_filter filter;
 	struct umts_modem modem;
 	struct uci_context *uci;
-	char uciname[32];
-	char profile[32];
+	char uciname[32]; /*< The name of the uci config file to use */
+	char networkname[32]; /*< The name of the uci section to use */
 	pid_t pppd;
 };
 

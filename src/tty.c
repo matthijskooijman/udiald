@@ -146,8 +146,8 @@ int umts_tty_cloexec(int fd) {
 }
 
 pid_t umts_tty_pppd(struct umts_state *state) {
-	char cpath[16 + sizeof(state->profile)] = "/tmp/umtsd-pppd-";
-	strcat(cpath, state->profile);
+	char cpath[16 + sizeof(state->networkname)] = "/tmp/umtsd-pppd-";
+	strcat(cpath, state->networkname);
 	if (unlink(cpath) < 0 && errno != ENOENT) {
 		syslog(LOG_CRIT, "%s: Failed to clean up existing ppp config file: %s",
 				state->modem.device_id, strerror(errno));
@@ -182,11 +182,11 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	ssize_t l = readlink("/proc/self/exe", buf + 9, sizeof(buf) - 10);
 	/* Pass on verbosity options */
 	char *verbose_opts = (verbose == 0 ? "" : verbose == 1 ? " -v" : " -v -v");
-	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -dn%s%s\"\n", state->profile, verbose_opts);
+	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -dn%s%s\"\n", state->networkname, verbose_opts);
 	fputs(buf, fp);
 
 	// Set linkname and ipparam
-	fprintf(fp, "linkname \"%s\"\nipparam \"%s\"\n", state->profile, state->profile);
+	fprintf(fp, "linkname \"%s\"\nipparam \"%s\"\n", state->networkname, state->networkname);
 
 	// UCI to pppd-cfg
 	int val;

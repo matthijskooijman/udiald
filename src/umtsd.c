@@ -35,7 +35,7 @@
 #include "config.h"
 
 static volatile int signaled = 0;
-static struct umts_state state = {.uciname = "network", .profile = "wan"};
+static struct umts_state state = {.uciname = "network", .networkname = "wan"};
 int verbose = 0;
 
 enum umts_app {
@@ -60,7 +60,7 @@ static int umts_usage(const char *app) {
 			"	-l                      Detect and list usable devices\n"
 			"\nGlobal Options:\n"
 			"	-e			Don't write error state\n"
-			"	-n <name>		Use given profile instead of \"wan\"\n"
+			"	-n <name>		Use given network name instead of \"wan\"\n"
 			"	-v			Increase verbosity\n\n"
 			"	-V <vendorid>		Only consider devices with the given vendor id (in hexadecimal)\n"
 			"	-P <productid>		Only consider devices with the given product id (in hexadecimal)\n"
@@ -165,7 +165,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 				break;
 
 			case 'n':
-				strncpy(state->profile, optarg, sizeof(state->profile) - 1);
+				strncpy(state->networkname, optarg, sizeof(state->networkname) - 1);
 				break;
 
 			case 'v':
