@@ -123,6 +123,7 @@ int umts_connect_main(struct umts_state *state);
 int umts_dial_main(struct umts_state *state);
 
 int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity);
+int umts_util_parse_hex_word(const char *hex, uint16_t *res);
 int umts_util_read_hex_word(const char *path, uint16_t *res);
 void umts_util_read_symlink_basename(const char *path, char *res, size_t size);
 

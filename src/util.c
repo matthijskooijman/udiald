@@ -51,6 +51,20 @@ int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const 
 }
 
 /**
+ * Parse a 16 bit word from the given string, converting it from a hex
+ * string to a real int.
+ */
+int umts_util_parse_hex_word(const char *hex, uint16_t *res) {
+	char *end;
+	*res = strtoul(hex, &end, 16);
+	if (*end != '\0') {
+		syslog(LOG_DEBUG, "Failed to convert hex word (read: \"%s\")", hex);
+		return UMTS_EINVAL;
+	}
+	return UMTS_OK;
+}
+
+/**
  * Read a 16 bit word from a file, converting it from a hex string to a
  * real int.
  *
@@ -77,14 +91,8 @@ int umts_util_read_hex_word(const char *path, uint16_t *res) {
 	}
 
 	buf[hex_bytes] = '\0';
-	char *end;
-	*res = strtoul(buf, &end, 16);
-	if (*end != '\0') {
-		syslog(LOG_DEBUG, "%s: Failed to convert hex word (read: \"%s\")", path, buf);
-		return UMTS_EINVAL;
-	}
 
-	return UMTS_OK;
+	return umts_util_parse_hex_word(buf, res);
 }
 
 /**
