@@ -179,7 +179,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 
 		if (umts_modem_match_profile(modem) == UMTS_OK) {
 			if (modem->profile->cfg.ctlidx >= modem->num_ttys || modem->profile->cfg.datidx >= modem->num_ttys) {
-				syslog(LOG_WARNING, "%s: Profile is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->profile->cfg.ctlidx, modem->profile->cfg.datidx, modem->num_ttys - 1);
+				syslog(LOG_WARNING, "%s: Profile \"%s\" is invalid, control index (%d) or data index (%d) is more than number largest available tty index (%zu)", modem->device_id, modem->profile->name, modem->profile->cfg.ctlidx, modem->profile->cfg.datidx, modem->num_ttys - 1);
 				globfree(&gl_tty);
 				continue;
 			}
