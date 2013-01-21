@@ -66,6 +66,8 @@ static int umts_usage(const char *app) {
 			"	-P <productid>		Only consider devices with the given product id (in hexadecimal)\n"
 			"	-D <deviceid>		Only consider the device with the given id (as listed in sysfs,\n"
 			"				e.g. 1.2-1)\n"
+			"	-p <profilename>        Use the profile with the given name instead of autodetecting a\n"
+			"				profile to use. Run with -L to get a list of valid profiles.\n"
 			"Connect Options:\n"
 			"	-t			Test state file for previous SIM-unlocking\n"
 			"				errors before attempting to connect\n\n"
@@ -130,7 +132,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:")) != -1) {
+	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:p:")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -191,6 +193,9 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 				break;
 			case 'D':
 				state->filter.device_id = optarg;
+				break;
+			case 'p':
+				state->filter.profile_name = strdup(optarg);
 				break;
 			default:
 				exit(umts_usage(argv[0]));

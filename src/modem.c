@@ -51,10 +51,17 @@ enum umts_mode umts_modem_modeval(const char *mode) {
 
 
 /**
- * Check if the given profile matches the given modem.
+ * Check if the given profile matches the given modem (or, if a name is
+ * given, has the given name).
  */
-static int match_profile(struct umts_modem *modem, const struct umts_profile *p) {
-	if (((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
+static int match_profile(struct umts_modem *modem, const struct umts_profile *p, const char *profile_name) {
+	if (profile_name && !strcmp(p->name, profile_name)) {
+		modem->profile = p;
+		syslog(LOG_NOTICE, "%s: Selected requested configuration profile \"%s\" (%s)", modem->device_id, p->name, p->desc);
+		return UMTS_OK;
+	}
+	if (!profile_name
+	&& ((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
 	&& ((p->flags & UMTS_PROFILE_NODEVICE) || p->device == modem->device)
 	&& (!p->driver || !strcmp(p->driver, modem->driver))) {
 		modem->profile = p;
@@ -78,11 +85,11 @@ static int match_profile(struct umts_modem *modem, const struct umts_profile *p)
  * Returns UMTS_OK when a profile was found or UMTS_ENODEV when there
  * was no applicable profile.
  */
-static int umts_modem_find_profile(const struct umts_state *state, struct umts_modem *modem) {
+static int umts_modem_find_profile(const struct umts_state *state, struct umts_modem *modem, const char *profile_name) {
 	// Match profiles loaded from uci first
 	struct umts_profile_list *l;
 	list_for_each_entry(l, &state->custom_profiles, h) {
-		if (match_profile(modem, &l->p) == UMTS_OK)
+		if (match_profile(modem, &l->p, profile_name) == UMTS_OK)
 			return UMTS_OK;
 	}
 	// Find the first profile that has all of its conditions
@@ -90,7 +97,7 @@ static int umts_modem_find_profile(const struct umts_state *state, struct umts_m
 	// matched first, then generic per-vendor profiles and then
 	// generic per-driver profiles.
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
-		if (match_profile(modem, &profiles[i]) == UMTS_OK)
+		if (match_profile(modem, &profiles[i], profile_name) == UMTS_OK)
 			return UMTS_OK;
 	}
 
@@ -193,7 +200,7 @@ int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *m
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
 		/* Find an applicable profile */
-		umts_modem_find_profile(state, modem);
+		umts_modem_find_profile(state, modem, filter->profile_name);
 
 		/* If a profile was found, find out the tty devices to
 		 * use. */
