@@ -329,8 +329,8 @@ static void display_profile(const struct umts_profile *p) {
 		printf("\tFromUci: %s\n", p->flags & UMTS_PROFILE_FROMUCI ? "Yes" : "No");
 		if (p->desc) printf("\tDesc: %s\n", p->desc);
 		if (p->driver) printf("\tDriver: %s\n", p->driver);
-		if (p->vendor) printf("\tVendor: 0x%x\n", p->vendor);
-		if (p->device) printf("\tProduct: 0x%x\n", p->device);
+		if (p->vendor) printf("\tVendor: 0x%04x\n", p->vendor);
+		if (p->device) printf("\tProduct: 0x%04x\n", p->device);
 		printf("\tControl: %d\n", p->cfg.ctlidx);
 		printf("\tData: %d\n", p->cfg.datidx);
 		for (int mode = 0; mode < UMTS_NUM_MODES; ++mode)
