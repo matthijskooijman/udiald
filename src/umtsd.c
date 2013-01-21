@@ -54,7 +54,7 @@ static int umts_usage(const char *app) {
 			"	-c			Connect using modem (default)\n"
 			"	-s			Scan modem and reset state file\n"
 			"	-u			Same as scan but also try to unlock SIM\n"
-			" 	-p <PUK> <PIN>		Reset PIN of locked SIM using PUK\n"
+			" 	-U <PUK> <PIN>		Reset PIN of locked SIM using PUK\n"
 			"	-d			Dial (used internally)\n"
 			"	-L                      List available configuration profiles\n"
 			"	-l                      Detect and list usable devices\n"
@@ -130,7 +130,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 	enum umts_app app = UMTS_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csupden:vtlLV:P:D:")) != -1) {
+	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UMTS_APP_CONNECT;
@@ -144,7 +144,7 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 				app = UMTS_APP_UNLOCK;
 				break;
 
-			case 'p':
+			case 'U':
 				app = UMTS_APP_PINPUK;
 				break;
 
