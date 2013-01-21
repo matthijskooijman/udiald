@@ -180,10 +180,11 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 	// We need to pass ourselve as connect script so get our path from /proc
 	memcpy(buf, "connect \"", 9);
 	ssize_t l = readlink("/proc/self/exe", buf + 9, sizeof(buf) - 10);
-	/* Pass on verbosity options */
+	/* Pass on relevant options */
 	char *verbose_opts = (verbose == 0 ? "" : verbose == 1 ? " -v" : " -v -v");
-	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -dn%s%s\"\n", state->networkname, verbose_opts);
+	snprintf(buf + 9 + l, sizeof(buf) - 9 - l, " -d -n%s -D%s -p%s %s\"\n", state->networkname, state->modem.device_id, state->modem.profile->name, verbose_opts);
 	fputs(buf, fp);
+	printf(buf);
 
 	// Set linkname and ipparam
 	fprintf(fp, "linkname \"%s\"\nipparam \"%s\"\n", state->networkname, state->networkname);
