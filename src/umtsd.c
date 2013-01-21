@@ -230,7 +230,7 @@ static void umts_select_modem(struct umts_state *state) {
 	state->filter.flags |= UMTS_FILTER_PROFILE;
 
 	/* Autodetect the first available modem (if any) */
-	int e = umts_modem_find_devices(&state->modem, NULL, &state->filter);
+	int e = umts_modem_find_devices(state, &state->modem, NULL, &state->filter);
 	if (e != UMTS_OK) {
 		syslog(LOG_CRIT, "No usable modem found");
 		umts_exitcode(e);
@@ -557,12 +557,17 @@ static void umts_connect_finish(struct umts_state *state) {
 }
 
 int main(int argc, char *const argv[]) {
+	INIT_LIST_HEAD(&state.custom_profiles);
+
 	enum umts_app app;
 	app = umts_parse_cmdline(&state, argc, argv);
 
 	umts_setup_syslog(&state, app);
 
 	umts_setup_uci(&state);
+
+	/* Load additional profiles from uci */
+	umts_modem_load_profiles(&state);
 
 	atexit(umts_cleanup);
 
@@ -581,10 +586,10 @@ int main(int argc, char *const argv[]) {
 		return umts_dial_main(&state);
 
 	if (app == UMTS_APP_LIST_PROFILES)
-		return umts_modem_list_profiles();
+		return umts_modem_list_profiles(&state);
 
 	if (app == UMTS_APP_LIST_DEVICES)
-		return umts_modem_list_devices(&state.filter);
+		return umts_modem_list_devices(&state, &state.filter);
 
 	if (app == UMTS_APP_CONNECT && state.flags & UMTS_FLAG_TESTSTATE) {
 		if (umts_config_get_int(&state, "umts_error", UMTS_OK) == UMTS_EUNLOCK) {

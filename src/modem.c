@@ -78,7 +78,13 @@ static int match_profile(struct umts_modem *modem, const struct umts_profile *p)
  * Returns UMTS_OK when a profile was found or UMTS_ENODEV when there
  * was no applicable profile.
  */
-static int umts_modem_match_profile(struct umts_modem *modem) {
+static int umts_modem_find_profile(const struct umts_state *state, struct umts_modem *modem) {
+	// Match profiles loaded from uci first
+	struct umts_profile_list *l;
+	list_for_each_entry(l, &state->custom_profiles, h) {
+		if (match_profile(modem, &l->p) == UMTS_OK)
+			return UMTS_OK;
+	}
 	// Find the first profile that has all of its conditions
 	// matching. The array is ordered so that specific devices are
 	// matched first, then generic per-vendor profiles and then
@@ -104,7 +110,7 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
  * When no modems were found, this function returns UMTS_ENODEV.
  * If at least one modem was detected, it returns UMTS_OK.
  */
-int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter) {
+int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter) {
 	if (func)
 		syslog(LOG_INFO, "Detecting usable devices");
 	else
@@ -187,7 +193,7 @@ int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_mode
 		snprintf(modem->device_id, sizeof(modem->device_id), "%s", device_id);
 
 		/* Find an applicable profile */
-		umts_modem_match_profile(modem);
+		umts_modem_find_profile(state, modem);
 
 		/* If a profile was found, find out the tty devices to
 		 * use. */
@@ -235,18 +241,18 @@ static void umts_modem_print(struct umts_modem *modem) {
 	printf("\tTTYCount: %zu\n", modem->num_ttys);
 	if (modem->profile) {
 		printf("\tProfile: %s\n", modem->profile->name);
-		printf("\tProfiledesc: %s\n", modem->profile->desc);
+		if (modem->profile->desc) printf("\tProfiledesc: %s\n", modem->profile->desc);
 	}
 }
 
 /**
  * Detect (potentially) usable devices and list them on stdout.
  */
-int umts_modem_list_devices(struct umts_device_filter *filter) {
+int umts_modem_list_devices(const struct umts_state *state, struct umts_device_filter *filter) {
 	syslog(LOG_NOTICE, "Listing usable devices");
 	/* Allocate some storage for umts_modem_find_devices to work */
 	struct umts_modem modem;
-	int e = umts_modem_find_devices(&modem, umts_modem_print, filter);
+	int e = umts_modem_find_devices(state, &modem, umts_modem_print, filter);
 	if (e == UMTS_ENODEV) {
 		syslog(LOG_NOTICE, "No devices found");
 		return UMTS_OK;
@@ -258,13 +264,70 @@ int umts_modem_list_devices(struct umts_device_filter *filter) {
 	return UMTS_OK;
 }
 
+/* Parse a single uci section of type umtsd_profile into a profile */
+static int umts_modem_parse_profile(const struct uci_section *s, struct umts_profile *p) {
+	p->name = strdup(s->e.name);
+	p->flags = UMTS_PROFILE_FROMUCI | UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE;
+	struct uci_element *e;
+	uci_foreach_element(&s->options, e) {
+		struct uci_option *o = uci_to_option(e);
+		if (o->type != UCI_TYPE_STRING) continue;
+
+		if (!strcmp(o->e.name, "desc"))
+			p->desc = strdup(o->v.string);
+		else if (!strcmp(o->e.name, "control"))
+			p->cfg.ctlidx = strtoul(o->v.string, NULL, 10);
+		else if (!strcmp(o->e.name, "data"))
+			p->cfg.datidx = strtoul(o->v.string, NULL, 10);
+		else if (!strcmp(o->e.name, "vendor")) {
+			p->vendor = strtoul(o->v.string, NULL, 16);
+			p->flags &= ~UMTS_PROFILE_NOVENDOR;
+		} else if (!strcmp(o->e.name, "product")) {
+			p->device = strtoul(o->v.string, NULL, 16);
+			p->flags &= ~UMTS_PROFILE_NODEVICE;
+		} else if (!strncmp(o->e.name, "mode_", 5)) {
+			/* Name starts with mode_ */
+			for (int i=0; i < UMTS_NUM_MODES; ++i)
+				if (!strcmp(o->e.name + 5, umts_modem_modestr(i)))
+					/* And ends with this mode name */
+					p->cfg.modecmd[i] = strdup(o->v.string);
+		} else {
+			syslog(LOG_WARNING, "Uci section %s contains unknown option: %s", s->e.name, o->e.name);
+		}
+	}
+
+	return UMTS_OK;
+}
+
 /**
- * Output a list of all known profiles on stdout.
+ * Load additional profiles from the uci configuration.
  */
+int umts_modem_load_profiles(struct umts_state *state) {
+	struct uci_ptr ptr = {0};
+	ptr.package = state->uciname;
+	uci_lookup_ptr(state->uci, &ptr, NULL, false);
+	struct uci_element *se;
+	uci_foreach_element(&ptr.p->sections, se) {
+		struct uci_section *s = uci_to_section(se);
+		if (!strcmp("umtsd_profile", s->type)) {
+			struct umts_profile_list *l = calloc(1, sizeof (struct umts_profile_list));
+			if (umts_modem_parse_profile(s, &l->p) != UMTS_OK) {
+				free(l);
+				continue;
+			}
+
+			syslog(LOG_INFO, "Loaded profile \"%s\" from uci", l->p.name);
+			list_add(&l->h, &state->custom_profiles);
+		}
+	}
+	return UMTS_OK;
+}
+
 
 static void display_profile(const struct umts_profile *p) {
 		printf("Profile: %s\n", p->name);
-		printf("\tDesc: %s\n", p->desc);
+		printf("\tFromUci: %s\n", p->flags & UMTS_PROFILE_FROMUCI ? "Yes" : "No");
+		if (p->desc) printf("\tDesc: %s\n", p->desc);
 		if (p->driver) printf("\tDriver: %s\n", p->driver);
 		if (p->vendor) printf("\tVendor: 0x%x\n", p->vendor);
 		if (p->device) printf("\tProduct: 0x%x\n", p->device);
@@ -277,7 +340,12 @@ static void display_profile(const struct umts_profile *p) {
 /**
  * Output a list of all known profiles on stdout.
  */
-int umts_modem_list_profiles() {
+int umts_modem_list_profiles(const struct umts_state *state) {
+	struct umts_profile_list *l;
+	list_for_each_entry(l, &state->custom_profiles, h) {
+		display_profile(&l->p);
+	}
+
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct umts_profile *p = &profiles[i];
 		display_profile(p);

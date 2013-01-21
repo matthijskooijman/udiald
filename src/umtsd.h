@@ -63,6 +63,7 @@ struct umts_config {
 enum umts_profile_flags {
 	UMTS_PROFILE_NOVENDOR = 1, /* The vendor field in this profile should be ignored */
 	UMTS_PROFILE_NODEVICE = 2, /* The device field in this profile should be ignored */
+	UMTS_PROFILE_FROMUCI = 4, /* This profile comes from uci */
 };
 
 /* Configuration profile, which combines a configuration with info about
@@ -75,7 +76,15 @@ struct umts_profile {
 	uint16_t vendor; /* The USB vendor id. */
 	uint16_t device; /* The USB product id. */
 	char *driver; /* The usb driver, or NULL for a device profile or generic vendor profile. */
-	const struct umts_config cfg;
+	struct umts_config cfg;
+};
+
+/**
+ * A struct to put a umts_profile in a ubox list.
+ */
+struct umts_profile_list {
+	struct umts_profile p;
+	struct list_head h;
 };
 
 enum umts_filter_flags {
@@ -123,15 +132,17 @@ struct umts_state {
 	char uciname[32]; /*< The name of the uci config file to use */
 	char networkname[32]; /*< The name of the uci section to use */
 	pid_t pppd;
+	struct list_head custom_profiles; /* Custom profiles loaded from uci */
 };
 
 extern int verbose;
 
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
-int umts_modem_find_devices(struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter);
-int umts_modem_list_profiles();
-int umts_modem_list_devices(struct umts_device_filter *filter);
+int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter);
+int umts_modem_list_profiles(const struct umts_state *state);
+int umts_modem_list_devices(const struct umts_state *state, struct umts_device_filter *filter);
+int umts_modem_load_profiles(struct umts_state *state);
 
 int umts_tty_open(const char *tty);
 char* umts_tty_calc(const char *basetty, uint8_t index, char buf[static 24]);
