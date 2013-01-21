@@ -49,6 +49,28 @@ enum umts_mode umts_modem_modeval(const char *mode) {
 	return -1;
 }
 
+
+/**
+ * Check if the given profile matches the given modem.
+ */
+static int match_profile(struct umts_modem *modem, const struct umts_profile *p) {
+	if (((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
+	&& ((p->flags & UMTS_PROFILE_NODEVICE) || p->device == modem->device)
+	&& (!p->driver || !strcmp(p->driver, modem->driver))) {
+		modem->profile = p;
+
+		if (p->vendor)
+			syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->device_id, p->vendor);
+		if (p->device)
+			syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->device_id, p->device);
+		if (p->driver)
+			syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->device_id, p->driver);
+		syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\" (%s)", modem->device_id, p->name, p->desc);
+		return UMTS_OK;
+	}
+	return UMTS_ENODEV;
+}
+
 /**
  * Find a profile matching the attributes passed. The found profile is
  * stored in modem->profile.
@@ -62,21 +84,8 @@ static int umts_modem_match_profile(struct umts_modem *modem) {
 	// matched first, then generic per-vendor profiles and then
 	// generic per-driver profiles.
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
-		const struct umts_profile *p = &profiles[i];
-		if (((p->flags & UMTS_PROFILE_NOVENDOR) || p->vendor == modem->vendor)
-		&& ((p->flags & UMTS_PROFILE_NODEVICE) || p->device == modem->device)
-		&& (!p->driver || !strcmp(p->driver, modem->driver))) {
-			modem->profile = p;
-
-			if (p->vendor)
-				syslog(LOG_INFO, "%s: Matched USB vendor id 0x%x", modem->device_id, p->vendor);
-			if (p->device)
-				syslog(LOG_INFO, "%s: Matched USB product id 0x%x", modem->device_id, p->device);
-			if (p->driver)
-				syslog(LOG_INFO, "%s: Matched driver name \"%s\"", modem->device_id, p->driver);
-			syslog(LOG_NOTICE, "%s: Autoselected configuration profile \"%s\" (%s)", modem->device_id, p->name, p->desc);
+		if (match_profile(modem, &profiles[i]) == UMTS_OK)
 			return UMTS_OK;
-		}
 	}
 
 	return UMTS_ENODEV;
