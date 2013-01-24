@@ -262,13 +262,11 @@ int umts_modem_list_devices(const struct umts_state *state, struct umts_device_f
 	int e = umts_modem_find_devices(state, &modem, umts_modem_print, filter);
 	if (e == UMTS_ENODEV) {
 		syslog(LOG_NOTICE, "No devices found");
-		return UMTS_OK;
 	} else if (e != UMTS_OK) {
 		syslog(LOG_ERR, "Error while detecting devices");
-		return e;
 	}
 
-	return UMTS_OK;
+	return e;
 }
 
 /* Parse a single uci section of type umtsd_profile into a profile */
