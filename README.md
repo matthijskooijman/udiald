@@ -25,11 +25,13 @@ Dependencies
 the existence of `/dev/ttyUSBx` files to use for communicating with the
 devices.
 
-`umtsd2` compiles against two libraries: [uci][1] for its configuration storage
-and [libubox][2] for some general utilities.
+`umtsd2` compiles against three libraries: [uci][1] for its
+configuration storage, [libjson-c][5] for its json output and
+[libubox][2] for some general utilities.
 
 [1]: http://nbd.name/gitweb.cgi?p=uci.git;a=summary
 [2]: http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
+[5]: https://github.com/json-c/json-c/wiki
 
 Furthermore, it requires [pppd][3] to set up the actual connection and, for a lot of
 devices, requires [usb-modeswitch][4] to put the device into modem mode befor

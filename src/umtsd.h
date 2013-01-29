@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <errno.h>
 #include <glob.h>
+#include <json/json.h>
 #include "ucix.h"
 
 #define UMTS_FLAG_TESTSTATE	0x01
@@ -141,7 +142,7 @@ extern int verbose;
 
 const char* umts_modem_modestr(enum umts_mode mode);
 enum umts_mode umts_modem_modeval(const char *mode);
-int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter);
+int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *, void *), void *data, struct umts_device_filter *filter);
 int umts_modem_list_profiles(const struct umts_state *state);
 int umts_modem_list_devices(const struct umts_state *state, struct umts_device_filter *filter);
 int umts_modem_load_profiles(struct umts_state *state);
@@ -160,5 +161,6 @@ int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const 
 int umts_util_parse_hex_word(const char *hex, uint16_t *res);
 int umts_util_read_hex_word(const char *path, uint16_t *res);
 void umts_util_read_symlink_basename(const char *path, char *res, size_t size);
+struct json_object *umts_util_sprintf_json_string(const char *fmt, ...);
 
 #endif /* UMTSD_H_ */

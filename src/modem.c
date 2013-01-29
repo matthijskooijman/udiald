@@ -111,13 +111,14 @@ static int umts_modem_find_profile(const struct umts_state *state, struct umts_m
  * When func is NULL, detection stops at the first usable device, which
  * is returned in *modem.
  *
- * When func is not null, it is called for every device detected. The
- * contents of *modem are undefined when the function returns.
+ * When func is not null, it is called for every device detected
+ * (passing the detectet device and data argument). The contents of
+ * *modem are undefined when this function returns.
  *
  * When no modems were found, this function returns UMTS_ENODEV.
  * If at least one modem was detected, it returns UMTS_OK.
  */
-int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *), struct umts_device_filter *filter) {
+int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *modem, void func(struct umts_modem *, void *), void *data, struct umts_device_filter *filter) {
 	if (func)
 		syslog(LOG_INFO, "Detecting usable devices");
 	else
@@ -223,7 +224,7 @@ int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *m
 			/* Call the callback, if any. If there is no
 			 * callback, just return the first match. */
 			if (func) {
-				func(modem);
+				func(modem, data);
 			} else {
 				globfree(&gl_tty);
 				break;
@@ -237,19 +238,55 @@ int umts_modem_find_devices(const struct umts_state *state, struct umts_modem *m
 	return (found ? UMTS_OK : UMTS_ENODEV);
 }
 
-/**
- * Helper function to pint a modem to stdout.
- */
-static void umts_modem_print(struct umts_modem *modem) {
-	printf("Device: %s\n", modem->device_id);
-	printf("\tVendor: 0x%04x\n", modem->vendor);
-	printf("\tProduct: 0x%04x\n", modem->device);
-	printf("\tDriver: %s\n", modem->driver);
-	printf("\tTTYCount: %zu\n", modem->num_ttys);
-	if (modem->profile) {
-		printf("\tProfile: %s\n", modem->profile->name);
-		if (modem->profile->desc) printf("\tProfiledesc: %s\n", modem->profile->desc);
+static struct json_object *profile_to_json(const struct umts_profile *p) {
+	struct json_object *obj = json_object_new_object();
+	json_object_object_add(obj, "name", json_object_new_string(p->name));
+	json_object_object_add(obj, "internal", json_object_new_boolean(!(p->flags & UMTS_PROFILE_FROMUCI)));
+	if (p->desc)
+		json_object_object_add(obj, "description", json_object_new_string(p->desc));
+	if (p->driver)
+		json_object_object_add(obj, "driver", json_object_new_string(p->driver));
+
+	if (!(p->flags & UMTS_PROFILE_NOVENDOR)) {
+		json_object_object_add(obj, "vendor", umts_util_sprintf_json_string("0x%04x", p->vendor));
+		json_object_object_add(obj, "vendor_int", json_object_new_int(p->vendor));
 	}
+	if (!(p->flags & UMTS_PROFILE_NODEVICE)) {
+		json_object_object_add(obj, "product", umts_util_sprintf_json_string("0x%04x", p->device));
+		json_object_object_add(obj, "product_int", json_object_new_int(p->device));
+	}
+	json_object_object_add(obj, "control", json_object_new_int(p->cfg.ctlidx));
+	json_object_object_add(obj, "data", json_object_new_int(p->cfg.datidx));
+	struct json_object *modes = json_object_new_object();
+	for (int mode = 0; mode < UMTS_NUM_MODES; ++mode) {
+		if (p->cfg.modecmd[mode])
+			json_object_object_add(modes, umts_modem_modestr(mode), json_object_new_string(p->cfg.modecmd[mode]));
+	}
+	json_object_object_add(obj, "modes", modes);
+
+	return obj;
+}
+
+/**
+ * Helper function to add a json version of a device to an array.
+ */
+static void add_device_json(struct umts_modem *modem, void *data) {
+	struct json_object *array = (struct json_object *)data;
+	struct json_object *obj = json_object_new_object();
+
+	json_object_object_add(obj, "id", json_object_new_string(modem->device_id));
+	json_object_object_add(obj, "vendor", umts_util_sprintf_json_string("0x%04x", modem->vendor));
+	json_object_object_add(obj, "vendor_int", json_object_new_int(modem->vendor));
+	json_object_object_add(obj, "product", umts_util_sprintf_json_string("0x%04x", modem->device));
+	json_object_object_add(obj, "product_int", json_object_new_int(modem->device));
+	json_object_object_add(obj, "driver", json_object_new_string(modem->driver));
+	json_object_object_add(obj, "ttys", json_object_new_int(modem->num_ttys));
+
+	if (modem->profile) {
+		json_object_object_add(obj, "profile", profile_to_json(modem->profile));
+	}
+
+	json_object_array_add(array, obj);
 }
 
 /**
@@ -259,13 +296,14 @@ int umts_modem_list_devices(const struct umts_state *state, struct umts_device_f
 	syslog(LOG_NOTICE, "Listing usable devices");
 	/* Allocate some storage for umts_modem_find_devices to work */
 	struct umts_modem modem;
-	int e = umts_modem_find_devices(state, &modem, umts_modem_print, filter);
+	struct json_object *array = json_object_new_array();
+	int e = umts_modem_find_devices(state, &modem, add_device_json, array, filter);
 	if (e == UMTS_ENODEV) {
 		syslog(LOG_NOTICE, "No devices found");
 	} else if (e != UMTS_OK) {
 		syslog(LOG_ERR, "Error while detecting devices");
 	}
-
+	printf("%s\n", json_object_to_json_string(array));
 	return e;
 }
 
@@ -328,32 +366,20 @@ int umts_modem_load_profiles(struct umts_state *state) {
 	return UMTS_OK;
 }
 
-
-static void display_profile(const struct umts_profile *p) {
-		printf("Profile: %s\n", p->name);
-		printf("\tFromUci: %s\n", p->flags & UMTS_PROFILE_FROMUCI ? "Yes" : "No");
-		if (p->desc) printf("\tDesc: %s\n", p->desc);
-		if (p->driver) printf("\tDriver: %s\n", p->driver);
-		if (!(p->flags & UMTS_PROFILE_NOVENDOR)) printf("\tVendor: 0x%04x\n", p->vendor);
-		if (!(p->flags & UMTS_PROFILE_NODEVICE)) printf("\tProduct: 0x%04x\n", p->device);
-		printf("\tControl: %d\n", p->cfg.ctlidx);
-		printf("\tData: %d\n", p->cfg.datidx);
-		for (int mode = 0; mode < UMTS_NUM_MODES; ++mode)
-			if (p->cfg.modecmd[mode]) printf("\tMode-%s: %s\n", umts_modem_modestr(mode), p->cfg.modecmd[mode]);
-		printf("\n");
-}
 /**
  * Output a list of all known profiles on stdout.
  */
 int umts_modem_list_profiles(const struct umts_state *state) {
 	struct umts_profile_list *l;
+	struct json_object *array = json_object_new_array();
 	list_for_each_entry(l, &state->custom_profiles, h) {
-		display_profile(&l->p);
+		json_object_array_add(array, profile_to_json(&l->p));
 	}
 
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct umts_profile *p = &profiles[i];
-		display_profile(p);
+		json_object_array_add(array, profile_to_json(p));
 	}
+	printf("%s\n", json_object_to_json_string(array));
 	return 0;
 }

@@ -235,7 +235,7 @@ static void umts_select_modem(struct umts_state *state) {
 	state->filter.flags |= UMTS_FILTER_PROFILE;
 
 	/* Autodetect the first available modem (if any) */
-	int e = umts_modem_find_devices(state, &state->modem, NULL, &state->filter);
+	int e = umts_modem_find_devices(state, &state->modem, NULL, NULL, &state->filter);
 	if (e != UMTS_OK) {
 		syslog(LOG_CRIT, "No usable modem found");
 		umts_exitcode(e);

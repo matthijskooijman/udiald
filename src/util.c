@@ -18,6 +18,9 @@
  *
  */
 
+
+#define _GNU_SOURCE // Get vasprintf
+
 #include "umtsd.h"
 #include <libgen.h>
 #include <syslog.h>
@@ -25,6 +28,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 /**
  * A version of glob that checks the return value and in case of error,
@@ -104,4 +109,23 @@ void umts_util_read_symlink_basename(const char *path, char *res, size_t size) {
 	int n = readlink(path, buf, sizeof(buf));
 	buf[n] = '\0';
 	snprintf(res, size, "%s", basename(buf));
+}
+
+/*
+ * Create a json_object string from a sprintf format and arguments.
+ */
+struct json_object *umts_util_sprintf_json_string(const char *fmt, ...) {
+	va_list ap;
+	char *str;
+
+	va_start(ap, fmt);
+	if (vasprintf(&str, fmt, ap) < 0) {
+		syslog(LOG_ERR, "Failed to sprintf (format: %s)", fmt);
+		return NULL;
+	}
+	va_end(ap);
+
+	json_object *obj = json_object_new_string(str);
+	free(str);
+	return obj;
 }
