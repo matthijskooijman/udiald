@@ -177,6 +177,13 @@ pid_t udiald_tty_pppd(struct udiald_state *state) {
 	fputs("\n460800\ncrtscts\nlock\n"
 		"noauth\nnoipdefault\nnovj\nnodetach\n", fp);
 
+	char *ifname;
+	if ((ifname = udiald_config_get(state, "ifname"))) {
+		fputs("ifname \"", fp);
+		fputs(ifname, fp);
+		fputs("\"\n", fp);
+	}
+
 	// We need to pass ourselve as connect script so get our path from /proc
 	memcpy(buf, "connect \"", 9);
 	ssize_t l = readlink("/proc/self/exe", buf + 9, sizeof(buf) - 10);
