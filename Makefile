@@ -1,6 +1,6 @@
 SFLAGS:=--std=gnu99
 WFLAGS:=-Wall -Werror -pedantic
-BINARY:=umtsd
+BINARY:=udiald
 SOURCES:=$(wildcard src/*.c)
 HEADERS:=$(wildcard src/*.h)
 

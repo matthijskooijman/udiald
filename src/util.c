@@ -1,5 +1,5 @@
 /**
- *   umtsd - UMTS connection manager
+ *   udiald - UMTS connection manager
  *   Copyright (C) 2013 Matthijs Kooijman <matthijs@stdin.nl>
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 
 #define _GNU_SOURCE // Get vasprintf
 
-#include "umtsd.h"
+#include "udiald.h"
 #include <libgen.h>
 #include <syslog.h>
 #include <string.h>
@@ -33,25 +33,25 @@
 
 /**
  * A version of glob that checks the return value and in case of error,
- * reports a log message and returns an umts_errorcode instead.
+ * reports a log message and returns an udiald_errorcode instead.
  *
  * Compared to regular glob, the errfunc parameter is left out, but the
  * activity parameter is added, which should be a string for use in
  * error messages.
  */
-int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity) {
+int udiald_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity) {
 	int e = glob(pattern, flags, NULL, pglob);
 
 	if (e == 0) {
-		return UMTS_OK;
+		return UDIALD_OK;
 	} else if (e == GLOB_NOMATCH) {
-		return UMTS_ENODEV;
+		return UDIALD_ENODEV;
 	} else if (errno) {
 		syslog(LOG_CRIT, "Glob error while %s: %s", activity, strerror(errno));
-		return UMTS_EINTERNAL;
+		return UDIALD_EINTERNAL;
 	} else {
 		syslog(LOG_CRIT, "Unknown glob error while %s", activity);
-		return UMTS_EINTERNAL;
+		return UDIALD_EINTERNAL;
 	}
 }
 
@@ -59,14 +59,14 @@ int umts_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const 
  * Parse a 16 bit word from the given string, converting it from a hex
  * string to a real int.
  */
-int umts_util_parse_hex_word(const char *hex, uint16_t *res) {
+int udiald_util_parse_hex_word(const char *hex, uint16_t *res) {
 	char *end;
 	*res = strtoul(hex, &end, 16);
 	if (*end != '\0') {
 		syslog(LOG_DEBUG, "Failed to convert hex word (read: \"%s\")", hex);
-		return UMTS_EINVAL;
+		return UDIALD_EINVAL;
 	}
-	return UMTS_OK;
+	return UDIALD_OK;
 }
 
 /**
@@ -74,9 +74,9 @@ int umts_util_parse_hex_word(const char *hex, uint16_t *res) {
  * real int.
  *
  * If an error occurs, a DEBUG message is logged, errno is reset and
- * UMTS_EINVAL is returned.
+ * UDIALD_EINVAL is returned.
  */
-int umts_util_read_hex_word(const char *path, uint16_t *res) {
+int udiald_util_read_hex_word(const char *path, uint16_t *res) {
 	const int hex_bytes = sizeof(*res) * 2;
 	char buf[hex_bytes + 1];
 
@@ -84,7 +84,7 @@ int umts_util_read_hex_word(const char *path, uint16_t *res) {
 	if (fd == -1) {
 		syslog(LOG_DEBUG, "%s: Failed to open: %s", path, strerror(errno));
 		errno = 0;
-		return UMTS_EINVAL;
+		return UDIALD_EINVAL;
 	}
 
 	int n = read(fd, buf, hex_bytes);
@@ -92,19 +92,19 @@ int umts_util_read_hex_word(const char *path, uint16_t *res) {
 	if (n != hex_bytes) {
 		syslog(LOG_DEBUG, "%s: Failed to read %d bytes (got %d): %s", path, hex_bytes, n, strerror(errno));
 		errno = 0;
-		return UMTS_EINVAL;
+		return UDIALD_EINVAL;
 	}
 
 	buf[hex_bytes] = '\0';
 
-	return umts_util_parse_hex_word(buf, res);
+	return udiald_util_parse_hex_word(buf, res);
 }
 
 /**
  * Reads the target of a symlink and returns the basename of that target
  * in res.
  */
-void umts_util_read_symlink_basename(const char *path, char *res, size_t size) {
+void udiald_util_read_symlink_basename(const char *path, char *res, size_t size) {
 	char buf[PATH_MAX];
 	int n = readlink(path, buf, sizeof(buf));
 	buf[n] = '\0';
@@ -114,7 +114,7 @@ void umts_util_read_symlink_basename(const char *path, char *res, size_t size) {
 /*
  * Create a json_object string from a sprintf format and arguments.
  */
-struct json_object *umts_util_sprintf_json_string(const char *fmt, ...) {
+struct json_object *udiald_util_sprintf_json_string(const char *fmt, ...) {
 	va_list ap;
 	char *str;
 

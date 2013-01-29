@@ -1,7 +1,7 @@
-#ifndef UMTS_DEVICECONFIG_H_
-#define UMTS_DEVICECONFIG_H_
+#ifndef UDIALD_DEVICECONFIG_H_
+#define UDIALD_DEVICECONFIG_H_
 
-#include "umtsd.h"
+#include "udiald.h"
 
 /// ****************************
 /// MODEM CONFIGURATION PROFILES
@@ -24,7 +24,7 @@
  * remain working after an upgrade. The description can always be
  * changed.
  */
-static const struct umts_profile profiles[] = {
+static const struct udiald_profile profiles[] = {
 	{
 		.name   = "0BDB3705G",
 		.desc   = "Ericsson F3705G",
@@ -34,9 +34,9 @@ static const struct umts_profile profiles[] = {
 			.ctlidx = 1,
 			.datidx = 0,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "AT+CFUN=1\r",
-				[UMTS_FORCE_UMTS] = "AT+CFUN=6\r",
-				[UMTS_FORCE_GPRS] = "AT+CFUN=5\r",
+				[UDIALD_MODE_AUTO] = "AT+CFUN=1\r",
+				[UDIALD_FORCE_UMTS] = "AT+CFUN=6\r",
+				[UDIALD_FORCE_GPRS] = "AT+CFUN=5\r",
 			},
 		},
 	},
@@ -50,7 +50,7 @@ static const struct umts_profile profiles[] = {
 			.ctlidx = 1,
 			.datidx = 2,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "",
+				[UDIALD_MODE_AUTO] = "",
 			},
 		},
 	},
@@ -64,11 +64,11 @@ static const struct umts_profile profiles[] = {
 			.ctlidx = 2,
 			.datidx = 0,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UMTS_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UMTS_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UMTS_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UMTS_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
+				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
+				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
+				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
+				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
+				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
 			},
 		},
 	},
@@ -86,11 +86,11 @@ static const struct umts_profile profiles[] = {
 				// config). Seems that the device
 				// doesn't get carrier after switching
 				// from (force-)gprs to umts.
-				[UMTS_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UMTS_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UMTS_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UMTS_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UMTS_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
+				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
+				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
+				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
+				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
+				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
 			},
 		},
 	},
@@ -101,16 +101,16 @@ static const struct umts_profile profiles[] = {
 		.name   = "12D1",
 		.desc   = "Huawei generic",
 		.vendor = 0x12d1,
-		.flags  = UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 0,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UMTS_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UMTS_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UMTS_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UMTS_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
+				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
+				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
+				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
+				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
+				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
 			},
 		},
 	},
@@ -118,16 +118,16 @@ static const struct umts_profile profiles[] = {
 		.name   = "19D2",
 		.desc   = "ZTE generic",
 		.vendor = 0x19d2,
-		.flags  = UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 2,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "AT+ZSNT=0,0,0\r",
-				[UMTS_FORCE_UMTS] = "AT+ZSNT=2,0,0\r",
-				[UMTS_FORCE_GPRS] = "AT+ZSNT=1,0,0\r",
-				[UMTS_PREFER_UMTS] = "AT+ZSNT=0,0,2\r",
-				[UMTS_PREFER_GPRS] = "AT+ZSNT=0,0,1\r",
+				[UDIALD_MODE_AUTO] = "AT+ZSNT=0,0,0\r",
+				[UDIALD_FORCE_UMTS] = "AT+ZSNT=2,0,0\r",
+				[UDIALD_FORCE_GPRS] = "AT+ZSNT=1,0,0\r",
+				[UDIALD_PREFER_UMTS] = "AT+ZSNT=0,0,2\r",
+				[UDIALD_PREFER_GPRS] = "AT+ZSNT=0,0,1\r",
 			},
 		},
 	},
@@ -136,12 +136,12 @@ static const struct umts_profile profiles[] = {
 		.name   = "option",
 		.desc   = "Option generic",
 		.driver = "option",
-		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 				.ctlidx = 1,
 				.datidx = 0,
 				.modecmd = {
-					[UMTS_MODE_AUTO] = "",
+					[UDIALD_MODE_AUTO] = "",
 				},
 		},
 	},
@@ -149,12 +149,12 @@ static const struct umts_profile profiles[] = {
 		.name   = "sierra",
 		.desc   = "Sierra generic",
 		.driver = "sierra",
-		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 				.ctlidx = 0,
 				.datidx = 2,
 				.modecmd = {
-					[UMTS_MODE_AUTO] = "",
+					[UDIALD_MODE_AUTO] = "",
 				},
 		},
 	},
@@ -162,16 +162,16 @@ static const struct umts_profile profiles[] = {
 		.name   = "hso",
 		.desc   = "HSO generic",
 		.driver = "hso",
-		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 0,
 			.datidx = 3,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "at_opsys=2,2\r",	// Set auto = prefer UMTS
-				[UMTS_FORCE_UMTS] = "at_opsys=1,2\r",
-				[UMTS_FORCE_GPRS] = "at_opsys=0,2\r",
-				[UMTS_PREFER_UMTS] = "at_opsys=2,2\r",
-				[UMTS_PREFER_GPRS] = "at_opsys=3,2\r",
+				[UDIALD_MODE_AUTO] = "at_opsys=2,2\r",	// Set auto = prefer UMTS
+				[UDIALD_FORCE_UMTS] = "at_opsys=1,2\r",
+				[UDIALD_FORCE_GPRS] = "at_opsys=0,2\r",
+				[UDIALD_PREFER_UMTS] = "at_opsys=2,2\r",
+				[UDIALD_PREFER_GPRS] = "at_opsys=3,2\r",
 			},
 		},
 	},
@@ -179,14 +179,14 @@ static const struct umts_profile profiles[] = {
 		.name   = "cdc_acm",
 		.desc   = "CDC generic",
 		.driver = "cdc_acm",
-		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 			/* These are just copied from the option generic
 			 * profile */
 			.ctlidx = 1,
 			.datidx = 0,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "",
+				[UDIALD_MODE_AUTO] = "",
 			},
 		},
 	},
@@ -194,15 +194,15 @@ static const struct umts_profile profiles[] = {
 		.name   = "usbserial",
 		.desc   = "USB serial generic",
 		.driver = "usbserial",
-		.flags  = UMTS_PROFILE_NOVENDOR | UMTS_PROFILE_NODEVICE,
+		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
 			.ctlidx = 0,
 			.datidx = 2,
 			.modecmd = {
-				[UMTS_MODE_AUTO] = "",
+				[UDIALD_MODE_AUTO] = "",
 			},
 		},
 	},
 };
 
-#endif /* UMTS_DEVICECONFIG_H_ */
+#endif /* UDIALD_DEVICECONFIG_H_ */

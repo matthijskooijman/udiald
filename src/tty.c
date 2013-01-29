@@ -1,5 +1,5 @@
 /**
- *   umtsd - UMTS connection manager
+ *   udiald - UMTS connection manager
  *   Copyright (C) 2010 Steven Barth <steven@midlink.org>
  *   Copyright (C) 2010 John Crispin <blogic@openwrt.org>
  *
@@ -31,20 +31,20 @@
 #include <poll.h>
 #include <string.h>
 #include <syslog.h>
-#include "umtsd.h"
+#include "udiald.h"
 #include "config.h"
 
 static const char *ttyresstr[] = {
-	[UMTS_AT_OK] = "OK",
-	[UMTS_AT_CONNECT] = "CONNECT",
-	[UMTS_AT_ERROR] = "ERROR",
-	[UMTS_AT_CMEERROR] = "+CME ERROR",
-	[UMTS_AT_NODIALTONE] = "NO DIALTONE",
-	[UMTS_AT_BUSY] = "BUSY",
-	[UMTS_AT_NOCARRIER] = "NO CARRIER",
+	[UDIALD_AT_OK] = "OK",
+	[UDIALD_AT_CONNECT] = "CONNECT",
+	[UDIALD_AT_ERROR] = "ERROR",
+	[UDIALD_AT_CMEERROR] = "+CME ERROR",
+	[UDIALD_AT_NODIALTONE] = "NO DIALTONE",
+	[UDIALD_AT_BUSY] = "BUSY",
+	[UDIALD_AT_NOCARRIER] = "NO CARRIER",
 };
 
-int umts_tty_open(const char *tty) {
+int udiald_tty_open(const char *tty) {
 	struct termios tio;
 	int fd = open(tty, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	if (fd < 0) return -1;
@@ -64,7 +64,7 @@ int umts_tty_open(const char *tty) {
 	return fd;
 }
 
-int umts_tty_put(int fd, const char *cmd) {
+int udiald_tty_put(int fd, const char *cmd) {
 	if (verbose >= 2)
 		syslog(LOG_DEBUG, "Writing: %s", cmd);
 	if (write(fd, cmd, strlen(cmd)) != strlen(cmd))
@@ -73,7 +73,7 @@ int umts_tty_put(int fd, const char *cmd) {
 }
 
 // Retrieve answer from modem
-enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
+enum udiald_atres udiald_tty_get(int fd, char *buf, size_t len, int timeout) {
 	buf[0] = 0;
 	struct pollfd pfd = {.fd = fd, .events = POLLIN | POLLERR | POLLHUP};
 
@@ -140,13 +140,13 @@ enum umts_atres umts_tty_get(int fd, char *buf, size_t len, int timeout) {
 	return -1;
 }
 
-int umts_tty_cloexec(int fd) {
+int udiald_tty_cloexec(int fd) {
 	fcntl(fd, F_SETFD, fcntl(fd, F_GETFD) | FD_CLOEXEC);
 	return fd;
 }
 
-pid_t umts_tty_pppd(struct umts_state *state) {
-	char cpath[16 + sizeof(state->networkname)] = "/tmp/umtsd-pppd-";
+pid_t udiald_tty_pppd(struct udiald_state *state) {
+	char cpath[17 + sizeof(state->networkname)] = "/tmp/udiald-pppd-";
 	strcat(cpath, state->networkname);
 	if (unlink(cpath) < 0 && errno != ENOENT) {
 		syslog(LOG_CRIT, "%s: Failed to clean up existing ppp config file: %s",
@@ -191,39 +191,39 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 
 	// UCI to pppd-cfg
 	int val;
-	if ((val = umts_config_get_int(state, "defaultroute", 1)) != 0) {
+	if ((val = udiald_config_get_int(state, "defaultroute", 1)) != 0) {
 		fputs("defaultroute\n", fp);
 	}
-	if ((val = umts_config_get_int(state, "replacedefaultroute", 0)) != 0) {
+	if ((val = udiald_config_get_int(state, "replacedefaultroute", 0)) != 0) {
 		fputs("replacedefaultroute\n", fp);
 	}
-	if ((val = umts_config_get_int(state, "usepeerdns", 1)) != 0) {
+	if ((val = udiald_config_get_int(state, "usepeerdns", 1)) != 0) {
 		fputs("usepeerdns\n", fp);
 	}
-	if ((val = umts_config_get_int(state, "persist", 1)) != 0) {
+	if ((val = udiald_config_get_int(state, "persist", 1)) != 0) {
 		fputs("persist\n", fp);
 	}
-	if ((val = umts_config_get_int(state, "unit", -1)) > 0) {
+	if ((val = udiald_config_get_int(state, "unit", -1)) > 0) {
 		fprintf(fp, "unit %i\n", val);
 	}
-	if ((val = umts_config_get_int(state, "maxfail", 1)) >= 0) {
+	if ((val = udiald_config_get_int(state, "maxfail", 1)) >= 0) {
 		fprintf(fp, "maxfail %i\n", val);
 	}
-	if ((val = umts_config_get_int(state, "holdoff", 0)) >= 0) {
+	if ((val = udiald_config_get_int(state, "holdoff", 0)) >= 0) {
 		fprintf(fp, "holdoff %i\n", val);
 	}
-	if ((val = umts_config_get_int(state, "umts_mtu", -1)) > 0) {
+	if ((val = udiald_config_get_int(state, "udiald_mtu", -1)) > 0) {
 		fprintf(fp, "mtu %i\nmru %i\n", val, val);
 	}
 
 	fprintf(fp, "lcp-echo-failure 12\n");
 
 	char *s;
-	s = umts_config_get(state, "umts_user");
+	s = udiald_config_get(state, "udiald_user");
 	fprintf(fp, "user \"%s\"\n", (s && !strpbrk(s, "\"\r\n")) ? s : "");
 	free(s);
 
-	s = umts_config_get(state, "umts_pass");
+	s = udiald_config_get(state, "udiald_pass");
 	fprintf(fp, "password \"%s\"\n", (s && !strpbrk(s, "\"\r\n")) ? s : "");
 	free(s);
 
@@ -235,7 +235,7 @@ pid_t umts_tty_pppd(struct umts_state *state) {
 
 	// Additional parameters
 	struct list_head opts = LIST_HEAD_INIT(opts);
-	umts_config_get_list(state, "umts_pppdopt", &opts);
+	udiald_config_get_list(state, "udiald_pppdopt", &opts);
 	struct ucilist *p, *p2;
 	list_for_each_entry_safe(p, p2, &opts, list) {
 		fputs(p->val, fp);

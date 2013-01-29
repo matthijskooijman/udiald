@@ -1,7 +1,7 @@
-umtsd2 - 3G modem dialing daemon
+udiald - 3G modem dialing daemon
 ================================
 
-`umtsd2` is a daemon that can talk to various 3G devices, like dongles and
+`udiald` is a daemon that can talk to various 3G devices, like dongles and
 phones, to make them set up a PPP data connection to the internet.
 
 These modems use the old-school AT command set, using some new specific
@@ -21,11 +21,11 @@ main `Makefile`.
 
 Dependencies
 ============
-`umtsd2` currently runs only on Linux, since it makes assumptions about
+`udiald` currently runs only on Linux, since it makes assumptions about
 the existence of `/dev/ttyUSBx` files to use for communicating with the
 devices.
 
-`umtsd2` compiles against three libraries: [uci][1] for its
+`udiald` compiles against three libraries: [uci][1] for its
 configuration storage, [libjson-c][5] for its json output and
 [libubox][2] for some general utilities.
 
@@ -35,21 +35,21 @@ configuration storage, [libjson-c][5] for its json output and
 
 Furthermore, it requires [pppd][3] to set up the actual connection and, for a lot of
 devices, requires [usb-modeswitch][4] to put the device into modem mode befor
-running `umtsd2`.
+running `udiald`.
 
 [3]: http://ppp.samba.org/
 [4]: http://www.draisberghof.de/usb_modeswitch/
 
-Even though `umtsd2`, uci and libubox are intended to run on OpenWRT,
+Even though `udiald`, uci and libubox are intended to run on OpenWRT,
 they can be compiled on a regular Linux system as well. Here's is the
 short-short-version of that (all command output was removed, except for the
-final `umtsd` run):
+final `udiald` run):
 
 	~$ mkdir work_dir
 	~$ cd work_dir/
 	~/work_dir$ git clone git://nbd.name/uci.git
 	~/work_dir$ git clone git://nbd.name/luci2/libubox.git
-	~/work_dir$ git clone git@github.com:matthijskooijman/umtsd2.git
+	~/work_dir$ git clone git@github.com:matthijskooijman/udiald.git
 	~/work_dir$ cd libubox
 	~/work_dir/libubox$ cmake .
 	~/work_dir/libubox$ make
@@ -60,30 +60,30 @@ final `umtsd` run):
 	~/work_dir/uci$ sudo cp libuci.so /usr/local/lib/
 	~/work_dir/uci$ sudo ldconfig
 	~/work_dir/uci$ sudo cp uci /usr/local/bin/
-	~/work_dir/uci$ cd ../umtsd2
-	~/work_dir/umtsd2$ echo 'CFLAGS=-I../ -I../uci' > Makefile.local
-	~/work_dir/umtsd2$ make
-	~/work_dir/umtsd2$ sudo mkdir /etc/config
-	~/work_dir/umtsd2$ sudo uci import network << EOF
+	~/work_dir/uci$ cd ../udiald
+	~/work_dir/udiald$ echo 'CFLAGS=-I../ -I../uci' > Makefile.local
+	~/work_dir/udiald$ make
+	~/work_dir/udiald$ sudo mkdir /etc/config
+	~/work_dir/udiald$ sudo uci import network << EOF
 	config network wan
 	        option umts_apn "internet"
 	EOF
-	matthijs@grubby:~/docs/Fon/src/work_dir/umtsd2$ sudo ./umtsd
-	umtsd[967]: ttyUSB1: Using control tty 1
-	umtsd[967]: ttyUSB1: Using data tty 0
-	umtsd[967]: ttyUSB1: Found option modem 12d1:1003
-	umtsd[967]: ttyUSB1: Supported modes: auto force-umts force-gprs prefer-umts prefer-gprs
-	umtsd[967]: ttyUSB1: Identified as huawei E220
-	umtsd[967]: ttyUSB1: SIM card is ready
-	umtsd[967]: ttyUSB1: Detected a GSM modem
-	umtsd[967]: ttyUSB1: Mode set to auto
-	umtsd[967]: ttyUSB1: Provider is T-Mobile  NL
-	umtsd[967]: ttyUSB1: RSSI is 7
-	umtsd[970]: ttyUSB1: Preparing to dial
-	umtsd[970]: ttyUSB1: Echo disabled
-	umtsd[970]: ttyUSB1: Modem reset
-	umtsd[970]: ttyUSB1: Selected APN internet. Now dialing...
-	umtsd[970]: ttyUSB1: Connected. Handover to pppd.
+	matthijs@grubby:~/docs/Fon/src/work_dir/udiald$ sudo ./udiald
+	udiald[967]: ttyUSB1: Using control tty 1
+	udiald[967]: ttyUSB1: Using data tty 0
+	udiald[967]: ttyUSB1: Found option modem 12d1:1003
+	udiald[967]: ttyUSB1: Supported modes: auto force-umts force-gprs prefer-umts prefer-gprs
+	udiald[967]: ttyUSB1: Identified as huawei E220
+	udiald[967]: ttyUSB1: SIM card is ready
+	udiald[967]: ttyUSB1: Detected a GSM modem
+	udiald[967]: ttyUSB1: Mode set to auto
+	udiald[967]: ttyUSB1: Provider is T-Mobile  NL
+	udiald[967]: ttyUSB1: RSSI is 7
+	udiald[970]: ttyUSB1: Preparing to dial
+	udiald[970]: ttyUSB1: Echo disabled
+	udiald[970]: ttyUSB1: Modem reset
+	udiald[970]: ttyUSB1: Selected APN internet. Now dialing...
+	udiald[970]: ttyUSB1: Connected. Handover to pppd.
 	Serial connection established.
 	Using interface ppp0
 	Connect: ppp0 <--> /dev/ttyUSB1
@@ -109,14 +109,16 @@ TODO (see src/umts-network-uci.txt)
 
 History
 =======
-`umtsd2` has been developed for Fon, for use in their Fonera routers.
-During the beginning of the 2013, the sources for `umtsd2` have been
+`udiald` has been developed for Fon, for use in their Fonera routers.
+During the beginning of the 2013, the sources for `udiald` have been
 published under the GPL, to allow the OpenWRT project to also start
-using `umtsd2`.
+using `udiald`.
 
-`umtsd2` is the successor to umtsd.lua, which is a rough `lua`
+`udiald` is the successor to umtsd.lua, which is a rough `lua`
 implementation with the same goals that is shipped on the "fon-ng"
-firmware for the Fonera 2.0g and 2.0n.
+firmware for the Fonera 2.0g and 2.0n. `udiald` was initially developed
+under the name `umtsd2` but was renamed shortly after publishing the
+sources.
 
 Licensing
 =========

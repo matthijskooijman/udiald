@@ -1,5 +1,5 @@
 /**
- *   umtsd - UMTS connection manager
+ *   udiald - UMTS connection manager
  *   Copyright (C) 2010 Steven Barth <steven@midlink.org>
  *   Copyright (C) 2010 John Crispin <blogic@openwrt.org>
  *
@@ -31,23 +31,23 @@
 #include <poll.h>
 #include <time.h>
 
-#include "umtsd.h"
+#include "udiald.h"
 #include "config.h"
 
 static volatile int signaled = 0;
-static struct umts_state state = {.uciname = "network", .networkname = "wan"};
+static struct udiald_state state = {.uciname = "network", .networkname = "wan"};
 int verbose = 0;
 
-enum umts_app {
-		UMTS_APP_CONNECT, UMTS_APP_SCAN,
-		UMTS_APP_UNLOCK, UMTS_APP_DIAL,
-		UMTS_APP_PINPUK, UMTS_APP_LIST_PROFILES,
-		UMTS_APP_LIST_DEVICES,
+enum udiald_app {
+		UDIALD_APP_CONNECT, UDIALD_APP_SCAN,
+		UDIALD_APP_UNLOCK, UDIALD_APP_DIAL,
+		UDIALD_APP_PINPUK, UDIALD_APP_LIST_PROFILES,
+		UDIALD_APP_LIST_DEVICES,
 };
 
-static int umts_usage(const char *app) {
+static int udiald_usage(const char *app) {
 	fprintf(stderr,
-			"umtsd - UMTS connection manager\n"
+			"udiald - UMTS connection manager\n"
 			"(c) 2010 Steven Barth, John Crispin\n\n"
 			"Usage: %s [options] [params...]\n\n"
 			"Command Options and Parameters:\n"
@@ -85,37 +85,37 @@ static int umts_usage(const char *app) {
 			"   	10			Generic PPP error\n"
 			"   	11			Network error\n",
 			app);
-	return UMTS_EINVAL;
+	return UDIALD_EINVAL;
 }
 
-static void umts_catch_signal(int signal) {
+static void udiald_catch_signal(int signal) {
 	if (!signaled) signaled = signal;
 }
 
 // Signal safe cleanup function
-static void umts_cleanup_safe(int signal) {
+static void udiald_cleanup_safe(int signal) {
 	if (state.ctlfd > 0) {
 		close(state.ctlfd);
 		state.ctlfd = -1;
 	}
 	if (signal) {
-		state.flags |= UMTS_FLAG_SIGNALED;
+		state.flags |= UDIALD_FLAG_SIGNALED;
 	}
 }
 
-static void umts_cleanup() {
+static void udiald_cleanup() {
 	if (state.uci) {
 		ucix_cleanup(state.uci);
 		state.uci = NULL;
 	}
-	umts_cleanup_safe(0);
+	udiald_cleanup_safe(0);
 }
 
-static void umts_exitcode(int code) {
-	if (code && state.flags & UMTS_FLAG_SIGNALED)
-		code = UMTS_ESIGNALED;
-	if (code && code != UMTS_ESIGNALED && !(state.flags & UMTS_FLAG_NOERRSTAT))
-		umts_config_set_int(&state, "umts_error", code);
+static void udiald_exitcode(int code) {
+	if (code && state.flags & UDIALD_FLAG_SIGNALED)
+		code = UDIALD_ESIGNALED;
+	if (code && code != UDIALD_ESIGNALED && !(state.flags & UDIALD_FLAG_NOERRSTAT))
+		udiald_config_set_int(&state, "udiald_error", code);
 	ucix_save(state.uci, state.uciname);
 	exit(code);
 }
@@ -128,42 +128,42 @@ static void sleep_seconds(int seconds) {
 /**
  * Parse the commandline and return the selected app.
  */
-static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char * const argv[]) {
-	enum umts_app app = UMTS_APP_CONNECT;
+static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc, char * const argv[]) {
+	enum udiald_app app = UDIALD_APP_CONNECT;
 
 	int s;
 	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:p:")) != -1) {
 		switch(s) {
 			case 'c':
-				app = UMTS_APP_CONNECT;
+				app = UDIALD_APP_CONNECT;
 				break;
 
 			case 's':
-				app = UMTS_APP_SCAN;
+				app = UDIALD_APP_SCAN;
 				break;
 
 			case 'u':
-				app = UMTS_APP_UNLOCK;
+				app = UDIALD_APP_UNLOCK;
 				break;
 
 			case 'U':
-				app = UMTS_APP_PINPUK;
+				app = UDIALD_APP_PINPUK;
 				break;
 
 			case 'd':
-				app = UMTS_APP_DIAL;
+				app = UDIALD_APP_DIAL;
 				break;
 
 			case 'l':
-				app = UMTS_APP_LIST_DEVICES;
+				app = UDIALD_APP_LIST_DEVICES;
 				break;
 
 			case 'L':
-				app = UMTS_APP_LIST_PROFILES;
+				app = UDIALD_APP_LIST_PROFILES;
 				break;
 
 			case 'e':
-				state->flags |= UMTS_FLAG_NOERRSTAT;
+				state->flags |= UDIALD_FLAG_NOERRSTAT;
 				break;
 
 			case 'n':
@@ -175,21 +175,21 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 				break;
 
 			case 't':
-				state->flags |= UMTS_FLAG_TESTSTATE;
+				state->flags |= UDIALD_FLAG_TESTSTATE;
 				break;
 			case 'V':
-				if (umts_util_parse_hex_word(optarg, &state->filter.vendor) != UMTS_OK) {
+				if (udiald_util_parse_hex_word(optarg, &state->filter.vendor) != UDIALD_OK) {
 					fprintf(stderr, "Failed to parse vendor id: \"%s\"\n", optarg);
-					exit(UMTS_EINVAL);
+					exit(UDIALD_EINVAL);
 				}
-				state->filter.flags |= UMTS_FILTER_VENDOR;
+				state->filter.flags |= UDIALD_FILTER_VENDOR;
 				break;
 			case 'P':
-				if (umts_util_parse_hex_word(optarg, &state->filter.device) != UMTS_OK) {
+				if (udiald_util_parse_hex_word(optarg, &state->filter.device) != UDIALD_OK) {
 					fprintf(stderr, "Failed to parse product id: \"%s\"\n", optarg);
-					exit(UMTS_EINVAL);
+					exit(UDIALD_EINVAL);
 				}
-				state->filter.flags |= UMTS_FILTER_DEVICE;
+				state->filter.flags |= UDIALD_FILTER_DEVICE;
 				break;
 			case 'D':
 				state->filter.device_id = optarg;
@@ -198,17 +198,17 @@ static enum umts_app umts_parse_cmdline(struct umts_state *state, int argc, char
 				state->filter.profile_name = strdup(optarg);
 				break;
 			default:
-				exit(umts_usage(argv[0]));
+				exit(udiald_usage(argv[0]));
 		}
 	}
 
 	return app;
 }
 
-static void umts_setup_syslog(struct umts_state *state, enum umts_app app) {
-	char *appname = "umtsd";
-	if (app == UMTS_APP_DIAL)
-		appname = "umtsd-dialer";
+static void udiald_setup_syslog(struct udiald_state *state, enum udiald_app app) {
+	char *appname = "udiald";
+	if (app == UDIALD_APP_DIAL)
+		appname = "udiald-dialer";
 
 	openlog(appname, LOG_PID | LOG_PERROR, LOG_USER);
 
@@ -216,12 +216,12 @@ static void umts_setup_syslog(struct umts_state *state, enum umts_app app) {
 		setlogmask(LOG_UPTO(LOG_NOTICE));
 }
 
-static void umts_setup_uci(struct umts_state *state) {
+static void udiald_setup_uci(struct udiald_state *state) {
 	// Prepare and initialize state
 	if (!(state->uci = ucix_init(state->uciname, 1))) {
-		exit(UMTS_EINTERNAL);
+		exit(UDIALD_EINTERNAL);
 	}
-	/* Reset errno, when running umtsd unprivileged, setting up uci
+	/* Reset errno, when running udiald unprivileged, setting up uci
 	 * might cause an ignored error, which could cloud debug
 	 * attempts */
 	errno = 0;
@@ -230,30 +230,30 @@ static void umts_setup_uci(struct umts_state *state) {
 /**
  * Select the modem to use, depending on config or autodetection.
  */
-static void umts_select_modem(struct umts_state *state) {
+static void udiald_select_modem(struct udiald_state *state) {
 	/* Only return a modem for which we have a valid configuration profile */
-	state->filter.flags |= UMTS_FILTER_PROFILE;
+	state->filter.flags |= UDIALD_FILTER_PROFILE;
 
 	/* Autodetect the first available modem (if any) */
-	int e = umts_modem_find_devices(state, &state->modem, NULL, NULL, &state->filter);
-	if (e != UMTS_OK) {
+	int e = udiald_modem_find_devices(state, &state->modem, NULL, NULL, &state->filter);
+	if (e != UDIALD_OK) {
 		syslog(LOG_CRIT, "No usable modem found");
-		umts_exitcode(e);
+		udiald_exitcode(e);
 	}
 	char b[512] = {0};
 	snprintf(b, sizeof(b), "%04x:%04x", state->modem.vendor, state->modem.device);
 	syslog(LOG_NOTICE, "%s: Found %s modem %s", state->modem.device_id,
 			state->modem.driver, b);
-	umts_config_set(state, "modem_id", b);
-	umts_config_set(state, "modem_driver", state->modem.driver);
+	udiald_config_set(state, "modem_id", b);
+	udiald_config_set(state, "modem_driver", state->modem.driver);
 
 	b[0] = '\0';
 	// Writing modestrings
-	const struct umts_config *cfg = &state->modem.profile->cfg;
-	for (size_t i = 0; i < UMTS_NUM_MODES; ++i)
+	const struct udiald_config *cfg = &state->modem.profile->cfg;
+	for (size_t i = 0; i < UDIALD_NUM_MODES; ++i)
 		if (cfg->modecmd[i]) {
-			umts_config_append(state, "modem_mode", umts_modem_modestr(i));
-			strncat(b, umts_modem_modestr(i), sizeof(b) - strlen(b) - 2);
+			udiald_config_append(state, "modem_mode", udiald_modem_modestr(i));
+			strncat(b, udiald_modem_modestr(i), sizeof(b) - strlen(b) - 2);
 			strcat(b, " ");
 		}
 	syslog(LOG_NOTICE, "%s: Supported modes: %s", state->modem.device_id, b);
@@ -262,38 +262,38 @@ static void umts_select_modem(struct umts_state *state) {
 /**
  * Open the control connection, storing the fd in state->ctlfd.
  */
-static void umts_open_control(struct umts_state *state) {
+static void udiald_open_control(struct udiald_state *state) {
 	// Open control connection
 	char ttypath[24];
 	snprintf(ttypath, sizeof(ttypath), "/dev/%s", state->modem.ctl_tty);
-	if ((state->ctlfd = umts_tty_cloexec(umts_tty_open(ttypath))) == -1) {
+	if ((state->ctlfd = udiald_tty_cloexec(udiald_tty_open(ttypath))) == -1) {
 		syslog(LOG_CRIT, "%s: Unable to open terminal", state->modem.device_id);
-		umts_exitcode(UMTS_EMODEM);
+		udiald_exitcode(UDIALD_EMODEM);
 	}
 }
 
 /**
  * Reset the modem through the control connection.
  */
-static void umts_modem_reset(struct umts_state *state) {
+static void udiald_modem_reset(struct udiald_state *state) {
 	char b[512] = {0};
 	// Hangup modem, disable echoing
 	tcflush(state->ctlfd, TCIFLUSH);
-	umts_tty_put(state->ctlfd, "ATE0\r");
-	umts_tty_get(state->ctlfd, b, sizeof(b), 2500);
+	udiald_tty_put(state->ctlfd, "ATE0\r");
+	udiald_tty_get(state->ctlfd, b, sizeof(b), 2500);
 	tcflush(state->ctlfd, TCIFLUSH);
 }
 
 /**
  * Query the modem for identification.
  */
-static void umts_identify(struct umts_state *state) {
+static void udiald_identify(struct udiald_state *state) {
 	char b[512] = {0};
 	// Identify modem
-	if (umts_tty_put(state->ctlfd, "AT+CGMI;+CGMM\r") < 1
-	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
+	if (udiald_tty_put(state->ctlfd, "AT+CGMI;+CGMM\r") < 1
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.device_id, b);
-		umts_exitcode(UMTS_EMODEM);
+		udiald_exitcode(UDIALD_EMODEM);
 	}
 	char *saveptr;
 	char *mi = strtok_r(b, "\r\n", &saveptr);
@@ -303,7 +303,7 @@ static void umts_identify(struct umts_state *state) {
 		mm = strdup(mm);
 		snprintf(b, sizeof(b), "%s %s", mi, mm);
 		syslog(LOG_NOTICE, "%s: Identified as %s", state->modem.device_id, b);
-		umts_config_set(state, "modem_name", b);
+		udiald_config_set(state, "modem_name", b);
 		free(mi);
 		free(mm);
 	}
@@ -312,37 +312,37 @@ static void umts_identify(struct umts_state *state) {
 /**
  * Query the modem for its SIM status.
  */
-static void umts_check_sim(struct umts_state *state) {
+static void udiald_check_sim(struct udiald_state *state) {
 	char b[512] = {0};
 	char *saveptr;
 	char *c = NULL;
 	// Getting SIM state
 	tcflush(state->ctlfd, TCIFLUSH);
-	if (umts_tty_put(state->ctlfd, "AT+CPIN?\r") < 1
-	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK
+	if (udiald_tty_put(state->ctlfd, "AT+CPIN?\r") < 1
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK
 	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
 		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, b);
-		umts_config_set(state, "simstate", "error");
-		umts_exitcode(UMTS_ESIM);
+		udiald_config_set(state, "simstate", "error");
+		udiald_exitcode(UDIALD_ESIM);
 	}
 
 	// Evaluate SIM state
 	if (!strcmp(c, "+CPIN: READY")) {
 		syslog(LOG_NOTICE, "%s: SIM card is ready", state->modem.device_id);
-		umts_config_set(state, "simstate", "ready");
+		udiald_config_set(state, "simstate", "ready");
 		state->simstate = 0;
 	} else if (!strcmp(c, "+CPIN: SIM PIN")) {
-		umts_config_set(state, "simstate", "wantpin");
+		udiald_config_set(state, "simstate", "wantpin");
 		state->simstate = 1;
 	} else if (!strcmp(c, "+CPIN: SIM PUK")) {
 		syslog(LOG_WARNING, "%s: SIM requires PUK!", state->modem.device_id);
-		umts_config_set(state, "simstate", "wantpuk");
+		udiald_config_set(state, "simstate", "wantpuk");
 		state->simstate = 2;
 	} else {
 		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, c);
-		umts_config_set(state, "simstate", "error");
+		udiald_config_set(state, "simstate", "error");
 		state->simstate = -1;
-		umts_exitcode(UMTS_ESIM);
+		udiald_exitcode(UDIALD_ESIM);
 	}
 }
 
@@ -355,27 +355,27 @@ static void umts_check_sim(struct umts_state *state) {
  * @param puk     The PUK to enter
  * @param pin     The new PIN code to set
  */
-static void umts_enter_puk(struct umts_state *state, const char *puk, const char *pin) {
+static void udiald_enter_puk(struct udiald_state *state, const char *puk, const char *pin) {
 	// Reset PIN with PUK
 	if (state->simstate != 2)
-		umts_exitcode(UMTS_ESIM);
+		udiald_exitcode(UDIALD_ESIM);
 
 	// Prepare command
 	char b[512] = {0};
 	if (strpbrk(pin, "\"\r\n;") || strpbrk(puk, "\"\r\n;"))
-		umts_exitcode(UMTS_EINVAL);
+		udiald_exitcode(UDIALD_EINVAL);
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\",\"%s\"\r", puk, pin);
 
 	// Send command
 	tcflush(state->ctlfd, TCIFLUSH);
-	if (umts_tty_put(state->ctlfd, b) >= 0
-	&& umts_tty_get(state->ctlfd, b, sizeof(b), 2500) == UMTS_AT_OK) {
+	if (udiald_tty_put(state->ctlfd, b) >= 0
+	&& udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) == UDIALD_AT_OK) {
 		syslog(LOG_NOTICE, "%s: PIN reset successful", state->modem.device_id);
-		umts_config_set(state, "simstate", "ready");
-		umts_exitcode(UMTS_OK);
+		udiald_config_set(state, "simstate", "ready");
+		udiald_exitcode(UDIALD_OK);
 	} else {
 		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, b);
-		umts_exitcode(UMTS_EUNLOCK);
+		udiald_exitcode(UDIALD_EUNLOCK);
 	}
 }
 
@@ -384,28 +384,28 @@ static void umts_enter_puk(struct umts_state *state, const char *puk, const char
  *
  * The pincode to use is taken from the configuration.
  */
-static void umts_enter_pin(struct umts_state *state) {
+static void udiald_enter_pin(struct udiald_state *state) {
 	//Try unlocking with PIN
-	char *pin = umts_config_get(state, "umts_pin");
+	char *pin = udiald_config_get(state, "udiald_pin");
 	char b[512] = {0};
 	if (!pin) {
 		syslog(LOG_CRIT, "%s: PIN missing", state->modem.device_id);
-		umts_exitcode(UMTS_EUNLOCK);
+		udiald_exitcode(UDIALD_EUNLOCK);
 	}
 	if (strpbrk(pin, "\"\r\n;"))
-		umts_exitcode(UMTS_EINVAL);
+		udiald_exitcode(UDIALD_EINVAL);
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\"\r", pin);
 	free(pin);
 
 	// Send command
 	tcflush(state->ctlfd, TCIFLUSH);
-	if (umts_tty_put(state->ctlfd, b) < 0
-	|| umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
+	if (udiald_tty_put(state->ctlfd, b) < 0
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
-		umts_exitcode(UMTS_EUNLOCK);
+		udiald_exitcode(UDIALD_EUNLOCK);
 	}
 	syslog(LOG_NOTICE, "%s: PIN accepted", state->modem.device_id);
-	umts_config_set(state, "simstate", "ready");
+	udiald_config_set(state, "simstate", "ready");
 
 	// Wait a few seconds for the dongle to find a carrier.
 	// Some dongles apparently do not send a NO CARRIER reply to the
@@ -417,14 +417,14 @@ static void umts_enter_pin(struct umts_state *state) {
 /**
  * Query the device for supported capabilities.
  */
-static void umts_check_caps(struct umts_state *state) {
+static void udiald_check_caps(struct udiald_state *state) {
 	char b[512] = {0};
 	state->is_gsm = 0;
-	if (umts_tty_put(state->ctlfd, "AT+GCAP\r") >= 0
-	&& umts_tty_get(state->ctlfd, b, sizeof(b), 2500) == UMTS_AT_OK) {
+	if (udiald_tty_put(state->ctlfd, "AT+GCAP\r") >= 0
+	&& udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) == UDIALD_AT_OK) {
 		if (strstr(b, "CGSM")) {
 			state->is_gsm = 1;
-			umts_config_set(state, "modem_gsm", "1");
+			udiald_config_set(state, "modem_gsm", "1");
 			syslog(LOG_NOTICE, "%s: Detected a GSM modem", state->modem.device_id);
 		}
 	}
@@ -435,29 +435,29 @@ static void umts_check_caps(struct umts_state *state) {
  *
  * The mode to set is taken from the configuration.
  */
-static void umts_set_mode(struct umts_state *state) {
+static void udiald_set_mode(struct udiald_state *state) {
 	char b[512] = {0};
-	char *m = umts_config_get(state, "umts_mode");
-	enum umts_mode mode = umts_modem_modeval((m) ? m : "auto");
+	char *m = udiald_config_get(state, "udiald_mode");
+	enum udiald_mode mode = udiald_modem_modeval((m) ? m : "auto");
 	if (mode == -1 || !state->modem.profile->cfg.modecmd[mode]) {
 		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.device_id, m);
 		free(m);
-		umts_exitcode(UMTS_EINVAL);
+		udiald_exitcode(UDIALD_EINVAL);
 	}
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (state->modem.profile->cfg.modecmd[mode][0]
-	&& (umts_tty_put(state->ctlfd, state->modem.profile->cfg.modecmd[mode]) < 0
-	|| umts_tty_get(state->ctlfd, b, sizeof(b), 5000) != UMTS_AT_OK)) {
+	&& (udiald_tty_put(state->ctlfd, state->modem.profile->cfg.modecmd[mode]) < 0
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 5000) != UDIALD_AT_OK)) {
 		syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
 			state->modem.device_id, (m) ? m : "auto", b);
 		free(m);
-		umts_exitcode(UMTS_EMODEM);
+		udiald_exitcode(UDIALD_EMODEM);
 	}
 	syslog(LOG_NOTICE, "%s: Mode set to %s", state->modem.device_id, (m) ? m : "auto");
 	free(m);
 }
 
-static void umts_connect_status_mainloop(struct umts_state *state) {
+static void udiald_connect_status_mainloop(struct udiald_state *state) {
 	int status = -1;
 	int logsteps = 4;	// Report RSSI / BER to syslog every LOGSTEPS intervals
 	char provider[64] = {0};
@@ -467,7 +467,7 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 	while (!signaled) {
 		// First run
 		if (!++status) {
-			umts_config_set(state, "connected", "1");
+			udiald_config_set(state, "connected", "1");
 			ucix_save(state->uci, state->uciname);
 		} else {
 			sleep_seconds(15);
@@ -476,12 +476,12 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 
 		// Query provider and RSSI / BER
 		tcflush(state->ctlfd, TCIFLUSH);
-/*		umts_tty_put(state->ctlfd, "AT+CREG?\r");
-		umts_tty_get(state->ctlfd, b, sizeof(b), 2500);
+/*		udiald_tty_put(state->ctlfd, "AT+CREG?\r");
+		udiald_tty_get(state->ctlfd, b, sizeof(b), 2500);
 		printf("%s:%s[%d]%s\n", __FILE__, __func__, __LINE__, b);
 */
-		umts_tty_put(state->ctlfd, "AT+COPS?;+CSQ\r");
-		if (umts_tty_get(state->ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK)
+		udiald_tty_put(state->ctlfd, "AT+COPS?;+CSQ\r");
+		if (udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK)
 			continue;
 
 		char *saveptr;
@@ -493,16 +493,16 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 		&& strncmp(cops, provider, sizeof(provider) - 1)) {
 			syslog(LOG_NOTICE, "%s: Provider is %s",
 				state->modem.device_id, cops);
-			umts_config_revert(state, "provider");
-			umts_config_set(state, "provider", cops);
+			udiald_config_revert(state, "provider");
+			udiald_config_set(state, "provider", cops);
 			strncpy(provider, cops, sizeof(provider) - 1);
 		}
 
 		if (csq && (csq = strtok_r(csq, " ,", &saveptr))
 		&& (csq = strtok_r(NULL, " ,", &saveptr))) {	// +CSQ: 14,99
 			// RSSI
-			umts_config_revert(state, "rssi");
-			umts_config_set(state, "rssi", csq);
+			udiald_config_revert(state, "rssi");
+			udiald_config_set(state, "rssi", csq);
 			if ((status % logsteps) == 0)
 				syslog(LOG_NOTICE, "%s: RSSI is %s",
 					state->modem.device_id, csq);
@@ -512,178 +512,178 @@ static void umts_connect_status_mainloop(struct umts_state *state) {
 	syslog(LOG_NOTICE, "Received signal %d, disconnecting", signaled);
 }
 
-static void umts_connect_finish(struct umts_state *state) {
-	umts_config_revert(state, "pid");
-	umts_config_revert(state, "connected");
-	umts_config_revert(state, "provider");
-	umts_config_revert(state, "rssi");
+static void udiald_connect_finish(struct udiald_state *state) {
+	udiald_config_revert(state, "pid");
+	udiald_config_revert(state, "connected");
+	udiald_config_revert(state, "provider");
+	udiald_config_revert(state, "rssi");
 
 	// Terminate active connection by hanging up and resetting
-	umts_tty_put(state->ctlfd, "ATH;&F\r");
+	udiald_tty_put(state->ctlfd, "ATH;&F\r");
 	int status;
 	if (waitpid(state->pppd, &status, WNOHANG) != state->pppd) {
 		kill(state->pppd, SIGTERM);
 		waitpid(state->pppd, &status, 0);
 		syslog(LOG_NOTICE, "%s: Terminated by signal %i",
 				state->modem.device_id, signaled);
-		umts_exitcode(UMTS_ESIGNALED);
+		udiald_exitcode(UDIALD_ESIGNALED);
 	}
 
 	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 5) {
 		// pppd was termined externally, we won't treat this as an error
 		syslog(LOG_NOTICE, "%s: pppd terminated by signal", state->modem.device_id);
-		umts_exitcode(UMTS_ESIGNALED);
+		udiald_exitcode(UDIALD_ESIGNALED);
 	}
 
 	switch (WEXITSTATUS(status)) {	// Exit codes from pppd (man pppd)
 		case 7:
 		case 16:
 			syslog(LOG_CRIT, "%s: pppd modem error", state->modem.device_id);
-			umts_exitcode(UMTS_EMODEM);
+			udiald_exitcode(UDIALD_EMODEM);
 
 		case 8:
 			syslog(LOG_CRIT, "%s: pppd dialing error", state->modem.device_id);
-			umts_exitcode(UMTS_EDIAL);
+			udiald_exitcode(UDIALD_EDIAL);
 
 		case 0:
 		case 15:
 			syslog(LOG_CRIT, "%s: terminated by network", state->modem.device_id);
-			umts_exitcode(UMTS_ENETWORK);
+			udiald_exitcode(UDIALD_ENETWORK);
 
 		case 19:
 			syslog(LOG_CRIT, "%s: invalid PPP credentials", state->modem.device_id);
-			umts_exitcode(UMTS_EAUTH);
+			udiald_exitcode(UDIALD_EAUTH);
 
 		default:
 			syslog(LOG_CRIT, "%s: PPP error (%i)",
 					state->modem.device_id, WEXITSTATUS(status));
-			umts_exitcode(UMTS_EPPP);
+			udiald_exitcode(UDIALD_EPPP);
 	}
 }
 
 int main(int argc, char *const argv[]) {
 	INIT_LIST_HEAD(&state.custom_profiles);
 
-	enum umts_app app;
-	app = umts_parse_cmdline(&state, argc, argv);
+	enum udiald_app app;
+	app = udiald_parse_cmdline(&state, argc, argv);
 
-	umts_setup_syslog(&state, app);
+	udiald_setup_syslog(&state, app);
 
-	umts_setup_uci(&state);
+	udiald_setup_uci(&state);
 
 	/* Load additional profiles from uci */
-	umts_modem_load_profiles(&state);
+	udiald_modem_load_profiles(&state);
 
-	atexit(umts_cleanup);
+	atexit(udiald_cleanup);
 
 	//Setup signals
 	struct sigaction sa = {
 		.sa_handler = SIG_IGN,
 	};
 	sigaction(SIGPIPE, &sa, NULL);
-	sa.sa_handler = umts_cleanup_safe;
+	sa.sa_handler = udiald_cleanup_safe;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGTERM, &sa, NULL);
 	sigaction(SIGHUP, &sa, NULL);
 
 	// Dial only needs an active UCI context
-	if (app == UMTS_APP_DIAL)
-		return umts_dial_main(&state);
+	if (app == UDIALD_APP_DIAL)
+		return udiald_dial_main(&state);
 
-	if (app == UMTS_APP_LIST_PROFILES)
-		return umts_modem_list_profiles(&state);
+	if (app == UDIALD_APP_LIST_PROFILES)
+		return udiald_modem_list_profiles(&state);
 
-	if (app == UMTS_APP_LIST_DEVICES)
-		return umts_modem_list_devices(&state, &state.filter);
+	if (app == UDIALD_APP_LIST_DEVICES)
+		return udiald_modem_list_devices(&state, &state.filter);
 
-	if (app == UMTS_APP_CONNECT && state.flags & UMTS_FLAG_TESTSTATE) {
-		if (umts_config_get_int(&state, "umts_error", UMTS_OK) == UMTS_EUNLOCK) {
+	if (app == UDIALD_APP_CONNECT && state.flags & UDIALD_FLAG_TESTSTATE) {
+		if (udiald_config_get_int(&state, "udiald_error", UDIALD_OK) == UDIALD_EUNLOCK) {
 			syslog(LOG_CRIT, "Aborting due to previous SIM unlocking failure. "
 			"Please check PIN and rescan device before reconnecting.");
-			exit(UMTS_EUNLOCK);
+			exit(UDIALD_EUNLOCK);
 		}
 	}
 
 	// Reset state
-	umts_config_revert(&state, "modem_name");
-	umts_config_revert(&state, "modem_driver");
-	umts_config_revert(&state, "modem_id");
-	umts_config_revert(&state, "modem_mode");
-	umts_config_revert(&state, "modem_gsm");
-	umts_config_revert(&state, "simstate");
-	if (!(state.flags & UMTS_FLAG_NOERRSTAT))
-		umts_config_revert(&state, "umts_error");
+	udiald_config_revert(&state, "modem_name");
+	udiald_config_revert(&state, "modem_driver");
+	udiald_config_revert(&state, "modem_id");
+	udiald_config_revert(&state, "modem_mode");
+	udiald_config_revert(&state, "modem_gsm");
+	udiald_config_revert(&state, "simstate");
+	if (!(state.flags & UDIALD_FLAG_NOERRSTAT))
+		udiald_config_revert(&state, "udiald_error");
 
-	umts_select_modem(&state);
+	udiald_select_modem(&state);
 
-	umts_open_control(&state);
+	udiald_open_control(&state);
 
-	umts_modem_reset(&state);
+	udiald_modem_reset(&state);
 
-	umts_identify(&state);
+	udiald_identify(&state);
 
-	umts_check_sim(&state);
+	udiald_check_sim(&state);
 
 
-	if (app == UMTS_APP_SCAN) {
-		umts_exitcode(UMTS_OK); // We are done here.
-	} else if (app == UMTS_APP_PINPUK) {
+	if (app == UDIALD_APP_SCAN) {
+		udiald_exitcode(UDIALD_OK); // We are done here.
+	} else if (app == UDIALD_APP_PINPUK) {
 		// Need two arguments
 		if (optind + 2 != argc) {
 			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.device_id);
-			umts_exitcode(UMTS_EINVAL);
+			udiald_exitcode(UDIALD_EINVAL);
 		}
 
-		umts_enter_puk(&state, argv[optind], argv[optind+1]);
+		udiald_enter_puk(&state, argv[optind], argv[optind+1]);
 	}
 
 	if (state.simstate == 2) {
-		umts_exitcode(UMTS_EUNLOCK);
+		udiald_exitcode(UDIALD_EUNLOCK);
 	} else if (state.simstate == 1) {
-		umts_enter_pin(&state);
+		udiald_enter_pin(&state);
 	}
 
-	if (app == UMTS_APP_UNLOCK)
-		umts_exitcode(UMTS_OK); // We are done here.
+	if (app == UDIALD_APP_UNLOCK)
+		udiald_exitcode(UDIALD_OK); // We are done here.
 
-	umts_check_caps(&state);
+	udiald_check_caps(&state);
 /*
 	char b[512] = {0};
 	// verbose provider info
-	if (umts_tty_put(state.ctlfd, "AT+CREG=2\r") < 1
-	|| umts_tty_get(state.ctlfd, b, sizeof(b), 2500) != UMTS_AT_OK) {
+	if (udiald_tty_put(state.ctlfd, "AT+CREG=2\r") < 1
+	|| udiald_tty_get(state.ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: failed to set verbose provider info (%s)", state.modem.device_id, b);
 	}
 */
 
 	// Setting network mode if GSM
 	if (state.is_gsm) {
-		umts_set_mode(&state);
+		udiald_set_mode(&state);
 	} else {
 		syslog(LOG_NOTICE, "%s: Skipped setting mode on non-GSM modem", state.modem.device_id);
 	}
 
 	// Save state
-	umts_config_set_int(&state, "pid", getpid());
+	udiald_config_set_int(&state, "pid", getpid());
 	ucix_save(state.uci, state.uciname);
 
 	// Block and unbind signals so they won't interfere
-	sa.sa_handler = umts_catch_signal;
+	sa.sa_handler = udiald_catch_signal;
 	sigaction(SIGTERM, &sa, NULL);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGHUP, &sa, NULL);
 	sigaction(SIGCHLD, &sa, NULL);
 
 	// Start pppd to dial
-	if (!(state.pppd = umts_tty_pppd(&state)))
-		umts_exitcode(UMTS_EINTERNAL);
+	if (!(state.pppd = udiald_tty_pppd(&state)))
+		udiald_exitcode(UDIALD_EINTERNAL);
 
-	umts_connect_status_mainloop(&state);
+	udiald_connect_status_mainloop(&state);
 
 	/* Clean up state and set exit code. Never returns. */
-	umts_connect_finish(&state);
+	udiald_connect_finish(&state);
 
 	// This cannot happen
-	return UMTS_EINTERNAL;
+	return UDIALD_EINTERNAL;
 }
 
