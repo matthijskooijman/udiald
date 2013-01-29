@@ -127,7 +127,7 @@ struct udiald_command {
 struct udiald_state {
 	int ctlfd;
 	int flags;
-	int simstate;
+	int sim_state;
 	int is_gsm;
 	struct udiald_device_filter filter;
 	struct udiald_modem modem;

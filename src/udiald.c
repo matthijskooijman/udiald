@@ -322,26 +322,26 @@ static void udiald_check_sim(struct udiald_state *state) {
 	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK
 	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
 		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, b);
-		udiald_config_set(state, "simstate", "error");
+		udiald_config_set(state, "sim_state", "error");
 		udiald_exitcode(UDIALD_ESIM);
 	}
 
 	// Evaluate SIM state
 	if (!strcmp(c, "+CPIN: READY")) {
 		syslog(LOG_NOTICE, "%s: SIM card is ready", state->modem.device_id);
-		udiald_config_set(state, "simstate", "ready");
-		state->simstate = 0;
+		udiald_config_set(state, "sim_state", "ready");
+		state->sim_state = 0;
 	} else if (!strcmp(c, "+CPIN: SIM PIN")) {
-		udiald_config_set(state, "simstate", "wantpin");
-		state->simstate = 1;
+		udiald_config_set(state, "sim_state", "wantpin");
+		state->sim_state = 1;
 	} else if (!strcmp(c, "+CPIN: SIM PUK")) {
 		syslog(LOG_WARNING, "%s: SIM requires PUK!", state->modem.device_id);
-		udiald_config_set(state, "simstate", "wantpuk");
-		state->simstate = 2;
+		udiald_config_set(state, "sim_state", "wantpuk");
+		state->sim_state = 2;
 	} else {
 		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, c);
-		udiald_config_set(state, "simstate", "error");
-		state->simstate = -1;
+		udiald_config_set(state, "sim_state", "error");
+		state->sim_state = -1;
 		udiald_exitcode(UDIALD_ESIM);
 	}
 }
@@ -357,7 +357,7 @@ static void udiald_check_sim(struct udiald_state *state) {
  */
 static void udiald_enter_puk(struct udiald_state *state, const char *puk, const char *pin) {
 	// Reset PIN with PUK
-	if (state->simstate != 2)
+	if (state->sim_state != 2)
 		udiald_exitcode(UDIALD_ESIM);
 
 	// Prepare command
@@ -371,7 +371,7 @@ static void udiald_enter_puk(struct udiald_state *state, const char *puk, const 
 	if (udiald_tty_put(state->ctlfd, b) >= 0
 	&& udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) == UDIALD_AT_OK) {
 		syslog(LOG_NOTICE, "%s: PIN reset successful", state->modem.device_id);
-		udiald_config_set(state, "simstate", "ready");
+		udiald_config_set(state, "sim_state", "ready");
 		udiald_exitcode(UDIALD_OK);
 	} else {
 		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, b);
@@ -405,7 +405,7 @@ static void udiald_enter_pin(struct udiald_state *state) {
 		udiald_exitcode(UDIALD_EUNLOCK);
 	}
 	syslog(LOG_NOTICE, "%s: PIN accepted", state->modem.device_id);
-	udiald_config_set(state, "simstate", "ready");
+	udiald_config_set(state, "sim_state", "ready");
 
 	// Wait a few seconds for the dongle to find a carrier.
 	// Some dongles apparently do not send a NO CARRIER reply to the
@@ -610,7 +610,7 @@ int main(int argc, char *const argv[]) {
 	udiald_config_revert(&state, "modem_id");
 	udiald_config_revert(&state, "modem_mode");
 	udiald_config_revert(&state, "modem_gsm");
-	udiald_config_revert(&state, "simstate");
+	udiald_config_revert(&state, "sim_state");
 	if (!(state.flags & UDIALD_FLAG_NOERRSTAT))
 		udiald_config_revert(&state, "udiald_error");
 
@@ -637,9 +637,9 @@ int main(int argc, char *const argv[]) {
 		udiald_enter_puk(&state, argv[optind], argv[optind+1]);
 	}
 
-	if (state.simstate == 2) {
+	if (state.sim_state == 2) {
 		udiald_exitcode(UDIALD_EUNLOCK);
-	} else if (state.simstate == 1) {
+	} else if (state.sim_state == 1) {
 		udiald_enter_pin(&state);
 	}
 
