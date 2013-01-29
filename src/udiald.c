@@ -109,6 +109,8 @@ static void udiald_exitcode(int code) {
 		code = UDIALD_ESIGNALED;
 	if (code && code != UDIALD_ESIGNALED && !(state.flags & UDIALD_FLAG_NOERRSTAT))
 		udiald_config_set_int(&state, "udiald_error", code);
+	if (state.app == UDIALD_APP_CONNECT)
+		udiald_config_revert(&state, "udiald_state");
 	ucix_save(state.uci, state.uciname);
 	exit(code);
 }
@@ -606,6 +608,11 @@ int main(int argc, char *const argv[]) {
 	if (!(state.flags & UDIALD_FLAG_NOERRSTAT))
 		udiald_config_revert(&state, "udiald_error");
 
+	if (state.app == UDIALD_APP_CONNECT) {
+		udiald_config_set(&state, "udiald_state", "init");
+		ucix_save(state.uci, state.uciname);
+	}
+
 	udiald_select_modem(&state);
 
 	udiald_open_control(&state);
@@ -665,6 +672,11 @@ int main(int argc, char *const argv[]) {
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGHUP, &sa, NULL);
 	sigaction(SIGCHLD, &sa, NULL);
+
+	if (state.app == UDIALD_APP_CONNECT) {
+		udiald_config_set(&state, "udiald_state", "dial");
+		ucix_save(state.uci, state.uciname);
+	}
 
 	// Start pppd to dial
 	if (!(state.pppd = udiald_tty_pppd(&state)))

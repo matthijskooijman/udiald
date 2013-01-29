@@ -89,6 +89,9 @@ int udiald_dial_main(struct udiald_state *state) {
 		return UDIALD_EDIAL;
 	}
 
+	udiald_config_set(state, "udiald_state", "connected");
+	ucix_save(state->uci, state->uciname);
+
 	syslog(LOG_NOTICE, "%s: Connected. Handover to pppd.", tty);
 	return UDIALD_OK;
 }
