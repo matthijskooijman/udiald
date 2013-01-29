@@ -38,13 +38,6 @@ static volatile int signaled = 0;
 static struct udiald_state state = {.uciname = "network", .networkname = "wan"};
 int verbose = 0;
 
-enum udiald_app {
-		UDIALD_APP_CONNECT, UDIALD_APP_SCAN,
-		UDIALD_APP_UNLOCK, UDIALD_APP_DIAL,
-		UDIALD_APP_PINPUK, UDIALD_APP_LIST_PROFILES,
-		UDIALD_APP_LIST_DEVICES,
-};
-
 static int udiald_usage(const char *app) {
 	fprintf(stderr,
 			"udiald - UMTS connection manager\n"
@@ -205,9 +198,9 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 	return app;
 }
 
-static void udiald_setup_syslog(struct udiald_state *state, enum udiald_app app) {
+static void udiald_setup_syslog(struct udiald_state *state) {
 	char *appname = "udiald";
-	if (app == UDIALD_APP_DIAL)
+	if (state->app == UDIALD_APP_DIAL)
 		appname = "udiald-dialer";
 
 	openlog(appname, LOG_PID | LOG_PERROR, LOG_USER);
@@ -564,10 +557,9 @@ static void udiald_connect_finish(struct udiald_state *state) {
 int main(int argc, char *const argv[]) {
 	INIT_LIST_HEAD(&state.custom_profiles);
 
-	enum udiald_app app;
-	app = udiald_parse_cmdline(&state, argc, argv);
+	state.app = udiald_parse_cmdline(&state, argc, argv);
 
-	udiald_setup_syslog(&state, app);
+	udiald_setup_syslog(&state);
 
 	udiald_setup_uci(&state);
 
@@ -587,16 +579,16 @@ int main(int argc, char *const argv[]) {
 	sigaction(SIGHUP, &sa, NULL);
 
 	// Dial only needs an active UCI context
-	if (app == UDIALD_APP_DIAL)
+	if (state.app == UDIALD_APP_DIAL)
 		return udiald_dial_main(&state);
 
-	if (app == UDIALD_APP_LIST_PROFILES)
+	if (state.app == UDIALD_APP_LIST_PROFILES)
 		return udiald_modem_list_profiles(&state);
 
-	if (app == UDIALD_APP_LIST_DEVICES)
+	if (state.app == UDIALD_APP_LIST_DEVICES)
 		return udiald_modem_list_devices(&state, &state.filter);
 
-	if (app == UDIALD_APP_CONNECT && state.flags & UDIALD_FLAG_TESTSTATE) {
+	if (state.app == UDIALD_APP_CONNECT && state.flags & UDIALD_FLAG_TESTSTATE) {
 		if (udiald_config_get_int(&state, "udiald_error", UDIALD_OK) == UDIALD_EUNLOCK) {
 			syslog(LOG_CRIT, "Aborting due to previous SIM unlocking failure. "
 			"Please check PIN and rescan device before reconnecting.");
@@ -625,9 +617,9 @@ int main(int argc, char *const argv[]) {
 	udiald_check_sim(&state);
 
 
-	if (app == UDIALD_APP_SCAN) {
+	if (state.app == UDIALD_APP_SCAN) {
 		udiald_exitcode(UDIALD_OK); // We are done here.
-	} else if (app == UDIALD_APP_PINPUK) {
+	} else if (state.app == UDIALD_APP_PINPUK) {
 		// Need two arguments
 		if (optind + 2 != argc) {
 			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.device_id);
@@ -643,7 +635,7 @@ int main(int argc, char *const argv[]) {
 		udiald_enter_pin(&state);
 	}
 
-	if (app == UDIALD_APP_UNLOCK)
+	if (state.app == UDIALD_APP_UNLOCK)
 		udiald_exitcode(UDIALD_OK); // We are done here.
 
 	udiald_check_caps(&state);

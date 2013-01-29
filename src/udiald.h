@@ -123,6 +123,13 @@ struct udiald_command {
 	char *response;
 };
 
+enum udiald_app {
+		UDIALD_APP_CONNECT, UDIALD_APP_SCAN,
+		UDIALD_APP_UNLOCK, UDIALD_APP_DIAL,
+		UDIALD_APP_PINPUK, UDIALD_APP_LIST_PROFILES,
+		UDIALD_APP_LIST_DEVICES,
+};
+
 /* Current umts state */
 struct udiald_state {
 	int ctlfd;
@@ -136,6 +143,7 @@ struct udiald_state {
 	char networkname[32]; /*< The name of the uci section to use */
 	pid_t pppd;
 	struct list_head custom_profiles; /* Custom profiles loaded from uci */
+	enum udiald_app app;
 };
 
 extern int verbose;
