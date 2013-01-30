@@ -352,10 +352,13 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 			p->flags &= ~UDIALD_PROFILE_NODEVICE;
 		} else if (!strncmp(o->e.name, "mode_", 5) && o->v.string[0]) {
 			/* Name starts with mode_ */
-			for (int i=0; i < UDIALD_NUM_MODES; ++i)
-				if (!strcmp(o->e.name + 5, udiald_modem_modestr(i)))
+			for (int i=0; i < UDIALD_NUM_MODES; ++i) {
+				if (!strcmp(o->e.name + 5, udiald_modem_modestr(i))) {
 					/* And ends with this mode name */
 					p->cfg.modecmd[i] = strdup(o->v.string);
+					break;
+				}
+			}
 		} else {
 			syslog(LOG_WARNING, "Uci section %s contains unknown option: %s", s->e.name, o->e.name);
 		}
