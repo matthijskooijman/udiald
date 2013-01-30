@@ -130,6 +130,13 @@ enum udiald_app {
 		UDIALD_APP_LIST_DEVICES,
 };
 
+enum udiald_display_format {
+	/* Full details in JSON format */
+	UDIALD_FORMAT_JSON,
+	/* Only identifiers */
+	UDIALD_FORMAT_ID,
+};
+
 /* Current umts state */
 struct udiald_state {
 	int ctlfd;
@@ -144,6 +151,7 @@ struct udiald_state {
 	pid_t pppd;
 	struct list_head custom_profiles; /* Custom profiles loaded from uci */
 	enum udiald_app app;
+	enum udiald_display_format format;
 };
 
 extern int verbose;

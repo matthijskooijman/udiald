@@ -35,7 +35,7 @@
 #include "config.h"
 
 static volatile int signaled = 0;
-static struct udiald_state state = {.uciname = "network", .networkname = "wan"};
+static struct udiald_state state = {.uciname = "network", .networkname = "wan", .format = UDIALD_FORMAT_JSON};
 int verbose = 0;
 
 static int udiald_usage(const char *app) {
@@ -64,6 +64,8 @@ static int udiald_usage(const char *app) {
 			"Connect Options:\n"
 			"	-t			Test state file for previous SIM-unlocking\n"
 			"				errors before attempting to connect\n\n"
+			"List options (valid for -L and -l):\n"
+			"	-f <format>		Sets the output format. Supported formats are \"json\" and \"id\".\n"
 			"Return Codes:\n"
 			"	0			OK\n"
 			"	1			Syntax error\n"
@@ -127,7 +129,7 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 	enum udiald_app app = UDIALD_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:p:")) != -1) {
+	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:p:f:")) != -1) {
 		switch(s) {
 			case 'c':
 				app = UDIALD_APP_CONNECT;
@@ -191,6 +193,16 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 				break;
 			case 'p':
 				state->filter.profile_name = strdup(optarg);
+				break;
+			case 'f':
+				if (!strcmp(optarg, "json")) {
+					state->format = UDIALD_FORMAT_JSON;
+				} else if (!strcmp(optarg, "id")) {
+					state->format = UDIALD_FORMAT_ID;
+				} else {
+					fprintf(stderr, "Invalid display format: %s\n", optarg);
+					exit(UDIALD_EINVAL);
+				}
 				break;
 			default:
 				exit(udiald_usage(argv[0]));

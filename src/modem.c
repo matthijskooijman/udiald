@@ -267,26 +267,37 @@ static struct json_object *profile_to_json(const struct udiald_profile *p) {
 	return obj;
 }
 
+struct device_display_data {
+	enum udiald_display_format format;
+	union {
+		struct json_object *array;
+	} data;
+};
+
 /**
  * Helper function to add a json version of a device to an array.
  */
-static void add_device_json(struct udiald_modem *modem, void *data) {
-	struct json_object *array = (struct json_object *)data;
-	struct json_object *obj = json_object_new_object();
+static void display_device(struct udiald_modem *modem, void *data) {
+	struct device_display_data *d = (struct device_display_data *)data;
+	if (d->format == UDIALD_FORMAT_JSON) {
+		struct json_object *obj = json_object_new_object();
 
-	json_object_object_add(obj, "id", json_object_new_string(modem->device_id));
-	json_object_object_add(obj, "vendor", udiald_util_sprintf_json_string("0x%04x", modem->vendor));
-	json_object_object_add(obj, "vendor_int", json_object_new_int(modem->vendor));
-	json_object_object_add(obj, "product", udiald_util_sprintf_json_string("0x%04x", modem->device));
-	json_object_object_add(obj, "product_int", json_object_new_int(modem->device));
-	json_object_object_add(obj, "driver", json_object_new_string(modem->driver));
-	json_object_object_add(obj, "ttys", json_object_new_int(modem->num_ttys));
+		json_object_object_add(obj, "id", json_object_new_string(modem->device_id));
+		json_object_object_add(obj, "vendor", udiald_util_sprintf_json_string("0x%04x", modem->vendor));
+		json_object_object_add(obj, "vendor_int", json_object_new_int(modem->vendor));
+		json_object_object_add(obj, "product", udiald_util_sprintf_json_string("0x%04x", modem->device));
+		json_object_object_add(obj, "product_int", json_object_new_int(modem->device));
+		json_object_object_add(obj, "driver", json_object_new_string(modem->driver));
+		json_object_object_add(obj, "ttys", json_object_new_int(modem->num_ttys));
 
-	if (modem->profile) {
-		json_object_object_add(obj, "profile", profile_to_json(modem->profile));
+		if (modem->profile) {
+			json_object_object_add(obj, "profile", profile_to_json(modem->profile));
+		}
+
+		json_object_array_add(d->data.array, obj);
+	} else if (d->format == UDIALD_FORMAT_ID) {
+		printf("%s\n", modem->device_id);
 	}
-
-	json_object_array_add(array, obj);
 }
 
 /**
@@ -296,14 +307,20 @@ int udiald_modem_list_devices(const struct udiald_state *state, struct udiald_de
 	syslog(LOG_NOTICE, "Listing usable devices");
 	/* Allocate some storage for udiald_modem_find_devices to work */
 	struct udiald_modem modem;
-	struct json_object *array = json_object_new_array();
-	int e = udiald_modem_find_devices(state, &modem, add_device_json, array, filter);
+	struct device_display_data data = {
+		.format = state->format,
+	};
+	if (state->format == UDIALD_FORMAT_JSON)
+		data.data.array = json_object_new_array();
+
+	int e = udiald_modem_find_devices(state, &modem, display_device, &data, filter);
 	if (e == UDIALD_ENODEV) {
 		syslog(LOG_NOTICE, "No devices found");
 	} else if (e != UDIALD_OK) {
 		syslog(LOG_ERR, "Error while detecting devices");
 	}
-	printf("%s\n", json_object_to_json_string(array));
+	if (state->format == UDIALD_FORMAT_JSON)
+		printf("%s\n", json_object_to_json_string(data.data.array));
 	return e;
 }
 
@@ -371,15 +388,24 @@ int udiald_modem_load_profiles(struct udiald_state *state) {
  */
 int udiald_modem_list_profiles(const struct udiald_state *state) {
 	struct udiald_profile_list *l;
-	struct json_object *array = json_object_new_array();
+	struct json_object *array = NULL;
+	if (state->format == UDIALD_FORMAT_JSON)
+		array = json_object_new_array();
 	list_for_each_entry(l, &state->custom_profiles, h) {
-		json_object_array_add(array, profile_to_json(&l->p));
+		if (state->format == UDIALD_FORMAT_JSON)
+			json_object_array_add(array, profile_to_json(&l->p));
+		else
+			printf("%s\n", l->p.name);
 	}
 
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct udiald_profile *p = &profiles[i];
-		json_object_array_add(array, profile_to_json(p));
+		if (state->format == UDIALD_FORMAT_JSON)
+			json_object_array_add(array, profile_to_json(p));
+		else
+			printf("%s\n", p->name);
 	}
-	printf("%s\n", json_object_to_json_string(array));
+	if (state->format == UDIALD_FORMAT_JSON)
+		printf("%s\n", json_object_to_json_string(array));
 	return 0;
 }
