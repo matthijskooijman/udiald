@@ -330,6 +330,9 @@ int udiald_modem_list_devices(const struct udiald_state *state, struct udiald_de
 static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald_profile *p) {
 	p->name = strdup(s->e.name);
 	p->flags = UDIALD_PROFILE_FROMUCI | UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE;
+
+	/* Assume there is an auto mode that is configured by default */
+	p->cfg.modecmd[UDIALD_MODE_AUTO] = "";
 	struct uci_element *e;
 	uci_foreach_element(&s->options, e) {
 		struct uci_option *o = uci_to_option(e);
