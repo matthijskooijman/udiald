@@ -56,7 +56,8 @@ static int udiald_usage(const char *app) {
 			"\nGlobal Options:\n"
 			"	-e				Don't write error state\n"
 			"	-n, --network-name <name>	Use given network name instead of \"wan\"\n"
-			"	-v, --verbose			Increase verbosity\n\n"
+			"	-v, --verbose			Increase verbosity (once = more info, twice = debug output)\n\n"
+			"	-q, --quiet			Decrease verbosity (once = errors / warnings only, twice = no output)\n\n"
 			"	-V, --vendor <vendor>		Only consider devices with the given vendor id (in hexadecimal)\n"
 			"	-P, --product <productid>	Only consider devices with the given product id (in hexadecimal)\n"
 			"	-D, --device-id <deviceid>	Only consider the device with the given id (as listed in sysfs,\n"
@@ -148,6 +149,7 @@ static struct option longopts[] = {
 	{"list-profiles", false, NULL, 'L'},
 	{"network-name", true, NULL, 'n'},
 	{"verbose", false, NULL, 'n'},
+	{"quiet", false, NULL, 'q'},
 	{"vendor", true, NULL, 'V'},
 	{"product", true, NULL, 'P'},
 	{"device-id", true, NULL, 'D'},
@@ -164,7 +166,7 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 	enum udiald_app app = UDIALD_APP_CONNECT;
 
 	int s;
-	while ((s = getopt_long(argc, argv, "csuUden:vtlLV:P:D:p:f", longopts, NULL)) != -1) {
+	while ((s = getopt_long(argc, argv, "csuUden:vtlLV:P:D:p:fq", longopts, NULL)) != -1) {
 		switch(s) {
 			case 'c':
 				app = UDIALD_APP_CONNECT;
@@ -204,6 +206,10 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 
 			case 'v':
 				verbose++;
+				break;
+
+			case 'q':
+				verbose--;
 				break;
 
 			case 't':
@@ -257,8 +263,17 @@ static void udiald_setup_syslog(struct udiald_state *state) {
 
 	openlog(appname, LOG_PID | LOG_PERROR, LOG_USER);
 
-	if (!verbose)
+	if (verbose > 1 ) // Log everything
+		setlogmask(LOG_UPTO(LOG_DEBUG));
+	else if (verbose == 1 )
+		setlogmask(LOG_UPTO(LOG_INFO));
+	else if (verbose == 0 )
 		setlogmask(LOG_UPTO(LOG_NOTICE));
+	else if (verbose == -1 )
+		setlogmask(LOG_UPTO(LOG_WARNING));
+	else if (verbose < -1 ) // Log nothing. We can't pass 0, so just
+				// enable all non-relevant bits instead.
+		setlogmask(INT_MAX & ~(LOG_UPTO(LOG_DEBUG)));
 }
 
 static void udiald_setup_uci(struct udiald_state *state) {
