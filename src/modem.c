@@ -350,7 +350,7 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 		} else if (!strcmp(o->e.name, "product")) {
 			p->device = strtoul(o->v.string, NULL, 16);
 			p->flags &= ~UDIALD_PROFILE_NODEVICE;
-		} else if (!strncmp(o->e.name, "mode_", 5)) {
+		} else if (!strncmp(o->e.name, "mode_", 5) && o->v.string[0]) {
 			/* Name starts with mode_ */
 			for (int i=0; i < UDIALD_NUM_MODES; ++i)
 				if (!strcmp(o->e.name + 5, udiald_modem_modestr(i)))
