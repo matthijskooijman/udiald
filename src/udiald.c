@@ -31,6 +31,7 @@
 #include <poll.h>
 #include <time.h>
 #include <getopt.h>
+#include <limits.h>
 
 #include "udiald.h"
 #include "config.h"
@@ -62,6 +63,9 @@ static int udiald_usage(const char *app) {
 			"					e.g. 1.2-1)\n"
 			"	-p, --profile <profilename>	Use the profile with the given name instead of autodetecting a\n"
 			"					profile to use. Run with -L to get a list of valid profiles.\n"
+			"	--usable			Only consider devices that are usable (i.e., for which a\n"
+			"					configuration profile is available). This is enabled by default\n"
+			"					with --connect, but disabled by default with the listing options.\n"
 			"Connect Options:\n"
 			"	-t				Test state file for previous SIM-unlocking\n"
 			"					errors before attempting to connect\n\n"
@@ -123,6 +127,16 @@ static void sleep_seconds(int seconds) {
 	nanosleep(&ts, NULL);
 }
 
+/* Constants to return for long options withou a corresponding short
+ * option. Long options with an equivalent short option just use the
+ * short option char.
+ * This list starts at UCHAR_MAX + 1, so we can be sure not to conflict
+ * with any short option character.
+ */
+enum long_options {
+	UDIALD_OPT_USABLE = UCHAR_MAX + 1,
+};
+
 static struct option longopts[] = {
 	{"connect", false, NULL, 'c'},
 	{"scan", false, NULL, 's'},
@@ -139,6 +153,7 @@ static struct option longopts[] = {
 	{"device-id", true, NULL, 'D'},
 	{"profile", true, NULL, 'p'},
 	{"format", true, NULL, 'f'},
+	{"usable", false, NULL, UDIALD_OPT_USABLE},
 	{0},
 };
 
@@ -223,6 +238,9 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 					fprintf(stderr, "Invalid display format: %s\n", optarg);
 					exit(UDIALD_EINVAL);
 				}
+				break;
+			case UDIALD_OPT_USABLE:
+				state->filter.flags |= UDIALD_FILTER_PROFILE;
 				break;
 			default:
 				exit(udiald_usage(argv[0]));
