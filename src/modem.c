@@ -270,7 +270,7 @@ static struct json_object *profile_to_json(const struct udiald_profile *p) {
 struct device_display_data {
 	enum udiald_display_format format;
 	union {
-		struct json_object *array;
+		struct json_object *dict;
 	} data;
 };
 
@@ -294,7 +294,7 @@ static void display_device(struct udiald_modem *modem, void *data) {
 			json_object_object_add(obj, "profile", profile_to_json(modem->profile));
 		}
 
-		json_object_array_add(d->data.array, obj);
+		json_object_object_add(d->data.dict, modem->device_id, obj);
 	} else if (d->format == UDIALD_FORMAT_ID) {
 		printf("%s\n", modem->device_id);
 	}
@@ -311,7 +311,7 @@ int udiald_modem_list_devices(const struct udiald_state *state, struct udiald_de
 		.format = state->format,
 	};
 	if (state->format == UDIALD_FORMAT_JSON)
-		data.data.array = json_object_new_array();
+		data.data.dict = json_object_new_object();
 
 	int e = udiald_modem_find_devices(state, &modem, display_device, &data, filter);
 	if (e == UDIALD_ENODEV) {
@@ -320,8 +320,8 @@ int udiald_modem_list_devices(const struct udiald_state *state, struct udiald_de
 		syslog(LOG_ERR, "Error while detecting devices");
 	}
 	if (state->format == UDIALD_FORMAT_JSON) {
-		printf("%s\n", json_object_to_json_string(data.data.array));
-		json_object_put(data.data.array);
+		printf("%s\n", json_object_to_json_string(data.data.dict));
+		json_object_put(data.data.dict);
 	}
 	return e;
 }
@@ -390,12 +390,12 @@ int udiald_modem_load_profiles(struct udiald_state *state) {
  */
 int udiald_modem_list_profiles(const struct udiald_state *state) {
 	struct udiald_profile_list *l;
-	struct json_object *array = NULL;
+	struct json_object *dict = NULL;
 	if (state->format == UDIALD_FORMAT_JSON)
-		array = json_object_new_array();
+		dict = json_object_new_object();
 	list_for_each_entry(l, &state->custom_profiles, h) {
 		if (state->format == UDIALD_FORMAT_JSON)
-			json_object_array_add(array, profile_to_json(&l->p));
+			json_object_object_add(dict, l->p.name, profile_to_json(&l->p));
 		else
 			printf("%s\n", l->p.name);
 	}
@@ -403,13 +403,13 @@ int udiald_modem_list_profiles(const struct udiald_state *state) {
 	for (size_t i = 0; i < (sizeof(profiles) / sizeof(*profiles)); ++i) {
 		const struct udiald_profile *p = &profiles[i];
 		if (state->format == UDIALD_FORMAT_JSON)
-			json_object_array_add(array, profile_to_json(p));
+			json_object_object_add(dict, p->name, profile_to_json(p));
 		else
 			printf("%s\n", p->name);
 	}
 	if (state->format == UDIALD_FORMAT_JSON) {
-		printf("%s\n", json_object_to_json_string(array));
-		json_object_put(array);
+		printf("%s\n", json_object_to_json_string(dict));
+		json_object_put(dict);
 	}
 	return 0;
 }
