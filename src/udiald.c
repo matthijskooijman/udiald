@@ -30,6 +30,7 @@
 #include <termios.h>
 #include <poll.h>
 #include <time.h>
+#include <getopt.h>
 
 #include "udiald.h"
 #include "config.h"
@@ -44,41 +45,41 @@ static int udiald_usage(const char *app) {
 			"(c) 2010 Steven Barth, John Crispin\n\n"
 			"Usage: %s [options] [params...]\n\n"
 			"Command Options and Parameters:\n"
-			"	-c			Connect using modem (default)\n"
-			"	-s			Scan modem and reset state file\n"
-			"	-u			Same as scan but also try to unlock SIM\n"
-			" 	-U <PUK> <PIN>		Reset PIN of locked SIM using PUK\n"
-			"	-d			Dial (used internally)\n"
-			"	-L                      List available configuration profiles\n"
-			"	-l                      Detect and list usable devices\n"
+			"	-c, --connect			Connect using modem (default)\n"
+			"	-s, --scan			Scan modem and reset state file\n"
+			"	-u, --unlock-pin		Same as scan but also try to unlock SIM\n"
+			" 	-U, --unlock-puk <PUK> <PIN>	Reset PIN of locked SIM using PUK\n"
+			"	-d, --dial			Dial (used internally)\n"
+			"	-L, --list-profiles		List available configuration profiles\n"
+			"	-l, --list-devices		Detect and list usable devices\n"
 			"\nGlobal Options:\n"
-			"	-e			Don't write error state\n"
-			"	-n <name>		Use given network name instead of \"wan\"\n"
-			"	-v			Increase verbosity\n\n"
-			"	-V <vendorid>		Only consider devices with the given vendor id (in hexadecimal)\n"
-			"	-P <productid>		Only consider devices with the given product id (in hexadecimal)\n"
-			"	-D <deviceid>		Only consider the device with the given id (as listed in sysfs,\n"
-			"				e.g. 1.2-1)\n"
-			"	-p <profilename>        Use the profile with the given name instead of autodetecting a\n"
-			"				profile to use. Run with -L to get a list of valid profiles.\n"
+			"	-e				Don't write error state\n"
+			"	-n, --network-name <name>	Use given network name instead of \"wan\"\n"
+			"	-v, --verbose			Increase verbosity\n\n"
+			"	-V, --vendor <vendor>		Only consider devices with the given vendor id (in hexadecimal)\n"
+			"	-P, --product <productid>	Only consider devices with the given product id (in hexadecimal)\n"
+			"	-D, --device-id <deviceid>	Only consider the device with the given id (as listed in sysfs,\n"
+			"					e.g. 1.2-1)\n"
+			"	-p, --profile <profilename>	Use the profile with the given name instead of autodetecting a\n"
+			"					profile to use. Run with -L to get a list of valid profiles.\n"
 			"Connect Options:\n"
-			"	-t			Test state file for previous SIM-unlocking\n"
-			"				errors before attempting to connect\n\n"
+			"	-t				Test state file for previous SIM-unlocking\n"
+			"					errors before attempting to connect\n\n"
 			"List options (valid for -L and -l):\n"
-			"	-f <format>		Sets the output format. Supported formats are \"json\" and \"id\".\n"
+			"	-f, --format <format>		Sets the output format. Supported formats are \"json\" and \"id\".\n"
 			"Return Codes:\n"
-			"	0			OK\n"
-			"	1			Syntax error\n"
-			"	2			Internal error\n"
-			"   	3			Terminated by signal\n"
-			"	4			No usable modem found\n"
-			"	5			Modem error\n"
-			"	6			SIM error\n"
-			"	7			SIM unlocking error (PIN failed etc.)\n"
-			"	8			Dialing error\n"
-			"	9			PPP auth error\n"
-			"   	10			Generic PPP error\n"
-			"   	11			Network error\n",
+			"	0				OK\n"
+			"	1				Syntax error\n"
+			"	2				Internal error\n"
+			"   	3				Terminated by signal\n"
+			"	4				No usable modem found\n"
+			"	5				Modem error\n"
+			"	6				SIM error\n"
+			"	7				SIM unlocking error (PIN failed etc.)\n"
+			"	8				Dialing error\n"
+			"	9				PPP auth error\n"
+			"   	10				Generic PPP error\n"
+			"   	11				Network error\n",
 			app);
 	return UDIALD_EINVAL;
 }
@@ -122,6 +123,25 @@ static void sleep_seconds(int seconds) {
 	nanosleep(&ts, NULL);
 }
 
+static struct option longopts[] = {
+	{"connect", false, NULL, 'c'},
+	{"scan", false, NULL, 's'},
+	{"unlock-pin", false, NULL, 'u'},
+	{"unlock-puk", false, NULL, 'U'},
+	{"dial", false, NULL, 'd'},
+	{"list-devices", false, NULL, 'l'},
+	{"list-profiles", false, NULL, 'L'},
+	{"list-profiles", false, NULL, 'L'},
+	{"network-name", true, NULL, 'n'},
+	{"verbose", false, NULL, 'n'},
+	{"vendor", true, NULL, 'V'},
+	{"product", true, NULL, 'P'},
+	{"device-id", true, NULL, 'D'},
+	{"profile", true, NULL, 'p'},
+	{"format", true, NULL, 'f'},
+	{0},
+};
+
 /**
  * Parse the commandline and return the selected app.
  */
@@ -129,7 +149,7 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 	enum udiald_app app = UDIALD_APP_CONNECT;
 
 	int s;
-	while ((s = getopt(argc, argv, "csuUden:vtlLV:P:D:p:f:")) != -1) {
+	while ((s = getopt_long(argc, argv, "csuUden:vtlLV:P:D:p:f", longopts, NULL)) != -1) {
 		switch(s) {
 			case 'c':
 				app = UDIALD_APP_CONNECT;
