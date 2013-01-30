@@ -360,7 +360,7 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 				}
 			}
 		} else {
-			syslog(LOG_WARNING, "Uci section %s contains unknown option: %s", s->e.name, o->e.name);
+			syslog(LOG_INFO, "Uci section %s contains unknown option: %s", s->e.name, o->e.name);
 		}
 	}
 
