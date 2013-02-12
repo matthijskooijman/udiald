@@ -19,6 +19,8 @@
  *
  */
 
+#define _GNU_SOURCE // Get vasprintf
+
 #include "udiald.h"
 #include <limits.h>
 #include <string.h>
@@ -353,9 +355,12 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 		} else if (!strncmp(o->e.name, "mode_", 5) && o->v.string[0]) {
 			/* Name starts with mode_ */
 			for (int i=0; i < UDIALD_NUM_MODES; ++i) {
+				/* And ends with this mode name */
 				if (!strcmp(o->e.name + 5, udiald_modem_modestr(i))) {
-					/* And ends with this mode name */
-					p->cfg.modecmd[i] = strdup(o->v.string);
+					/* Add a \r, since that's hard
+					 * to write down in a browser
+					 * and uci. */
+					asprintf(&p->cfg.modecmd[i], "%s\r", strdup(o->v.string));
 					break;
 				}
 			}

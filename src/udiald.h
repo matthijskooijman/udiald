@@ -58,7 +58,7 @@ enum udiald_atres {
 struct udiald_config {
 	uint8_t ctlidx;		/* Index of control TTY from first TTY */
 	uint8_t datidx;		/* Index of data TTY from first TTY */
-	const char *modecmd[UDIALD_NUM_MODES];	/* Commands to enter modes */
+	char *modecmd[UDIALD_NUM_MODES];	/* Commands to enter modes */
 };
 
 enum udiald_profile_flags {
