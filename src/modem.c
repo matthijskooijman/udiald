@@ -30,10 +30,10 @@
 
 static const char *modestr[] = {
 	[UDIALD_MODE_AUTO] = "auto",
-	[UDIALD_FORCE_UMTS] = "force-umts",
-	[UDIALD_FORCE_GPRS] = "force-gprs",
-	[UDIALD_PREFER_UMTS] = "prefer-umts",
-	[UDIALD_PREFER_GPRS] = "prefer-gprs"
+	[UDIALD_FORCE_UMTS] = "force_umts",
+	[UDIALD_FORCE_GPRS] = "force_gprs",
+	[UDIALD_PREFER_UMTS] = "prefer_umts",
+	[UDIALD_PREFER_GPRS] = "prefer_gprs"
 };
 
 // mode no -> mode string
