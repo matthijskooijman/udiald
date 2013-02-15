@@ -20,6 +20,8 @@
 #define UDIALD_FLAG_NOERRSTAT	0x02
 #define UDIALD_FLAG_SIGNALED	0x04
 
+#define lengthof(x) (sizeof(x) / sizeof(*x))
+
 enum udiald_errcode {
 	UDIALD_OK,
 	UDIALD_EINVAL,
