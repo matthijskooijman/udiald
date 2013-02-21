@@ -146,8 +146,8 @@ int udiald_tty_cloexec(int fd) {
 }
 
 pid_t udiald_tty_pppd(struct udiald_state *state) {
-	char cpath[17 + sizeof(state->networkname)] = "/tmp/udiald-pppd-";
-	strcat(cpath, state->networkname);
+	char cpath[18 + sizeof(state->networkname) + sizeof(pid_t) * 3];
+	snprintf(cpath, sizeof(cpath), "/tmp/udiald-pppd-%s-%d", state->networkname, getpid());
 	if (unlink(cpath) < 0 && errno != ENOENT) {
 		syslog(LOG_CRIT, "%s: Failed to clean up existing ppp config file: %s",
 				state->modem.device_id, strerror(errno));
