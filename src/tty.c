@@ -222,6 +222,9 @@ pid_t udiald_tty_pppd(struct udiald_state *state) {
 	if ((val = udiald_config_get_int(state, "udiald_mtu", -1)) > 0) {
 		fprintf(fp, "mtu %i\nmru %i\n", val, val);
 	}
+	if ((val = udiald_config_get_int(state, "noremoteip", 1)) > 0) {
+		fprintf(fp, "noremoteip\n");
+	}
 
 	fprintf(fp, "lcp-echo-failure 12\n");
 
