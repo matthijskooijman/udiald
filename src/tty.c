@@ -108,31 +108,37 @@ enum udiald_atres udiald_tty_get(int fd, char *buf, size_t len, int timeout) {
 		rem -= rxed;
 		c += rxed;
 
-		// AT status codes end in \r(\n)
-		if ((c[-1] != '\r' && c[-1] != '\n') || &c[-2] <= buf)
-			continue;
+		char *d = c;
 
-		char *d = &c[-2];
-		// Go to \r(\n) before status
-		while (d > buf && d[-1] != '\r' && d[-1] != '\n')
+		do {
+			// AT status codes end in \r(\n)
+			// Skip all suffixing newline chars
+			while(d > buf && (d[-1] == '\r' || d[-1] == '\n'))
+				--d;
+
+			// no trailing newline or only newlines received
+			if (d == c || d == buf)
+				break;
+
+			// Skip last newline
 			--d;
 
-		if (*d == '^') { // Async signal (we don't want this)
-			if (d - 1 >= buf && d[-1] == '\r') {
-				d--;
-			} else if (d - 2 >= buf && d[-2] == '\r') {
-				d -= 2;
-			}
-			*d = 0;
-			c = d;
-			rem = len - 1 - (d - buf);
-			continue;
-		}
+			// Go to \r(\n) before status
+			while (d > buf && d[-1] != '\r' && d[-1] != '\n')
+				--d;
 
-		// Compare with known AT status codes (array at the very top)
-		for (size_t i = 0; i < sizeof(ttyresstr) / sizeof(*ttyresstr); ++i)
-			if (!strncmp(ttyresstr[i], d, strlen(ttyresstr[i])))
-				return i;
+			if (*d == '^') { // Async signal (we don't want this)
+				*d = 0;
+				c = d;
+				rem = len - 1 - (d - buf);
+				continue;
+			}
+
+			// Compare with known AT status codes (array at the very top)
+			for (size_t i = 0; i < sizeof(ttyresstr) / sizeof(*ttyresstr); ++i)
+				if (!strncmp(ttyresstr[i], d, strlen(ttyresstr[i])))
+					return i;
+		} while (d != buf);
 	}
 
 	syslog(LOG_ERR, "No complete response received within %zu bytes", len);
