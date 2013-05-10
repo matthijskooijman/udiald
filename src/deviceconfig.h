@@ -11,6 +11,15 @@
 // will cause this data to be duplicated in the final binary. If you
 // need anything from here, go through a function in modem.c.
 
+// Modesetting commands for Huawei modems using the SYSCFG commands.
+// CDMA/EVDO-only modems aparrently need the PREFMODE command
+#define HUAWEI_SYSCFG_MODECMD { \
+	[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r", \
+	[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r", \
+	[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r", \
+	[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r", \
+	[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r", \
+}
 
 /* Make sure that the correct ordering of this array is observed: First
  * specific devices, then generic per-vendor profiles and lastly generic
@@ -63,13 +72,7 @@ static const struct udiald_profile profiles[] = {
 		.cfg = {
 			.ctlidx = 2,
 			.datidx = 0,
-			.modecmd = {
-				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
-			},
+			.modecmd = HUAWEI_SYSCFG_MODECMD,
 		},
 	},
 	{
@@ -80,18 +83,7 @@ static const struct udiald_profile profiles[] = {
 		.cfg = {
 			.ctlidx = 2,
 			.datidx = 0,
-			.modecmd = {
-				// These haven't been well-tested (just
-				// copied from the Huawei generic
-				// config). Seems that the device
-				// doesn't get carrier after switching
-				// from (force-)gprs to umts.
-				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
-			},
+			.modecmd = HUAWEI_SYSCFG_MODECMD,
 		},
 	},
 
@@ -105,13 +97,7 @@ static const struct udiald_profile profiles[] = {
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 0,
-			.modecmd = {
-				[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r",	// Set auto = prefer UMTS
-				[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r",
-				[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r",
-				[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r",
-				[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r",
-			},
+			.modecmd = HUAWEI_SYSCFG_MODECMD,
 		},
 	},
 	{
