@@ -78,7 +78,7 @@ int udiald_dial_main(struct udiald_state *state) {
 	enum udiald_atres res = UDIALD_AT_NOCARRIER;
 	for (int i = 0; i < 9; ++i) { // Wait 9 * 5s for network
 		tcflush(0, TCIFLUSH);
-		udiald_tty_put(1, "ATD*99#\r");
+		udiald_tty_put(1, "ATD*99***1#\r");
 		res = udiald_tty_get(0, b, sizeof(b), 10000);
 		if (res != UDIALD_AT_NOCARRIER && res != UDIALD_AT_OK)
 			break;
