@@ -539,6 +539,14 @@ static void udiald_connect_status_mainloop(struct udiald_state *state) {
 	char provider[64] = {0};
 	char b[512] = {0};
 
+	// Set reporting format for AT+COPS? to 0 (long alphanumeric
+	// format), for devices that default to reporting numeric
+	// identifiers only. "3" means to leave actual network selection
+	// parameters unchanged and only set the format.
+	udiald_tty_put(state->ctlfd, "AT+COPS=3,0\r");
+	if (udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK)
+		syslog(LOG_WARNING, "%s: Failed to set AT+COPS to long format\n", state->modem.device_id);
+
 	// Main loop, wait for termination, measure signal strength
 	while (!signaled) {
 		// First run
