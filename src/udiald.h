@@ -55,6 +55,7 @@ enum udiald_atres {
 	UDIALD_AT_NODIALTONE,
 	UDIALD_AT_BUSY,
 	UDIALD_AT_NOCARRIER,
+	UDIALD_AT_NOT_SUPPORTED,
 };
 
 struct udiald_config {

@@ -42,6 +42,8 @@ static const char *ttyresstr[] = {
 	[UDIALD_AT_NODIALTONE] = "NO DIALTONE",
 	[UDIALD_AT_BUSY] = "BUSY",
 	[UDIALD_AT_NOCARRIER] = "NO CARRIER",
+	// This one seems to be Huawei-specific:
+	[UDIALD_AT_NOT_SUPPORTED] = "COMMAND NOT SUPPORT",
 };
 
 int udiald_tty_open(const char *tty) {
