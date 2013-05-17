@@ -464,7 +464,7 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	//Try unlocking with PIN
 	char *pin = udiald_config_get(state, "udiald_pin");
 	char b[512] = {0};
-	if (!pin) {
+	if (!pin || !*pin) {
 		syslog(LOG_CRIT, "%s: No PIN configured", state->modem.device_id);
 		udiald_exitcode(UDIALD_EUNLOCK, "No PIN configured");
 	}
@@ -514,7 +514,7 @@ static void udiald_check_caps(struct udiald_state *state) {
 static void udiald_set_mode(struct udiald_state *state) {
 	char b[512] = {0};
 	char *m = udiald_config_get(state, "udiald_mode");
-	enum udiald_mode mode = udiald_modem_modeval((m) ? m : "auto");
+	enum udiald_mode mode = udiald_modem_modeval((m && *m) ? m : "auto");
 	if (mode == -1 || !state->modem.profile->cfg.modecmd[mode]) {
 		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.device_id, udiald_modem_modestr(mode));
 		free(m);

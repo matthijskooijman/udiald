@@ -184,7 +184,7 @@ pid_t udiald_tty_pppd(struct udiald_state *state) {
 		"noauth\nnoipdefault\nnovj\nnodetach\n", fp);
 
 	char *ifname;
-	if ((ifname = udiald_config_get(state, "ifname"))) {
+	if ((ifname = udiald_config_get(state, "ifname")) && *ifname) {
 		fputs("ifname \"", fp);
 		fputs(ifname, fp);
 		fputs("\"\n", fp);
@@ -236,11 +236,11 @@ pid_t udiald_tty_pppd(struct udiald_state *state) {
 
 	char *s;
 	s = udiald_config_get(state, "udiald_user");
-	fprintf(fp, "user \"%s\"\n", (s && !strpbrk(s, "\"\r\n")) ? s : "");
+	fprintf(fp, "user \"%s\"\n", (s && *s && !strpbrk(s, "\"\r\n")) ? s : "");
 	free(s);
 
 	s = udiald_config_get(state, "udiald_pass");
-	fprintf(fp, "password \"%s\"\n", (s && !strpbrk(s, "\"\r\n")) ? s : "");
+	fprintf(fp, "password \"%s\"\n", (s && *s && !strpbrk(s, "\"\r\n")) ? s : "");
 	free(s);
 
 	if (verbose) /* Log to stderr (as well as syslog) */

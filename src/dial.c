@@ -60,7 +60,7 @@ int udiald_dial_main(struct udiald_state *state) {
 	char *apn = udiald_config_get(state, "udiald_apn");
 
 	snprintf(b, sizeof(b), "AT+CGDCONT=1,\"IP\",\"%s\"\r",
-		(apn && !strpbrk(apn, "\"\r\n;")) ? apn : "");
+		(apn && *apn && !strpbrk(apn, "\"\r\n;")) ? apn : "");
 
 	udiald_tty_put(1, b);
 	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
