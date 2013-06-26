@@ -13,12 +13,25 @@
 
 // Modesetting commands for Huawei modems using the SYSCFG commands.
 // CDMA/EVDO-only modems aparrently need the PREFMODE command
+//
+// Values are mode,preference,bands,roaming,srvdomain
+// mode=2: Automatic
+// mode=13: GSM (2G)
+// mode=14: WCDMA (3G
+// mode=16: No change
+// preference=0: automatic
+// preference=1: Prefer GSM
+// preference=2: Prefer WCDMA
+// preference=3: No change
+// bands=3FFFFFFF: Allow all bands (or no change, specs aren't clear)
+// roaming=2: No change
+// srvdomain=2: No change
 #define HUAWEI_SYSCFG_MODECMD { \
-	[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,2,40000000,2,4\r", \
-	[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,40000000,2,4\r", \
-	[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,40000000,2,4\r", \
-	[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,40000000,2,4\r", \
-	[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,40000000,2,4\r", \
+	[UDIALD_MODE_AUTO] = "AT^SYSCFG=2,0,3FFFFFFF,2,4\r", \
+	[UDIALD_FORCE_UMTS] = "AT^SYSCFG=14,2,3FFFFFFF,2,4\r", \
+	[UDIALD_FORCE_GPRS] = "AT^SYSCFG=13,1,3FFFFFFF,2,4\r", \
+	[UDIALD_PREFER_UMTS] = "AT^SYSCFG=2,2,3FFFFFFF,2,4\r", \
+	[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,3FFFFFFF,2,4\r", \
 }
 
 /* Make sure that the correct ordering of this array is observed: First
