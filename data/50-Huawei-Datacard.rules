@@ -1,0 +1,1176 @@
+# This file was copied from the "HUAWEI Data Cards Linux Driver",
+# version 4.19.19.00 which is licensed under GPLv2 and was downloaded
+# from http://www.huaweidevice.com/worldwide/downloadCenter.do?method=toDownloadFile&flay=software&softid=NDcwMzU=
+###################################################################################
+##
+## This rules are for the new version of udev( >= udevinfo, version 098 ) 
+## The command to check the version is : udevinfo -V
+##
+###################################################################################
+
+SUBSYSTEMS=="usb", ENV{MODALIAS}=="usb:v12D1*ipFF", ENV{MODALIAS}="option"
+SUBSYSTEMS=="usb", ENV{MODALIAS}=="usb:v12D1*ip50", ENV{MODALIAS}="usb-storage"
+SUBSYSTEMS=="usb", ENV{MODALIAS}=="usb:v12D1*ic02isc06ipFF", ENV{MODALIAS}="hw_cdc_driver"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1446*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D1*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1448*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1520*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1521*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1522*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1523*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1524*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1525*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1526*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1527*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1528*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1529*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152A*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152B*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152C*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152D*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152E*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p152F*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1530*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1531*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1532*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1533*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1534*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1535*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1536*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1537*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1538*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1539*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153A*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153B*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153C*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153D*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153E*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p153F*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1540*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1541*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1542*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1543*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1544*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1545*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1546*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1547*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1548*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1549*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154A*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154B*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154C*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154D*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154E*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p154F*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1550*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1551*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1552*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1553*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1554*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1555*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1556*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0B*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1449*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AD*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1557*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1558*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1559*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1B*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1505*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B5*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C1*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C2*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C3*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C4*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C5*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14FE*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14FF*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B7*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14BA*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1F20*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1F21*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1F22*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1F23*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D50*", KERNEL=="sr[0-9]", SYMLINK+="hwcdrom", MODE="0666"
+
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", RUN+="/path/HWActivator"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AC*", RUN+="/sbin/modprobe hw_cdc_driver"
+
+##
+##  Notify the dashboard while plugging or unplugging the device with adding or removing /dev/huawei_mobile file
+##
+###################################################################################
+ACTION=="add", ATTRS{idVendor}=="12d1", KERNEL=="ttyUSB*", RUN+="/bin/touch /dev/huawei_mobile"
+ACTION=="remove", KERNEL=="ttyUSB*", RUN+="/bin/rm -f /dev/huawei_mobile"
+#### ttyUSB%n must be renamed by SYMLINK method :update by lxz 20120506 start
+#ACTION=="add", ATTRS{idVendor}=="12d1", KERNEL=="ttyUSB*", RUN+="/bin/rm -f /dev/ttyUSB%n"
+#### ttyUSB%n must be renamed by SYMLINK method :update by lxz 20120506 end
+######Add for TD data card######################################
+ACTION=="add", ATTRS{idVendor}=="12d1", KERNEL=="ttyACM*", RUN+="/bin/touch /dev/huawei_mobile"
+ACTION=="remove", KERNEL=="ttyACM*", RUN+="/bin/rm -f /dev/huawei_mobile"
+
+
+######unbind option driver from NDIS ports and bind huawei_ether driver to NDIS ports###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="00", ATTRS{bInterfaceProtocol}=="00", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="ff", RUN+="/sbin/usbmod $devpath"
+######ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="00", RUN+="/sbin/usbmod $devpath"
+######unbind option driver from NDIS ports and bind CDC-ECM driver to NDIS ports###################################
+######must unbind data port first ,then unbind interrupt port ###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="00", RUN+="/sbin/usbmod bindcdc_ether $devpath"
+
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="0d", ATTRS{bInterfaceProtocol}=="00", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="0d", ATTRS{bInterfaceProtocol}=="ff", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---single port:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="07", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="37", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="67", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---double port:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="08", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="09", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="38", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="39", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="68", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="69", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---ndis no 3G:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="11", RUN+="/sbin/usbmod $devpath"
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---ncm interface:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="16", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="46", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="76", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---single port:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="07", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="37", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="67", RUN+="/sbin/usbmod $devpath"
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---double port:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="08", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="09", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="38", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="39", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="68", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="69", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---ndis no 3G:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="11", RUN+="/sbin/usbmod $devpath"
+######unbind option driver from NDIS ports and bind ndis driver to NDIS ports ---ncm interface:added by lxz 20120506###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="16", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="46", RUN+="/sbin/usbmod $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="76", RUN+="/sbin/usbmod $devpath"
+
+######unbind option driver from massstorage ports and bind usb-storage driver to massstorage ports###################################
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceClass}=="08", ATTRS{bInterfaceSubClass}=="06", ATTRS{bInterfaceProtocol}=="50", RUN+="/sbin/usbmod bindusbstorage $devpath"
+
+#####added by l81005329 for DTS2012072704174 start
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="wwan*", ATTRS{bInterfaceProtocol}=="08", RUN+="/sbin/usbmod unbind_qmi_wwan $devpath"
+ACTION=="add", SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1*", KERNEL=="cdc-wdm*", ATTRS{bInterfaceProtocol}=="09", RUN+="/sbin/usbmod unbind_cdc_wdm $devpath"
+#####added by l81005329 for DTS2012072704174 end
+
+##########################################rename each port based on its protocols new pid#############################################
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="02", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="03", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="04", SYMLINK+="ttyUSB_utps_pscs"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="05", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="06", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="31", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="32", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="33", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="34", SYMLINK+="ttyUSB_utps_pscs"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="35", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="36", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0b", SYMLINK+="ttyUSB_utps_finger-print"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="0f", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3b", SYMLINK+="ttyUSB_utps_fingerprint"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="3f", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="46", SYMLINK+="ttyUSB_utps_ncm"
+
+##########################################rename each port based on its protocols new pid jungo#############################################
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="02", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="03", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="04", SYMLINK+="ttyUSB_utps_pscs"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="05", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="06", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="31", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="32", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="33", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="34", SYMLINK+="ttyUSB_utps_pscs"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="35", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="36", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0b", SYMLINK+="ttyUSB_utps_fingerprint"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="0f", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3b", SYMLINK+="ttyUSB_utps_fingerprint"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="3f", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="46", SYMLINK+="ttyUSB_utps_ncm"
+
+##########################################rename each port based on its protocols new pid no 3G#############################################
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="10", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="12", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="13", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="14", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="15", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="16", SYMLINK+="ttyUSB_utps_ncm"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="17", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="61", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="62", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="63", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="64", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="65", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="66", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="76", SYMLINK+="ttyUSB_utps_ncm"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6b", SYMLINK+="ttyUSB_utps_fingerprint"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="6f", SYMLINK+="ttyUSB_utps_dvb"
+
+##########################################rename each port based on its protocols new pid jungo no 3G#############################################
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="10", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="12", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="13", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="14", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="15", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="16", SYMLINK+="ttyUSB_utps_ncm"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="17", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="61", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="62", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="63", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="64", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="65", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="66", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="76", SYMLINK+="ttyUSB_utps_ncm"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6a", SYMLINK+="ttyUSB_utps_bluetooth"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6b", SYMLINK+="ttyUSB_utps_fingerprint"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6c", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6d", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6e", SYMLINK+="ttyUSB_utps_pcvoice"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="6f", SYMLINK+="ttyUSB_utps_dvb"
+
+##########################################add new port base on 2.4.5#############################################
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="18", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="19", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="1a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="1b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="1c", SYMLINK+="ttyUSB_utps_serialC"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="48", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="49", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="4a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="4b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="4c", SYMLINK+="ttyUSB_utps_serialC"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="78", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="79", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="7a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="7b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="01", ATTRS{bInterfaceProtocol}=="7c", SYMLINK+="ttyUSB_utps_serialC"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="18", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="19", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="1a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="1b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="1c", SYMLINK+="ttyUSB_utps_serialC"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="48", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="49", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="4a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="4b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="4c", SYMLINK+="ttyUSB_utps_serialC"
+
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="78", SYMLINK+="ttyUSB_utps_shellA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="79", SYMLINK+="ttyUSB_utps_shellB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="7a", SYMLINK+="ttyUSB_utps_serialA"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="7b", SYMLINK+="ttyUSB_utps_serialB"
+SUBSYSTEMS=="usb",ATTRS{modalias}=="usb:v12D1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceSubClass}=="02", ATTRS{bInterfaceProtocol}=="7c", SYMLINK+="ttyUSB_utps_serialC"
+
+##########################################rename each port based on pids#############################################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1001*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1001*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1001*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1003*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1003*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A9*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A9*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_bt"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1004*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1004*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1004*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1004*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1401*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1401*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1401*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1402*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1402*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1402*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1403*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1403*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1403*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1403*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1405*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1405*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1405*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1406*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1406*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1406*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1408*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1408*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1409*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1409*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1409*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1409*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p140F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1411*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1411*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1411*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1411*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1411*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1412*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1412*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1412*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1412*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1412*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcvoice"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1413*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcvoice"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1414*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1414*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1414*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1414*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1414*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcvoice"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1415*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1415*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1415*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1415*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1415*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_dvb"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1416*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1417*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1417*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1417*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1417*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1417*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1418*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1418*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1418*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1418*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1418*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1419*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p141F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1420*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1420*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1420*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1421*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1421*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1421*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1422*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1422*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1422*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1422*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1422*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1427*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1427*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1427*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1427*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1428*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1428*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1428*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1428*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1428*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1429*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1429*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1429*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1448*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1448*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+##########For NDIS devices#####################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1430*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1430*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1430*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1431*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1431*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1432*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1433*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1433*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1433*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1433*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1434*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1434*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1434*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1434*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1435*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1435*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1436*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1436*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1436*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1437*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1437*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1437*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1438*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1438*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1438*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1438*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1439*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1439*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1439*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1439*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p143E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_finger"
+
+##########The PIDs for the special operators#####################
+#############Modem only###################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1450*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1450*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1450*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1451*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1451*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1451*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1452*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1452*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1452*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1453*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1453*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1453*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1454*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1454*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1454*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1455*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1455*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1455*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1456*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1456*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1456*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1457*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1457*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1457*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1458*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1458*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1458*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1459*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1459*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1459*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p145F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1460*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1460*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1460*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1461*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1461*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1461*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1462*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1462*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1462*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1463*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1463*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1463*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+#############Modem + NDIS###################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1404*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1404*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1404*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1404*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1404*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ctrl"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1407*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1407*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1407*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1407*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ctrl"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p142B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ctrl"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_finger"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1464*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1464*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1464*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1465*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1465*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1465*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1466*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1466*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1466*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1467*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1467*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1467*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1468*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1468*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1468*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1469*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1469*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1469*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p146F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1470*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1470*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1470*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1471*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1471*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1471*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1472*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1472*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1472*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1473*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1473*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1473*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1474*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1474*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1474*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1475*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1475*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1475*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1476*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1476*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1476*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1477*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1477*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1477*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1478*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1478*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1478*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1479*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1479*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1479*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p147F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1480*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1480*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1480*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1481*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1481*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1481*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C9*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C9*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14C9*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CA*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CB*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14CC*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+######################################################E58eV begin##########################################################################################################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1491*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1491*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1492*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1492*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1493*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1493*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1494*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1494*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1495*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1495*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1496*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1496*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1497*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1497*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1498*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1498*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1499*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1499*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149a*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149a*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149b*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149c*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149d*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149e*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p149f*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14a0*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14a1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14a2*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14a3*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14a4*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+#################################################E583v end################################################################################################################
+
+
+#############Modem + NDIS + HID###################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1482*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1482*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1482*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1482*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1483*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1483*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1483*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1483*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1484*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1484*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1484*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1484*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1485*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1485*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1485*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1485*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1486*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1486*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1486*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1486*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1487*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1488*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1489*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p148B*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_ndis"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_video"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="10", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1510*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="11", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_video"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="09", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_gps"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1511*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="10", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1512*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1512*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1512*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_video"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1513*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1513*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1513*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1513*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_video"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1514*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1514*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1514*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1514*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_video"
+
+#####add by l81005329 for EC1762 DTS2012092500189 start
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1515*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1515*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1515*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+#####add by l81005329 for EC1762 DTS2012092500189 end
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1516*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1516*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1516*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1516*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="07", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+
+##########For the TD-SCDMA data card or module devices#####################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D03*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D03*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D03*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D09*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D09*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D09*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D50*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1D50*", KERNEL=="ttyACM*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="01", SYMLINK+="ttyUSB_utps_pcui"
+
+#########For the Jungo Devices #######################################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C05*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C05*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C05*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C06*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C06*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C07*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C07*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C07*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C07*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="06", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_bt"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C08*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C08*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C09*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C09*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0C*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0D*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C0F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C10*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C10*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C10*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C10*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C11*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C11*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C11*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C11*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C11*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C12*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C12*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C12*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C12*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C13*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C13*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C13*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C13*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C13*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C14*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C14*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C14*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C14*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C15*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C15*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C15*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C15*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C15*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="05", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_control"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C16*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="08", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_bt"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C23*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C23*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C23*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C23*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1444*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1444*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1445*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1445*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1445*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144E*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcvoice"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p144F*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AE*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AE*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AF*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AF*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14AF*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B0*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B0*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B0*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcvoice"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B1*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A5*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A5*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A5*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A6*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A6*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A6*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A7*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A7*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14A7*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C17*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C17*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C18*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C18*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C18*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C19*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C19*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C19*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C19*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_mms"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p1C1A*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcsc"
+
+
+
+
+###############################DIAG+PCUI+NDIS+CDROM&SD#######################################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14B8*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+###############################ADD E177#######################################
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D2*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D2*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="03", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D2*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="04", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D3*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_modem"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D3*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D3*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="02", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"
+
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D4*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="00", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_diag"
+SUBSYSTEMS=="usb", ATTRS{modalias}=="usb:v12D1p14D4*", KERNEL=="ttyUSB*", ATTRS{bInterfaceNumber}=="01", ATTRS{bInterfaceProtocol}=="ff", SYMLINK+="ttyUSB_utps_pcui"

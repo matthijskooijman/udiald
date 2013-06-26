@@ -3,6 +3,7 @@ WFLAGS:=-Wall -Werror -pedantic
 BINARY:=udiald
 SOURCES:=$(wildcard src/*.c)
 HEADERS:=$(wildcard src/*.h)
+DEVICE_CONFIG_HUAWEI:=src/deviceconfig_huawei.h
 
 # This will be renamed to json-c in version 0.11
 JSON_LIB:=json
@@ -12,8 +13,11 @@ JSON_LIB:=json
 
 all: $(BINARY)
 
-$(BINARY): $(SOURCES) $(HEADERS)
+$(BINARY): $(SOURCES) $(HEADERS) $(DEVICE_CONFIG_HUAWEI)
 	$(CC) $(CFLAGS) $(SFLAGS) $(WFLAGS) $(LDFLAGS) -l$(JSON_LIB) -lubox -luci -o $@ $(SOURCES)
 
+$(DEVICE_CONFIG_HUAWEI): data/50-Huawei-Datacard.rules data/extract-huawei.py
+	data/extract-huawei.py < $< > $@
+
 clean:
-	rm -f $(BINARY)
+	rm -f $(BINARY) $(DEVICE_CONFIG_HUAWEI)
