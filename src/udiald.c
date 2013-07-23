@@ -339,7 +339,7 @@ static void udiald_select_modem(struct udiald_state *state) {
 			strncat(b, udiald_modem_modestr(i), sizeof(b) - strlen(b) - 2);
 			strcat(b, " ");
 		}
-	syslog(LOG_NOTICE, "%s: Supported modes: %s", state->modem.device_id, b);
+	syslog(LOG_NOTICE, "%s: Configuration profile supports modes: %s", state->modem.device_id, b);
 }
 
 /**
@@ -397,6 +397,7 @@ static void udiald_identify(struct udiald_state *state) {
  * debug measure only).
  */
 static void udiald_probe(struct udiald_state *state) {
+        syslog(LOG_NOTICE, "Starting probe");
 	char b[512] = {0};
 	if (udiald_tty_put(state->ctlfd, "AT+GCAP\r") < 1
 	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
@@ -477,6 +478,7 @@ static void udiald_probe(struct udiald_state *state) {
 	} else {
 		syslog(LOG_NOTICE, strtok(b, "\r\n"));
 	}
+        syslog(LOG_NOTICE, "Probe finished");
 }
 
 /**

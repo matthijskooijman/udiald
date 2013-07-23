@@ -88,6 +88,7 @@ static int match_profile(struct udiald_modem *modem, const struct udiald_profile
  * was no applicable profile.
  */
 static int udiald_modem_find_profile(const struct udiald_state *state, struct udiald_modem *modem, const char *profile_name) {
+        syslog(LOG_INFO, "%s: Looking for matching profile", modem->device_id);
 	// Match profiles loaded from uci first
 	struct udiald_profile_list *l;
 	list_for_each_entry(l, &state->custom_profiles, h) {
@@ -102,6 +103,7 @@ static int udiald_modem_find_profile(const struct udiald_state *state, struct ud
 		if (match_profile(modem, &profiles[i], profile_name) == UDIALD_OK)
 			return UDIALD_OK;
 	}
+        syslog(LOG_INFO, "%s: No matching profile found", modem->device_id);
 
 	return UDIALD_ENODEV;
 }
