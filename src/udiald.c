@@ -472,7 +472,7 @@ static void udiald_probe(struct udiald_state *state) {
 	// may take a while)
 	syslog(LOG_CRIT, "%s: Quering available networks, this might take a while...", state->modem.device_id);
 	if (udiald_tty_put(state->ctlfd, "AT+COPS=?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 15000) != UDIALD_AT_OK) {
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 45000) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: AT+COPS=? failed (%s)", state->modem.device_id, b);
 	} else {
 		syslog(LOG_NOTICE, strtok(b, "\r\n"));
