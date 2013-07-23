@@ -804,11 +804,10 @@ int main(int argc, char *const argv[]) {
 
 	udiald_identify(&state);
 
-	if (state.app == UDIALD_APP_PROBE)
-		udiald_probe(&state);
-
 	udiald_check_sim(&state);
 
+	if (state.app == UDIALD_APP_PROBE)
+		udiald_probe(&state);
 
 	if (state.app == UDIALD_APP_SCAN || state.app == UDIALD_APP_PROBE) {
 		udiald_exitcode(UDIALD_OK, NULL); // We are done here.
