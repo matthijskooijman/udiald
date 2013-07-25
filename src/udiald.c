@@ -166,7 +166,7 @@ static struct option longopts[] = {
 	{"list-profiles", false, NULL, 'L'},
 	{"list-profiles", false, NULL, 'L'},
 	{"network-name", true, NULL, 'n'},
-	{"verbose", false, NULL, 'n'},
+	{"verbose", false, NULL, 'v'},
 	{"quiet", false, NULL, 'q'},
 	{"vendor", true, NULL, 'V'},
 	{"product", true, NULL, 'P'},
