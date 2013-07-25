@@ -59,10 +59,26 @@ int udiald_dial_main(struct udiald_state *state) {
 	// Set PDP and APN
 	char *apn = udiald_config_get(state, "udiald_apn");
 
-	snprintf(b, sizeof(b), "AT+CGDCONT=1,\"IP\",\"%s\"\r",
-		(apn && *apn && !strpbrk(apn, "\"\r\n;")) ? apn : "");
+	if (!apn)
+		apn = "";
 
-	if (!apn || !*apn)
+	char *invalid = strpbrk(apn, "\"\r\n;");
+	if (invalid) {
+		if (invalid[0] == '\r')
+			invalid = "\r";
+		else if (invalid[0] == '\n')
+			invalid = "\n";
+		else
+			invalid[1] = '\0';
+
+		syslog(LOG_ERR, "%s: Invalid character in APN: '%s'",
+				tty, invalid);
+		return UDIALD_EDIAL;
+	}
+
+	snprintf(b, sizeof(b), "AT+CGDCONT=1,\"IP\",\"%s\"\r", apn);
+
+	if (!*apn)
 		syslog(LOG_WARNING, "%s: No apn configured, connection might not work", tty);
 
 	udiald_tty_put(1, b);
@@ -71,7 +87,7 @@ int udiald_dial_main(struct udiald_state *state) {
 				tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
 	}
-	syslog(LOG_NOTICE, "%s: Selected APN %s. Now dialing...", tty, apn);
+	syslog(LOG_NOTICE, "%s: Selected APN \"%s\". Now dialing...", tty, apn);
 	free(apn);
 
 	// Dial
