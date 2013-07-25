@@ -785,7 +785,8 @@ int main(int argc, char *const argv[]) {
 	udiald_config_revert(&state, "modem_mode");
 	udiald_config_revert(&state, "modem_gsm");
 	udiald_config_revert(&state, "sim_state");
-	udiald_config_revert(&state, "udiald_error");
+	udiald_config_revert(&state, "udiald_error_code");
+	udiald_config_revert(&state, "udiald_error_msg");
 
 	if (state.app == UDIALD_APP_CONNECT) {
 		udiald_config_set(&state, "udiald_state", "init");
