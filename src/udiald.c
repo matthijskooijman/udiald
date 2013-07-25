@@ -56,7 +56,6 @@ static int udiald_usage(const char *app) {
 			"	-L, --list-profiles		List available configuration profiles\n"
 			"	-l, --list-devices		Detect and list usable devices\n"
 			"\nGlobal Options:\n"
-			"	-e				Don't write error state\n"
 			"	-n, --network-name <name>	Use given network name instead of \"wan\"\n"
 			"	-v, --verbose			Increase verbosity (once = more info, twice = debug output)\n\n"
 			"	-q, --quiet			Decrease verbosity (once = errors / warnings only, twice = no output)\n\n"
@@ -119,7 +118,7 @@ static void udiald_exitcode(int code, const char *fmt, ...) {
 	va_list ap;
 	if (code && state.flags & UDIALD_FLAG_SIGNALED)
 		code = UDIALD_ESIGNALED;
-	if (code && code != UDIALD_ESIGNALED && !(state.flags & UDIALD_FLAG_NOERRSTAT)) {
+	if (code && code != UDIALD_ESIGNALED) {
 		udiald_config_set_int(&state, "udiald_error_code", code);
 		if (fmt) {
 			va_start(ap, fmt);
@@ -185,7 +184,7 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 	enum udiald_app app = UDIALD_APP_CONNECT;
 
 	int s;
-	while ((s = getopt_long(argc, argv, "csuUden:vtlLV:P:D:p:fq", longopts, NULL)) != -1) {
+	while ((s = getopt_long(argc, argv, "csuUdn:vtlLV:P:D:p:fq", longopts, NULL)) != -1) {
 		switch(s) {
 			case 'c':
 				app = UDIALD_APP_CONNECT;
@@ -217,10 +216,6 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 
 			case 'L':
 				app = UDIALD_APP_LIST_PROFILES;
-				break;
-
-			case 'e':
-				state->flags |= UDIALD_FLAG_NOERRSTAT;
 				break;
 
 			case 'n':
@@ -790,8 +785,7 @@ int main(int argc, char *const argv[]) {
 	udiald_config_revert(&state, "modem_mode");
 	udiald_config_revert(&state, "modem_gsm");
 	udiald_config_revert(&state, "sim_state");
-	if (!(state.flags & UDIALD_FLAG_NOERRSTAT))
-		udiald_config_revert(&state, "udiald_error");
+	udiald_config_revert(&state, "udiald_error");
 
 	if (state.app == UDIALD_APP_CONNECT) {
 		udiald_config_set(&state, "udiald_state", "init");
