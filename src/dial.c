@@ -23,10 +23,24 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <errno.h>
 #include <termios.h>
 #include "udiald.h"
 #include "config.h"
+
+static void fatal_error(struct udiald_state *state, const char *fmt, ...) {
+	char buf[256];
+	va_list ap;
+
+	va_start(ap, fmt);
+	vsnprintf(buf, lengthof(buf), fmt, ap);
+	va_end(ap);
+
+	syslog(LOG_ERR, "%s", buf);
+	udiald_config_set(state, "udiald_dial_error_msg", buf);
+	ucix_save(state->uci, state->uciname);
+}
 
 int udiald_dial_main(struct udiald_state *state) {
 	char *tty = ttyname(0);
@@ -41,8 +55,8 @@ int udiald_dial_main(struct udiald_state *state) {
 	syslog(LOG_NOTICE, "%s: Preparing to dial", tty);
 	udiald_tty_put(1, "ATE0\r");
 	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_ERR, "%s: Error disabling echo (%s)",
-				tty, (b[0]) ? b : strerror(errno));
+		fatal_error(state, "%s: Error disabling echo (%s)",
+				   tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 	syslog(LOG_NOTICE, "%s: Echo disabled", tty);
@@ -50,8 +64,8 @@ int udiald_dial_main(struct udiald_state *state) {
 	// Reset, unecho, ...
 	udiald_tty_put(1, "ATH\r");
 	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_ERR, "%s: Error resetting modem (%s)",
-				tty, (b[0]) ? b : strerror(errno));
+		fatal_error(state, "%s: Error resetting modem (%s)",
+				   tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 	syslog(LOG_NOTICE, "%s: Modem reset", tty);
@@ -71,8 +85,8 @@ int udiald_dial_main(struct udiald_state *state) {
 		else
 			invalid[1] = '\0';
 
-		syslog(LOG_ERR, "%s: Invalid character in APN: '%s'",
-				tty, invalid);
+		fatal_error(state,  "%s: Invalid character in APN: '%s'",
+				    tty, invalid);
 		return UDIALD_EDIAL;
 	}
 
@@ -83,8 +97,8 @@ int udiald_dial_main(struct udiald_state *state) {
 
 	udiald_tty_put(1, b);
 	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_ERR, "%s: Failed to set APN (%s)",
-				tty, (b[0]) ? b : strerror(errno));
+		fatal_error(state,  "%s: Failed to set APN (%s)",
+				    tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 	syslog(LOG_NOTICE, "%s: Selected APN \"%s\". Now dialing...", tty, apn);
@@ -103,8 +117,8 @@ int udiald_dial_main(struct udiald_state *state) {
 	}
 
 	if (res != UDIALD_AT_CONNECT) {
-		syslog(LOG_ERR, "%s: Failed to connect (%s)", tty,
-				(b[0]) ? b : strerror(errno));
+		fatal_error(state,  "%s: Failed to connect (%s)", tty,
+				   (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 
