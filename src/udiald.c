@@ -490,7 +490,10 @@ static void udiald_check_sim(struct udiald_state *state) {
 	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
 		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, b);
 		udiald_config_set(state, "sim_state", "error");
-		udiald_exitcode(UDIALD_ESIM, "Unable to get SIM status");
+		state->sim_state = -1;
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_ESIM, "Unable to get SIM status");
+		return;
 	}
 
 	// Evaluate SIM state
@@ -509,7 +512,8 @@ static void udiald_check_sim(struct udiald_state *state) {
 		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, c);
 		udiald_config_set(state, "sim_state", "error");
 		state->sim_state = -1;
-		udiald_exitcode(UDIALD_ESIM, "Unknown SIM status");
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_ESIM, "Unknown SIM status");
 	}
 }
 
