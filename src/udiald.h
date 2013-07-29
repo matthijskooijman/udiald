@@ -62,6 +62,7 @@ struct udiald_config {
 	uint8_t ctlidx;		/* Index of control TTY from first TTY */
 	uint8_t datidx;		/* Index of data TTY from first TTY */
 	char *modecmd[UDIALD_NUM_MODES];	/* Commands to enter modes */
+	char *dialcmd; /* Dial command */
 };
 
 enum udiald_profile_flags {
@@ -175,6 +176,7 @@ pid_t udiald_tty_pppd(struct udiald_state *state);
 
 int udiald_connect_main(struct udiald_state *state);
 int udiald_dial_main(struct udiald_state *state);
+void udiald_select_modem(struct udiald_state *state);
 
 int udiald_util_checked_glob(const char *pattern, int flags, glob_t *pglob, const char *activity);
 int udiald_util_parse_hex_word(const char *hex, uint16_t *res);

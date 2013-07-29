@@ -308,7 +308,7 @@ static void udiald_setup_uci(struct udiald_state *state) {
 /**
  * Select the modem to use, depending on config or autodetection.
  */
-static void udiald_select_modem(struct udiald_state *state) {
+void udiald_select_modem(struct udiald_state *state) {
 	/* Only return a modem for which we have a valid configuration profile */
 	state->filter.flags |= UDIALD_FILTER_PROFILE;
 
@@ -393,6 +393,7 @@ static void udiald_identify(struct udiald_state *state) {
  */
 static void udiald_probe(struct udiald_state *state) {
         syslog(LOG_NOTICE, "Starting probe");
+	// TODO ATI, AT+GMI, AT+GMM, AT+GMR
 	char b[512] = {0};
 	if (udiald_tty_put(state->ctlfd, "AT+GCAP\r") < 1
 	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {

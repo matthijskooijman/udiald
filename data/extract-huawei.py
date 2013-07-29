@@ -67,6 +67,7 @@ def output(vid, pid, control, data):
 			.ctlidx = {control},
 			.datidx = {data},
 			.modecmd = HUAWEI_SYSCFG_MODECMD,
+			.dialcmd = "ATD*99***1#\\r",
 		}},
 	}},""".format(devname = devname, vid = vid, pid = pid, control = control, data = data))
 

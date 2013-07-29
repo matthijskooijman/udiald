@@ -267,6 +267,7 @@ static struct json_object *profile_to_json(const struct udiald_profile *p) {
 			json_object_object_add(modes, udiald_modem_modestr(mode), json_object_new_string(p->cfg.modecmd[mode]));
 	}
 	json_object_object_add(obj, "modes", modes);
+	json_object_object_add(obj, "dialcmd", json_object_new_string(p->cfg.dialcmd));
 
 	return obj;
 }
@@ -348,6 +349,8 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 			p->cfg.ctlidx = strtoul(o->v.string, NULL, 10);
 		else if (!strcmp(o->e.name, "data"))
 			p->cfg.datidx = strtoul(o->v.string, NULL, 10);
+		else if (!strcmp(o->e.name, "dialcmd"))
+			asprintf(&p->cfg.dialcmd, "%s\r", o->v.string);
 		else if (!strcmp(o->e.name, "vendor")) {
 			p->vendor = strtoul(o->v.string, NULL, 16);
 			p->flags &= ~UDIALD_PROFILE_NOVENDOR;
@@ -371,6 +374,11 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 		}
 	}
 
+	if (!p->cfg.dialcmd) {
+		syslog(LOG_WARNING, "Uci section %s does not contain a dial command", s->e.name);
+		return UDIALD_EINVAL;
+	}
+
 	return UDIALD_OK;
 }
 
@@ -378,6 +386,7 @@ static void udiald_modem_free_profile(struct udiald_profile_list *l) {
 	free(l->p.desc);
 	for (int i=0; i < UDIALD_NUM_MODES; ++i)
 		free(l->p.cfg.modecmd[i]);
+	free(l->p.cfg.dialcmd);
 	free(l);
 }
 

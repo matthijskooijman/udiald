@@ -60,6 +60,7 @@ static const struct udiald_profile profiles[] = {
 				[UDIALD_FORCE_UMTS] = "AT+CFUN=6\r",
 				[UDIALD_FORCE_GPRS] = "AT+CFUN=5\r",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 
@@ -74,6 +75,7 @@ static const struct udiald_profile profiles[] = {
 			.modecmd = {
 				[UDIALD_MODE_AUTO] = "",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 
@@ -95,6 +97,7 @@ static const struct udiald_profile profiles[] = {
 			.ctlidx = 1,
 			.datidx = 0,
 			.modecmd = HUAWEI_SYSCFG_MODECMD,
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 	{
@@ -112,6 +115,7 @@ static const struct udiald_profile profiles[] = {
 				[UDIALD_PREFER_UMTS] = "AT+ZSNT=0,0,2\r",
 				[UDIALD_PREFER_GPRS] = "AT+ZSNT=0,0,1\r",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 // DRIVER PROFILES
@@ -126,6 +130,7 @@ static const struct udiald_profile profiles[] = {
 			.modecmd = {
 				[UDIALD_MODE_AUTO] = "",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 	{
@@ -139,6 +144,7 @@ static const struct udiald_profile profiles[] = {
 			.modecmd = {
 				[UDIALD_MODE_AUTO] = "",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 	{
@@ -156,6 +162,7 @@ static const struct udiald_profile profiles[] = {
 				[UDIALD_PREFER_UMTS] = "at_opsys=2,2\r",
 				[UDIALD_PREFER_GPRS] = "at_opsys=3,2\r",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 	{
@@ -171,6 +178,7 @@ static const struct udiald_profile profiles[] = {
 			.modecmd = {
 				[UDIALD_MODE_AUTO] = "",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 	{
@@ -184,6 +192,7 @@ static const struct udiald_profile profiles[] = {
 			.modecmd = {
 				[UDIALD_MODE_AUTO] = "",
 			},
+			.dialcmd = "ATD*99***1#\r",
 		},
 	},
 };

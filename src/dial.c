@@ -43,6 +43,8 @@ static void fatal_error(struct udiald_state *state, const char *fmt, ...) {
 }
 
 int udiald_dial_main(struct udiald_state *state) {
+	udiald_select_modem(state);
+
 	char *tty = ttyname(0);
 	if (tty && (tty = strrchr(tty, '/')))
 		tty++;
@@ -108,7 +110,16 @@ int udiald_dial_main(struct udiald_state *state) {
 	enum udiald_atres res = UDIALD_AT_NOCARRIER;
 	for (int i = 0; i < 9; ++i) { // Wait 9 * 5s for network
 		tcflush(0, TCIFLUSH);
-		udiald_tty_put(1, "ATD*99***1#\r");
+		// Linux Driver 4.19.19.00 Tool User Guide.pdf inside
+		// HUAWEI Data Cards Linux Driver suggests that ATD*99#
+		// should generally work for WCDMA and GSM, but ATD#777
+		// is needed for CDMA (EVDO). Alternatively,
+		// AT+GCDATA="PPP",1 (where 1 is the PDP profile set up
+		// wit CGDCONT) is also said to be the official connect
+		// command (ATD is legacy but possibly supported by more
+		// modems).
+		syslog(LOG_INFO, "%s: Using dial command: %s", tty, state->modem.profile->cfg.dialcmd);
+		udiald_tty_put(1, state->modem.profile->cfg.dialcmd);
 		res = udiald_tty_get(0, b, sizeof(b), 10000);
 		if (res != UDIALD_AT_NOCARRIER && res != UDIALD_AT_OK)
 			break;
