@@ -34,6 +34,7 @@ import sys
 
 # Map (vid, pid) => devicename
 devnames = {
+    (0x12d1, 0x1001): "Huawei K3520 / E1752 / E620",
     (0x12d1, 0x1003): "Huawei E220",
     (0x12d1, 0x1433): "Huawei E173",
 }
