@@ -34,8 +34,8 @@ import sys
 
 # Map (vid, pid) => devicename
 devnames = {
-    (0x12d1, 0x1433): "Huawei E173",
     (0x12d1, 0x1003): "Huawei E220",
+    (0x12d1, 0x1433): "Huawei E173",
 }
 
 def output(vid, pid, control, data):
