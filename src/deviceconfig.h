@@ -121,11 +121,11 @@ static const struct udiald_profile profiles[] = {
 		.driver = "option",
 		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
-				.ctlidx = 1,
-				.datidx = 0,
-				.modecmd = {
-					[UDIALD_MODE_AUTO] = "",
-				},
+			.ctlidx = 1,
+			.datidx = 0,
+			.modecmd = {
+				[UDIALD_MODE_AUTO] = "",
+			},
 		},
 	},
 	{
@@ -134,11 +134,11 @@ static const struct udiald_profile profiles[] = {
 		.driver = "sierra",
 		.flags  = UDIALD_PROFILE_NOVENDOR | UDIALD_PROFILE_NODEVICE,
 		.cfg = {
-				.ctlidx = 0,
-				.datidx = 2,
-				.modecmd = {
-					[UDIALD_MODE_AUTO] = "",
-				},
+			.ctlidx = 0,
+			.datidx = 2,
+			.modecmd = {
+				[UDIALD_MODE_AUTO] = "",
+			},
 		},
 	},
 	{
