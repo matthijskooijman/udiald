@@ -374,6 +374,13 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 	return UDIALD_OK;
 }
 
+static void udiald_modem_free_profile(struct udiald_profile_list *l) {
+	free(l->p.desc);
+	for (int i=0; i < UDIALD_NUM_MODES; ++i)
+		free(l->p.cfg.modecmd[i]);
+	free(l);
+}
+
 /**
  * Load additional profiles from the uci configuration.
  */
@@ -387,7 +394,7 @@ int udiald_modem_load_profiles(struct udiald_state *state) {
 		if (!strcmp("udiald_profile", s->type)) {
 			struct udiald_profile_list *l = calloc(1, sizeof (struct udiald_profile_list));
 			if (udiald_modem_parse_profile(s, &l->p) != UDIALD_OK) {
-				free(l);
+				udiald_modem_free_profile(l);
 				continue;
 			}
 
