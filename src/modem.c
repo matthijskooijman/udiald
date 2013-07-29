@@ -365,7 +365,7 @@ static int udiald_modem_parse_profile(const struct uci_section *s, struct udiald
 					/* Add a \r, since that's hard
 					 * to write down in a browser
 					 * and uci. */
-					asprintf(&p->cfg.modecmd[i], "%s\r", strdup(o->v.string));
+					asprintf(&p->cfg.modecmd[i], "%s\r", o->v.string);
 					break;
 				}
 			}
