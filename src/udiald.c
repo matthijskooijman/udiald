@@ -387,6 +387,17 @@ static void udiald_identify(struct udiald_state *state) {
 	}
 }
 
+static void udiald_probe_cmd(struct udiald_state *state, const char *cmd, int timeout) {
+	char b[512] = {0};
+	snprintf(b, sizeof(b) - 1, "%s\r", cmd);
+	if (udiald_tty_put(state->ctlfd, b) < 1
+	|| udiald_tty_get(state->ctlfd, b, sizeof(b), timeout) != UDIALD_AT_OK) {
+		syslog(LOG_CRIT, "%s: %s failed (%s)", state->modem.device_id, cmd, b);
+	} else {
+		syslog(LOG_NOTICE, strtok(b, "\r\n"));
+	}
+}
+
 /**
  * Probe the modem for supported commands and features (intended as a
  * debug measure only).
@@ -394,86 +405,29 @@ static void udiald_identify(struct udiald_state *state) {
 static void udiald_probe(struct udiald_state *state) {
         syslog(LOG_NOTICE, "Starting probe");
 	// TODO ATI, AT+GMI, AT+GMM, AT+GMR
-	char b[512] = {0};
-	if (udiald_tty_put(state->ctlfd, "AT+GCAP\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+GCAP failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+GCAP", 2500);
 	// Current functionality level
-	if (udiald_tty_put(state->ctlfd, "AT+CFUN?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CFUN? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CFUN?", 2500);
 	// Supported functionality levels
-	if (udiald_tty_put(state->ctlfd, "AT+CFUN=?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CFUN=? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CFUN=?", 2500);
 	// Current "PDP" context
-	if (udiald_tty_put(state->ctlfd, "AT+CGDCONT?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CGDCONT? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CGDCONT?", 2500);
 	// Available "PDP" contexts
-	if (udiald_tty_put(state->ctlfd, "AT+CGDCONT=?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CGDCONT=? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CGDCONT=?", 2500);
 	// Network attach status
-	if (udiald_tty_put(state->ctlfd, "AT+CREG?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CREG? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CREG?", 2500);
 	// GPRS attach status
-	if (udiald_tty_put(state->ctlfd, "AT+CGREG?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CGREG? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CGREG?", 2500);
 	// E-UTRAN EPS (LTE?) attach status
-	if (udiald_tty_put(state->ctlfd, "AT+CEREG?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+CEREG? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+CEREG?", 2500);
 	// Supported access technologies (GSM/UMTS/LTE) on Sierra
 	// devices
-	if (udiald_tty_put(state->ctlfd, "AT!SELRAT=?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT!SELRAT=? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT!SELRAT=?", 2500);
 	// Current network
-	if (udiald_tty_put(state->ctlfd, "AT+COPS?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+COPS? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+COPS?", 2500);
 	// Available networks (read using a longer timeout, this command
 	// may take a while)
-	syslog(LOG_CRIT, "%s: Quering available networks, this might take a while...", state->modem.device_id);
-	if (udiald_tty_put(state->ctlfd, "AT+COPS=?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 45000) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: AT+COPS=? failed (%s)", state->modem.device_id, b);
-	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
-	}
+	udiald_probe_cmd(state, "AT+COPS=?", 45000);
         syslog(LOG_NOTICE, "Probe finished");
 }
 
