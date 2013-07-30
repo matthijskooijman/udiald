@@ -354,11 +354,11 @@ static void udiald_open_control(struct udiald_state *state) {
  * Reset the modem through the control connection.
  */
 static void udiald_modem_reset(struct udiald_state *state) {
-	char b[512] = {0};
+	struct udiald_tty_read r;
 	// Hangup modem, disable echoing
 	tcflush(state->ctlfd, TCIFLUSH);
 	udiald_tty_put(state->ctlfd, "ATE0\r");
-	udiald_tty_get(state->ctlfd, b, sizeof(b), 2500);
+	udiald_tty_get(state->ctlfd, &r, NULL, 2500);
 	tcflush(state->ctlfd, TCIFLUSH);
 }
 
@@ -366,35 +366,30 @@ static void udiald_modem_reset(struct udiald_state *state) {
  * Query the modem for identification.
  */
 static void udiald_identify(struct udiald_state *state) {
-	char b[512] = {0};
+	struct udiald_tty_read r;
+	char b[512];
 	// Identify modem
 	if (udiald_tty_put(state->ctlfd, "AT+CGMI;+CGMM\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.device_id, b);
+	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK
+	|| r.lines < 3) {
+		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.device_id, udiald_tty_flatten_result(&r));
 		udiald_exitcode(UDIALD_EMODEM, "Unable to identify modem");
 	}
-	char *saveptr;
-	char *mi = strtok_r(b, "\r\n", &saveptr);
-	char *mm = strtok_r(NULL, "\r\n", &saveptr);
-	if (mi && mm) {
-		mi = strdup(mi);
-		mm = strdup(mm);
-		snprintf(b, sizeof(b), "%s %s", mi, mm);
-		syslog(LOG_NOTICE, "%s: Identified as %s", state->modem.device_id, b);
-		udiald_config_set(state, "modem_name", b);
-		free(mi);
-		free(mm);
-	}
+	snprintf(b, sizeof(b), "%s %s", r.raw_lines[0], r.raw_lines[1]);
+	syslog(LOG_NOTICE, "%s: Identified as %s", state->modem.device_id, b);
+	udiald_config_set(state, "modem_name", b);
 }
 
 static void udiald_probe_cmd(struct udiald_state *state, const char *cmd, int timeout) {
 	char b[512] = {0};
+	struct udiald_tty_read r;
 	snprintf(b, sizeof(b) - 1, "%s\r", cmd);
 	if (udiald_tty_put(state->ctlfd, b) < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), timeout) != UDIALD_AT_OK) {
-		syslog(LOG_CRIT, "%s: %s failed (%s)", state->modem.device_id, cmd, b);
+	|| udiald_tty_get(state->ctlfd, &r, NULL, timeout) != UDIALD_AT_OK) {
+		syslog(LOG_CRIT, "%s: %s failed (%s)", state->modem.device_id, cmd, udiald_tty_flatten_result(&r));
 	} else {
-		syslog(LOG_NOTICE, strtok(b, "\r\n"));
+		for (size_t i = 0; i < r.lines; ++i)
+			syslog(LOG_NOTICE, r.raw_lines[i]);
 	}
 }
 
@@ -435,15 +430,13 @@ static void udiald_probe(struct udiald_state *state) {
  * Query the modem for its SIM status.
  */
 static void udiald_check_sim(struct udiald_state *state) {
-	char b[512] = {0};
-	char *saveptr;
-	char *c = NULL;
+	struct udiald_tty_read r;
 	// Getting SIM state
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (udiald_tty_put(state->ctlfd, "AT+CPIN?\r") < 1
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK
-	|| !(c = strtok_r(b, "\r\n", &saveptr))) {
-		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, b);
+	|| udiald_tty_get(state->ctlfd, &r, "+CPIN: ", 2500) != UDIALD_AT_OK
+	|| r.result_line == NULL) {
+		syslog(LOG_CRIT, "%s: Unable to get SIM status (%s)", state->modem.device_id, udiald_tty_flatten_result(&r));
 		udiald_config_set(state, "sim_state", "error");
 		state->sim_state = -1;
 		if (state->app != UDIALD_APP_PROBE)
@@ -452,19 +445,19 @@ static void udiald_check_sim(struct udiald_state *state) {
 	}
 
 	// Evaluate SIM state
-	if (!strcmp(c, "+CPIN: READY")) {
+	if (!strcmp(r.result_line, "+CPIN: READY")) {
 		syslog(LOG_NOTICE, "%s: SIM card is ready", state->modem.device_id);
 		udiald_config_set(state, "sim_state", "ready");
 		state->sim_state = 0;
-	} else if (!strcmp(c, "+CPIN: SIM PIN")) {
+	} else if (!strcmp(r.result_line, "+CPIN: SIM PIN")) {
 		udiald_config_set(state, "sim_state", "wantpin");
 		state->sim_state = 1;
-	} else if (!strcmp(c, "+CPIN: SIM PUK")) {
+	} else if (!strcmp(r.result_line, "+CPIN: SIM PUK")) {
 		syslog(LOG_WARNING, "%s: SIM requires PUK!", state->modem.device_id);
 		udiald_config_set(state, "sim_state", "wantpuk");
 		state->sim_state = 2;
 	} else {
-		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, c);
+		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, r.result_line);
 		udiald_config_set(state, "sim_state", "error");
 		state->sim_state = -1;
 		if (state->app != UDIALD_APP_PROBE)
@@ -493,14 +486,15 @@ static void udiald_enter_puk(struct udiald_state *state, const char *puk, const 
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\",\"%s\"\r", puk, pin);
 
 	// Send command
+	struct udiald_tty_read r;
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (udiald_tty_put(state->ctlfd, b) >= 0
-	&& udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) == UDIALD_AT_OK) {
+	&& udiald_tty_get(state->ctlfd, &r, NULL, 2500) == UDIALD_AT_OK) {
 		syslog(LOG_NOTICE, "%s: PIN reset successful", state->modem.device_id);
 		udiald_config_set(state, "sim_state", "ready");
 		udiald_exitcode(UDIALD_OK, NULL);
 	} else {
-		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, b);
+		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, udiald_tty_flatten_result(&r));
 		udiald_exitcode(UDIALD_EUNLOCK, "Failed to reset PIN");
 	}
 }
@@ -524,9 +518,10 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	free(pin);
 
 	// Send command
+	struct udiald_tty_read r;
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (udiald_tty_put(state->ctlfd, b) < 0
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK) {
+	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
 		udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
 	}
@@ -544,11 +539,12 @@ static void udiald_enter_pin(struct udiald_state *state) {
  * Query the device for supported capabilities.
  */
 static void udiald_check_caps(struct udiald_state *state) {
-	char b[512] = {0};
+	struct udiald_tty_read r;
 	state->is_gsm = 0;
 	if (udiald_tty_put(state->ctlfd, "AT+GCAP\r") >= 0
-	&& udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) == UDIALD_AT_OK) {
-		if (strstr(b, "CGSM")) {
+	&& udiald_tty_get(state->ctlfd, &r, "+GCAP: ", 2500) == UDIALD_AT_OK
+	&& r.result_line) {
+		if (strstr(r.result_line, "CGSM")) {
 			state->is_gsm = 1;
 			udiald_config_set(state, "modem_gsm", "1");
 			syslog(LOG_NOTICE, "%s: Detected a GSM modem", state->modem.device_id);
@@ -562,7 +558,7 @@ static void udiald_check_caps(struct udiald_state *state) {
  * The mode to set is taken from the configuration.
  */
 static void udiald_set_mode(struct udiald_state *state) {
-	char b[512] = {0};
+	struct udiald_tty_read r;
 	char *m = udiald_config_get(state, "udiald_mode");
 	enum udiald_mode mode = udiald_modem_modeval((m && *m) ? m : "auto");
 	if (mode == -1 || !state->modem.profile->cfg.modecmd[mode]) {
@@ -573,9 +569,9 @@ static void udiald_set_mode(struct udiald_state *state) {
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (state->modem.profile->cfg.modecmd[mode][0]
 	&& (udiald_tty_put(state->ctlfd, state->modem.profile->cfg.modecmd[mode]) < 0
-	|| udiald_tty_get(state->ctlfd, b, sizeof(b), 5000) != UDIALD_AT_OK)) {
+	|| udiald_tty_get(state->ctlfd, &r, NULL, 5000) != UDIALD_AT_OK)) {
 		syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
-			state->modem.device_id, udiald_modem_modestr(mode), b);
+			state->modem.device_id, udiald_modem_modestr(mode), udiald_tty_flatten_result(&r));
 		free(m);
 		udiald_exitcode(UDIALD_EMODEM, "Failed to set mode (%s)", udiald_modem_modestr(mode));
 	}
@@ -587,14 +583,14 @@ static void udiald_connect_status_mainloop(struct udiald_state *state) {
 	int status = -1;
 	int logsteps = 4;	// Report RSSI / BER to syslog every LOGSTEPS intervals
 	char provider[64] = {0};
-	char b[512] = {0};
+	struct udiald_tty_read r;
 
 	// Set reporting format for AT+COPS? to 0 (long alphanumeric
 	// format), for devices that default to reporting numeric
 	// identifiers only. "3" means to leave actual network selection
 	// parameters unchanged and only set the format.
 	udiald_tty_put(state->ctlfd, "AT+COPS=3,0\r");
-	if (udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK)
+	if (udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK)
 		syslog(LOG_WARNING, "%s: Failed to set AT+COPS to long format\n", state->modem.device_id);
 
 	// Main loop, wait for termination, measure signal strength
@@ -615,12 +611,13 @@ static void udiald_connect_status_mainloop(struct udiald_state *state) {
 		printf("%s:%s[%d]%s\n", __FILE__, __func__, __LINE__, b);
 */
 		udiald_tty_put(state->ctlfd, "AT+COPS?;+CSQ\r");
-		if (udiald_tty_get(state->ctlfd, b, sizeof(b), 2500) != UDIALD_AT_OK)
+		if (udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK
+		|| r.lines < 3)
 			continue;
 
 		char *saveptr;
-		char *cops = strtok_r(b, "\r\n", &saveptr);
-		char *csq = strtok_r(NULL, "\r\n", &saveptr);
+		char *cops = r.raw_lines[0];
+		char *csq = r.raw_lines[1];
 
 		if (cops && (cops = strchr(cops, '"')) // +COPS: 0,0,"FONIC",2
 		&& (cops = strtok_r(cops, "\"", &saveptr))

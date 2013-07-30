@@ -52,11 +52,12 @@ int udiald_dial_main(struct udiald_state *state) {
 	tcflush(0, TCIFLUSH); // Skip crap
 
 	char b[512];
+	struct udiald_tty_read r;
 
 	// Reset, unecho, ...
 	syslog(LOG_NOTICE, "%s: Preparing to dial", tty);
 	udiald_tty_put(1, "ATE0\r");
-	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
+	if (udiald_tty_get(0, &r, NULL, 2500) != UDIALD_AT_OK) {
 		fatal_error(state, "%s: Error disabling echo (%s)",
 				   tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
@@ -65,7 +66,7 @@ int udiald_dial_main(struct udiald_state *state) {
 
 	// Reset, unecho, ...
 	udiald_tty_put(1, "ATH\r");
-	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
+	if (udiald_tty_get(0, &r, NULL, 2500) != UDIALD_AT_OK) {
 		fatal_error(state, "%s: Error resetting modem (%s)",
 				   tty, (b[0]) ? b : strerror(errno));
 		return UDIALD_EDIAL;
@@ -98,9 +99,9 @@ int udiald_dial_main(struct udiald_state *state) {
 		syslog(LOG_WARNING, "%s: No apn configured, connection might not work", tty);
 
 	udiald_tty_put(1, b);
-	if (udiald_tty_get(0, b, sizeof(b), 2500) != UDIALD_AT_OK) {
+	if (udiald_tty_get(0, &r, NULL, 2500) != UDIALD_AT_OK) {
 		fatal_error(state,  "%s: Failed to set APN (%s)",
-				    tty, (b[0]) ? b : strerror(errno));
+				    tty, r.lines ? udiald_tty_flatten_result(&r) : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 	syslog(LOG_NOTICE, "%s: Selected APN \"%s\". Now dialing...", tty, apn);
@@ -120,7 +121,7 @@ int udiald_dial_main(struct udiald_state *state) {
 		// modems).
 		syslog(LOG_INFO, "%s: Using dial command: %s", tty, state->modem.profile->cfg.dialcmd);
 		udiald_tty_put(1, state->modem.profile->cfg.dialcmd);
-		res = udiald_tty_get(0, b, sizeof(b), 10000);
+		res = udiald_tty_get(0, &r, NULL, 10000);
 		if (res != UDIALD_AT_NOCARRIER && res != UDIALD_AT_OK)
 			break;
 		syslog(LOG_NOTICE, "%s: No carrier. Waiting for network...", tty);
@@ -129,7 +130,7 @@ int udiald_dial_main(struct udiald_state *state) {
 
 	if (res != UDIALD_AT_CONNECT) {
 		fatal_error(state,  "%s: Failed to connect (%s)", tty,
-				   (b[0]) ? b : strerror(errno));
+				   r.lines ? udiald_tty_flatten_result(&r) : strerror(errno));
 		return UDIALD_EDIAL;
 	}
 

@@ -158,6 +158,21 @@ struct udiald_state {
 	enum udiald_display_format format;
 };
 
+/* Result struct for udiald_tty_get */
+struct udiald_tty_read {
+	// Number of lines read
+	size_t lines;
+	// Lines read
+	char *raw_lines[10];
+	// First line starting with the given result_prefix
+	char *result_line;
+
+	// Don't use, call udiald_tty_flatten_result instead
+	char flat_buf[512];
+	// Don't use, raw_lines above points into this buffer
+	char raw_buf[512];
+};
+
 extern int verbose;
 
 const char* udiald_modem_modestr(enum udiald_mode mode);
@@ -171,7 +186,8 @@ int udiald_tty_open(const char *tty);
 char* udiald_tty_calc(const char *basetty, uint8_t index, char buf[static 24]);
 int udiald_tty_cloexec(int fd);
 int udiald_tty_put(int fd, const char *cmd);
-enum udiald_atres udiald_tty_get(int fd, char *buf, size_t len, int timeout);
+const char *udiald_tty_flatten_result(struct udiald_tty_read *r);
+enum udiald_atres udiald_tty_get(int fd, struct udiald_tty_read *r, const char *result_prefix, int timeout);
 pid_t udiald_tty_pppd(struct udiald_state *state);
 
 int udiald_connect_main(struct udiald_state *state);

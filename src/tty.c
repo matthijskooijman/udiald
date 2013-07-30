@@ -66,6 +66,33 @@ int udiald_tty_open(const char *tty) {
 	return fd;
 }
 
+// "Flatten" a udiald_tty_result, so it becomes a single string that can
+// be stored in uci or logged.
+//
+// The resulting pointer points to a buffer insided the passed
+// udiald_tty_read so it does not need to be freed and is valid until
+// the next call to this function with the same udiald_tty_read.
+const char *udiald_tty_flatten_result(struct udiald_tty_read *r) {
+	char *flat = r->flat_buf;
+	char *end = flat + lengthof(r->flat_buf) - 1;
+
+	for (size_t i = 0; i < r->lines; ++i) {
+		char *in = r->raw_lines[i];
+		if (flat != end) *flat++ = '"';
+		while (*in)
+			if (flat != end) *flat++ = *in++;
+		if (flat != end) *flat++ = '"';
+		if (i != r->lines - 1) {
+			if (flat != end) *flat++ = ',';
+			if (flat != end) *flat++ = ' ';
+		}
+		if (flat == end)
+			break;
+	}
+	*flat = '\0';
+	return r->flat_buf;
+}
+
 int udiald_tty_put(int fd, const char *cmd) {
 	if (verbose >= 2)
 		syslog(LOG_DEBUG, "Writing: %s", cmd);
@@ -75,14 +102,15 @@ int udiald_tty_put(int fd, const char *cmd) {
 }
 
 // Retrieve answer from modem
-enum udiald_atres udiald_tty_get(int fd, char *buf, size_t len, int timeout) {
-	buf[0] = 0;
+enum udiald_atres udiald_tty_get(int fd, struct udiald_tty_read *r, const char *result_prefix, int timeout) {
 	struct pollfd pfd = {.fd = fd, .events = POLLIN | POLLERR | POLLHUP};
 
-	char *c = buf;
-	size_t rem = len - 1;
-
 	int err;
+	char *c = r->raw_buf;
+	size_t rem = lengthof(r->raw_buf);
+	r->lines = 0;
+	r->result_line = NULL;
+	bool in_newline = true;
 
 	// Modems are evil, they might not send the complete answer when doing
 	// a read, so we read until we get a known AT status code (see top)
@@ -98,52 +126,75 @@ enum udiald_atres udiald_tty_get(int fd, char *buf, size_t len, int timeout) {
 			return -1;
 		}
 
-		ssize_t rxed = read(fd, c, rem);
-		if (rxed < 1) {
-			syslog(LOG_ERR, "Read failed: %s", strerror(rxed));
+		ssize_t rxed;
+		while ((rxed = read(fd, c, 1)) > 0) {
+			if (c[0] == '\r' || c[0] == '\n') {
+				if (!in_newline) {
+					// Found the end of the current line,
+					// process it.
+					in_newline = true;
+					// Replace the newline with a
+					// nul-termination
+					c[0] = '\0';
+
+					char *start = r->raw_lines[r->lines];
+
+					syslog(LOG_DEBUG, "Read: %s", start);
+
+					if (start[0] == '^') {
+						// Async reply, pretend the line was
+						// never there
+						c = start;
+						continue;
+					}
+
+					++r->lines;
+
+					// See if the current line starts with the
+					// given prefix
+					if (!r->result_line && result_prefix && !strncmp(start, result_prefix, strlen(result_prefix)))
+					    r->result_line = start;
+
+					// Compare with known AT status codes (array at the very top)
+					for (size_t i = 0; i < lengthof(ttyresstr); ++i)
+						if (!strncmp(start, ttyresstr[i], strlen(ttyresstr[i])))
+							return i;
+
+			    } else {
+				    // Continuing the current newline, don't
+				    // include this character in the output.
+				    rxed = 0;
+			    }
+			} else if (in_newline) {
+				// We were in a newline, but now found a
+				// non-newline character. Start a new line.
+
+				if (r->lines == lengthof(r->raw_lines) - 1) {
+					syslog(LOG_ERR, "No complete response received within %zu lines", lengthof(r->raw_lines));
+					errno = ERANGE;
+					return -1;
+				}
+
+				// Remember the start of the line
+				r->raw_lines[r->lines] = c;
+
+				in_newline = false;
+			} else {
+				// Regular character, halfway a line. Do
+				// nothing special.
+			}
+
+			rem -= rxed;
+			c += rxed;
+		}
+		if (rxed == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+			syslog(LOG_ERR, "Read failed: %s", strerror(errno));
 			return -1;
 		}
 
-		*(c + rxed) = 0;
-		if (verbose >= 2)
-			syslog(LOG_DEBUG, "Read: %s", c);
-		rem -= rxed;
-		c += rxed;
-
-		char *d = c;
-
-		do {
-			// AT status codes end in \r(\n)
-			// Skip all suffixing newline chars
-			while(d > buf && (d[-1] == '\r' || d[-1] == '\n'))
-				--d;
-
-			// no trailing newline or only newlines received
-			if (d == c || d == buf)
-				break;
-
-			// Skip last newline
-			--d;
-
-			// Go to \r(\n) before status
-			while (d > buf && d[-1] != '\r' && d[-1] != '\n')
-				--d;
-
-			if (*d == '^') { // Async signal (we don't want this)
-				*d = 0;
-				c = d;
-				rem = len - 1 - (d - buf);
-				continue;
-			}
-
-			// Compare with known AT status codes (array at the very top)
-			for (size_t i = 0; i < sizeof(ttyresstr) / sizeof(*ttyresstr); ++i)
-				if (!strncmp(ttyresstr[i], d, strlen(ttyresstr[i])))
-					return i;
-		} while (d != buf);
 	}
 
-	syslog(LOG_ERR, "No complete response received within %zu bytes", len);
+	syslog(LOG_ERR, "No complete response received within %zu bytes", lengthof(r->raw_buf));
 	errno = ERANGE;
 	return -1;
 }
