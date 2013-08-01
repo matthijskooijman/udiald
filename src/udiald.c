@@ -443,6 +443,16 @@ static void udiald_probe(struct udiald_state *state) {
 	// Supported access technologies (GSM/UMTS/LTE) on Sierra
 	// devices
 	udiald_probe_cmd(state, "AT!SELRAT=?", 2500);
+	// ZTE current mode (GSM/UMTS)
+	udiald_probe_cmd(state, "AT+ZSNT?", 2500);
+	// Huawei current mode (GSM/UMTS, legacy command)
+	udiald_probe_cmd(state, "AT^SYSCFG?", 2500);
+	// Huawei current mode (GSM/UMTS, new command)
+	udiald_probe_cmd(state, "AT^SYSCFGEX?", 2500);
+	// Huawei supported modes (GSM/UMTS, new command)
+	udiald_probe_cmd(state, "AT^SYSCFGEX=?", 2500);
+	// Huawei EVDO current mode (GSM/UMTS)
+	udiald_probe_cmd(state, "AT^PREFMODE?", 2500);
 	// Current network
 	udiald_probe_cmd(state, "AT+COPS?", 2500);
 	// Available networks (read using a longer timeout, this command
