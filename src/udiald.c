@@ -404,8 +404,28 @@ static void udiald_probe_cmd(struct udiald_state *state, const char *cmd, int ti
  */
 static void udiald_probe(struct udiald_state *state) {
         syslog(LOG_NOTICE, "Starting probe");
-	// TODO ATI, AT+GMI, AT+GMM, AT+GMR
+	// Diagnostic info
+	udiald_probe_cmd(state, "ATI", 2500);
+	// Manufacturer information
+	udiald_probe_cmd(state, "AT+GMI", 2500);
+	// Hardware version
+	udiald_probe_cmd(state, "AT^HWVER", 2500);
+	// Software version
+	udiald_probe_cmd(state, "AT+CGMR", 2500);
+	// Model info (Sierra only?)
+	udiald_probe_cmd(state, "AT+GMM", 2500);
+	// Revision info (Sierra only?)
+	udiald_probe_cmd(state, "AT+GMR", 2500);
+	// simlock status (e.g., single-operator lock)
+	// Returns <status>,<tries left>,<operator>
+	// <status> 1: locked 2: unlocked 3: locked forever
+	udiald_probe_cmd(state, "AT^CARDLOCK?", 2500);
+	// Capabilities
 	udiald_probe_cmd(state, "AT+GCAP", 2500);
+	// Current SIM card (SC) lock enabled state
+	udiald_probe_cmd(state, "AT+CLCK=\"SC\",2", 2500);
+	// Available locking facilities
+	udiald_probe_cmd(state, "AT+CLCK=?", 2500);
 	// Current functionality level
 	udiald_probe_cmd(state, "AT+CFUN?", 2500);
 	// Supported functionality levels
