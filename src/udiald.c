@@ -383,6 +383,7 @@ static void udiald_identify(struct udiald_state *state) {
 static void udiald_probe_cmd(struct udiald_state *state, const char *cmd, int timeout) {
 	char b[512] = {0};
 	struct udiald_tty_read r;
+	syslog(LOG_NOTICE, "Sending %s", cmd);
 	snprintf(b, sizeof(b) - 1, "%s\r", cmd);
 	if (udiald_tty_put(state->ctlfd, b) < 1
 	|| udiald_tty_get(state->ctlfd, &r, NULL, timeout) != UDIALD_AT_OK) {
