@@ -34,6 +34,23 @@
 	[UDIALD_PREFER_GPRS] = "AT^SYSCFG=2,1,3FFFFFFF,2,4\r", \
 }
 
+// Modesetting commands for ZTE modems
+// Values are cm_mode,net_sel_mode,pref_acq
+// cm_mode=0: Automatic
+// cm_mode=1: GSM only
+// cm_mode=2: UMTS only
+// net_sel_mode is read-only and related to AT+COPS network selection
+// pref_acq=0: Automatic order
+// pref_acq=1: GSM, then UMTS
+// pref_acq=2: UMTS, then GSM
+#define ZTE_ZSNT_MODECMD { \
+	[UDIALD_MODE_AUTO] = "AT+ZSNT=0,0,0\r", \
+	[UDIALD_FORCE_UMTS] = "AT+ZSNT=2,0,0\r", \
+	[UDIALD_FORCE_GPRS] = "AT+ZSNT=1,0,0\r", \
+	[UDIALD_PREFER_UMTS] = "AT+ZSNT=0,0,2\r", \
+	[UDIALD_PREFER_GPRS] = "AT+ZSNT=0,0,1\r", \
+}
+
 /* Make sure that the correct ordering of this array is observed: First
  * specific devices, then generic per-vendor profiles and lastly generic
  * per-driver profiles.
@@ -108,13 +125,7 @@ static const struct udiald_profile profiles[] = {
 		.cfg = {
 			.ctlidx = 1,
 			.datidx = 2,
-			.modecmd = {
-				[UDIALD_MODE_AUTO] = "AT+ZSNT=0,0,0\r",
-				[UDIALD_FORCE_UMTS] = "AT+ZSNT=2,0,0\r",
-				[UDIALD_FORCE_GPRS] = "AT+ZSNT=1,0,0\r",
-				[UDIALD_PREFER_UMTS] = "AT+ZSNT=0,0,2\r",
-				[UDIALD_PREFER_GPRS] = "AT+ZSNT=0,0,1\r",
-			},
+			.modecmd = ZTE_ZSNT_MODECMD,
 			.dialcmd = "ATD*99***1#\r",
 		},
 	},
