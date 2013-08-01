@@ -455,6 +455,7 @@ static void udiald_check_sim(struct udiald_state *state) {
 		udiald_config_set(state, "sim_state", "ready");
 		state->sim_state = 0;
 	} else if (!strcmp(r.result_line, "+CPIN: SIM PIN")) {
+		syslog(LOG_NOTICE, "%s: SIM card requires pin", state->modem.device_id);
 		udiald_config_set(state, "sim_state", "wantpin");
 		state->sim_state = 1;
 	} else if (!strcmp(r.result_line, "+CPIN: SIM PUK")) {
