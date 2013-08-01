@@ -82,7 +82,7 @@ static const struct udiald_profile profiles[] = {
 	},
 
 	{
-		.name   = "1BBB000",
+		.name   = "1BBB0000",
 		.desc   = "Alcatel X060s",
 		.vendor = 0x1bbb,
 		.device = 0x0000,
