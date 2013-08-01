@@ -389,8 +389,12 @@ static void udiald_probe_cmd(struct udiald_state *state, const char *cmd, int ti
 	|| udiald_tty_get(state->ctlfd, &r, NULL, timeout) != UDIALD_AT_OK) {
 		syslog(LOG_CRIT, "%s: %s failed (%s)", state->modem.device_id, cmd, udiald_tty_flatten_result(&r));
 	} else {
-		for (size_t i = 0; i < r.lines; ++i)
-			syslog(LOG_NOTICE, r.raw_lines[i]);
+		for (size_t i = 0; i < r.lines; ++i) {
+			if (strstr(r.raw_lines[i], "IMEI"))
+				syslog(LOG_NOTICE, "<IMEI censored by udiald>");
+			else
+				syslog(LOG_NOTICE, r.raw_lines[i]);
+		}
 	}
 }
 
