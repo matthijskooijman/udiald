@@ -546,14 +546,25 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	char b[512] = {0};
 	if (!pin || !*pin) {
 		syslog(LOG_CRIT, "%s: No PIN configured", state->modem.device_id);
-		udiald_exitcode(UDIALD_EUNLOCK, "No PIN configured");
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_EUNLOCK, "No PIN configured");
+		free(pin);
+		return;
 	}
-	if (strpbrk(pin, "\"\r\n;"))
-		udiald_exitcode(UDIALD_EINVAL, "Invalid PIN configured (%s)", pin);
+	if (strpbrk(pin, "\"\r\n;")) {
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_EINVAL, "Invalid PIN configured (%s)", pin);
+		free(pin);
+		return;
+	}
 
 	const char *failed = udiald_config_get(state, "failed_pin");
-	if (failed && strcmp(pin, failed) == 0)
-		udiald_exitcode(UDIALD_ESIM, "Not retrying previously failed pin (%s)", failed);
+	if (failed && strcmp(pin, failed) == 0) {
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_ESIM, "Not retrying previously failed pin (%s)", failed);
+		free(pin);
+		return;
+	}
 	udiald_config_revert(state, "failed_pin");
 
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\"\r", pin);
@@ -565,7 +576,10 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK) {
 		udiald_config_set(state, "failed_pin", pin);
 		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
-		udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
+		if (state->app != UDIALD_APP_PROBE)
+			udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
+		free(pin);
+		return;
 	}
 	free(pin);
 
@@ -803,10 +817,7 @@ int main(int argc, char *const argv[]) {
 
 	udiald_check_sim(&state);
 
-	if (state.app == UDIALD_APP_PROBE)
-		udiald_probe(&state);
-
-	if (state.app == UDIALD_APP_SCAN || state.app == UDIALD_APP_PROBE) {
+	if (state.app == UDIALD_APP_SCAN) {
 		udiald_exitcode(UDIALD_OK, NULL); // We are done here.
 	} else if (state.app == UDIALD_APP_PINPUK) {
 		// Need two arguments
@@ -818,14 +829,19 @@ int main(int argc, char *const argv[]) {
 		udiald_enter_puk(&state, argv[optind], argv[optind+1]);
 	}
 
-	if (state.sim_state == 2) {
-		udiald_exitcode(UDIALD_EUNLOCK, "SIM locked - need PUK");
-	} else if (state.sim_state == 1) {
+	if (state.sim_state == 1)
 		udiald_enter_pin(&state);
-	}
 
 	if (state.app == UDIALD_APP_UNLOCK)
 		udiald_exitcode(UDIALD_OK, NULL); // We are done here.
+
+	if (state.app == UDIALD_APP_PROBE) {
+		udiald_probe(&state);
+		udiald_exitcode(UDIALD_OK, NULL); // We are done here.
+	}
+
+	if (state.sim_state == 2)
+		udiald_exitcode(UDIALD_EUNLOCK, "SIM locked - need PUK");
 
 	udiald_check_caps(&state);
 /*
