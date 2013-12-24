@@ -550,6 +550,12 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	}
 	if (strpbrk(pin, "\"\r\n;"))
 		udiald_exitcode(UDIALD_EINVAL, "Invalid PIN configured (%s)", pin);
+
+	const char *failed = udiald_config_get(state, "failed_pin");
+	if (failed && strcmp(pin, failed) == 0)
+		udiald_exitcode(UDIALD_ESIM, "Not retrying previously failed pin (%s)", failed);
+	udiald_config_revert(state, "failed_pin");
+
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\"\r", pin);
 
 	// Send command
@@ -557,6 +563,7 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (udiald_tty_put(state->ctlfd, b) < 0
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK) {
+		udiald_config_set(state, "failed_pin", pin);
 		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
 		udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
 	}
