@@ -551,7 +551,6 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	if (strpbrk(pin, "\"\r\n;"))
 		udiald_exitcode(UDIALD_EINVAL, "Invalid PIN configured (%s)", pin);
 	snprintf(b, sizeof(b), "AT+CPIN=\"%s\"\r", pin);
-	free(pin);
 
 	// Send command
 	struct udiald_tty_read r;
@@ -561,6 +560,8 @@ static void udiald_enter_pin(struct udiald_state *state) {
 		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
 		udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
 	}
+	free(pin);
+
 	syslog(LOG_NOTICE, "%s: PIN accepted", state->modem.device_id);
 	udiald_config_set(state, "sim_state", "ready");
 
