@@ -126,6 +126,11 @@ static void udiald_exitcode(int code, const char *fmt, ...) {
 			vsnprintf(buf, lengthof(buf), fmt, ap);
 			va_end(ap);
 			udiald_config_set(&state, "udiald_error_msg", buf);
+
+			if (state.modem.device_id[0])
+				syslog(LOG_CRIT, "%s: %s", state.modem.device_id, buf);
+			else
+				syslog(LOG_CRIT, "%s", buf);
 		} else {
 			udiald_config_revert(&state, "udiald_error_msg");
 		}
@@ -321,7 +326,6 @@ void udiald_select_modem(struct udiald_state *state) {
 	/* Autodetect the first available modem (if any) */
 	int e = udiald_modem_find_devices(state, &state->modem, NULL, NULL, &state->filter);
 	if (e != UDIALD_OK) {
-		syslog(LOG_CRIT, "No usable modem found");
 		udiald_exitcode(e, "No usable modem found");
 	}
 	char b[512] = {0};
@@ -351,7 +355,6 @@ static void udiald_open_control(struct udiald_state *state) {
 	char ttypath[24];
 	snprintf(ttypath, sizeof(ttypath), "/dev/%s", state->modem.ctl_tty);
 	if ((state->ctlfd = udiald_tty_cloexec(udiald_tty_open(ttypath))) == -1) {
-		syslog(LOG_CRIT, "%s: Unable to open terminal", state->modem.device_id);
 		udiald_exitcode(UDIALD_EMODEM, "Unable to open terminal");
 	}
 }
@@ -378,7 +381,6 @@ static void udiald_identify(struct udiald_state *state) {
 	if (udiald_tty_put(state->ctlfd, "AT+CGMI;+CGMM\r") < 1
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK
 	|| r.lines < 3) {
-		syslog(LOG_CRIT, "%s: Unable to identify modem (%s)", state->modem.device_id, udiald_tty_flatten_result(&r));
 		udiald_exitcode(UDIALD_EMODEM, "Unable to identify modem");
 	}
 	snprintf(b, sizeof(b), "%s %s", r.raw_lines[0], r.raw_lines[1]);
@@ -499,11 +501,12 @@ static void udiald_check_sim(struct udiald_state *state) {
 		udiald_config_set(state, "sim_state", "wantpuk");
 		state->sim_state = 2;
 	} else {
-		syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, r.result_line);
 		udiald_config_set(state, "sim_state", "error");
 		state->sim_state = -1;
 		if (state->app != UDIALD_APP_PROBE)
-			udiald_exitcode(UDIALD_ESIM, "Unknown SIM status");
+			udiald_exitcode(UDIALD_ESIM, "Unknown SIM status (%s)", r.result_line);
+		else
+			syslog(LOG_CRIT, "%s: Unknown SIM status (%s)", state->modem.device_id, r.result_line);
 	}
 }
 
@@ -536,7 +539,6 @@ static void udiald_enter_puk(struct udiald_state *state, const char *puk, const 
 		udiald_config_set(state, "sim_state", "ready");
 		udiald_exitcode(UDIALD_OK, NULL);
 	} else {
-		syslog(LOG_CRIT, "%s: Failed to reset PIN (%s)", state->modem.device_id, udiald_tty_flatten_result(&r));
 		udiald_exitcode(UDIALD_EUNLOCK, "Failed to reset PIN");
 	}
 }
@@ -554,7 +556,6 @@ static void udiald_enter_pin(struct udiald_state *state) {
 
 	char b[512] = {0};
 	if (!pin || !*pin) {
-		syslog(LOG_CRIT, "%s: No PIN configured", state->modem.device_id);
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_EUNLOCK, "No PIN configured");
 		free(pin);
@@ -584,9 +585,8 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	if (udiald_tty_put(state->ctlfd, b) < 0
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK) {
 		udiald_config_set(state, "failed_pin", pin);
-		syslog(LOG_CRIT, "%s: PIN rejected (%s)", state->modem.device_id, b);
 		if (state->app != UDIALD_APP_PROBE)
-			udiald_exitcode(UDIALD_EUNLOCK, "PIN rejected (%s)", pin);
+			udiald_exitcode(UDIALD_EUNLOCK, "PIN %s rejected (%s)", pin, udiald_tty_flatten_result(&r));
 		free(pin);
 		return;
 	}
@@ -629,7 +629,6 @@ static void udiald_set_mode(struct udiald_state *state) {
 	char *m = udiald_config_get(state, "udiald_mode");
 	enum udiald_mode mode = udiald_modem_modeval((m && *m) ? m : "auto");
 	if (mode == -1 || !state->modem.profile->cfg.modecmd[mode]) {
-		syslog(LOG_CRIT, "%s: Unsupported mode %s", state->modem.device_id, udiald_modem_modestr(mode));
 		free(m);
 		udiald_exitcode(UDIALD_EINVAL, "Unsupported mode (%s)", udiald_modem_modestr(mode));
 	}
@@ -637,10 +636,9 @@ static void udiald_set_mode(struct udiald_state *state) {
 	if (state->modem.profile->cfg.modecmd[mode][0]
 	&& (udiald_tty_put(state->ctlfd, state->modem.profile->cfg.modecmd[mode]) < 0
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 5000) != UDIALD_AT_OK)) {
-		syslog(LOG_CRIT, "%s: Failed to set mode %s (%s)",
-			state->modem.device_id, udiald_modem_modestr(mode), udiald_tty_flatten_result(&r));
 		free(m);
-		udiald_exitcode(UDIALD_EMODEM, "Failed to set mode (%s)", udiald_modem_modestr(mode));
+		udiald_exitcode(UDIALD_EMODEM, "Failed to set mode %s (%s)",
+			state->modem.device_id, udiald_modem_modestr(mode), udiald_tty_flatten_result(&r));
 	}
 	syslog(LOG_NOTICE, "%s: Mode set to %s", state->modem.device_id, udiald_modem_modestr(mode));
 	free(m);
@@ -722,39 +720,30 @@ static void udiald_connect_finish(struct udiald_state *state) {
 	if (waitpid(state->pppd, &status, WNOHANG) != state->pppd) {
 		kill(state->pppd, SIGTERM);
 		waitpid(state->pppd, &status, 0);
-		syslog(LOG_NOTICE, "%s: Terminated by signal %i",
-				state->modem.device_id, signaled);
 		udiald_exitcode(UDIALD_ESIGNALED, "Terminated by signal %i", signaled);
 	}
 
 	if (WIFSIGNALED(status) || WEXITSTATUS(status) == 5) {
 		// pppd was termined externally, we won't treat this as an error
-		syslog(LOG_NOTICE, "%s: pppd terminated by signal", state->modem.device_id);
 		udiald_exitcode(UDIALD_ESIGNALED, "pppd terminated");
 	}
 
 	switch (WEXITSTATUS(status)) {	// Exit codes from pppd (man pppd)
 		case 7:
 		case 16:
-			syslog(LOG_CRIT, "%s: pppd: modem error", state->modem.device_id);
 			udiald_exitcode(UDIALD_EMODEM, "pppd: modem error");
 
 		case 8:
-			syslog(LOG_CRIT, "%s: pppd: dialing error", state->modem.device_id);
 			udiald_exitcode(UDIALD_EDIAL, "pppd: dialing error");
 
 		case 0:
 		case 15:
-			syslog(LOG_CRIT, "%s: pppd: terminated by network", state->modem.device_id);
 			udiald_exitcode(UDIALD_ENETWORK, "ppd: terminated by network");
 
 		case 19:
-			syslog(LOG_CRIT, "%s: pppd: invalid credentials", state->modem.device_id);
 			udiald_exitcode(UDIALD_EAUTH, "pppd: invalid credentials");
 
 		default:
-			syslog(LOG_CRIT, "%s: PPP error (%i)",
-					state->modem.device_id, WEXITSTATUS(status));
 			udiald_exitcode(UDIALD_EPPP, "pppd: other error (%i)", WEXITSTATUS(status));
 	}
 }
@@ -831,7 +820,6 @@ int main(int argc, char *const argv[]) {
 	} else if (state.app == UDIALD_APP_PINPUK) {
 		// Need two arguments
 		if (optind + 2 != argc) {
-			syslog(LOG_CRIT, "%s: Need exactly two arguments for -p", state.modem.device_id);
 			udiald_exitcode(UDIALD_EINVAL, "Invalid arguments");
 		}
 
