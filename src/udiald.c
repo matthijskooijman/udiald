@@ -558,12 +558,16 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	if (!pin || !*pin) {
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_EUNLOCK, "No PIN configured");
+		else
+			syslog(LOG_CRIT, "%s: No PIN configured", state->modem.device_id);
 		free(pin);
 		return;
 	}
 	if (strpbrk(pin, "\"\r\n;")) {
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_EINVAL, "Invalid PIN configured (%s)", pin);
+		else
+			syslog(LOG_CRIT, "%s: Invalid PIN configured (%s)", state->modem.device_id, pin);
 		free(pin);
 		return;
 	}
@@ -572,6 +576,8 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	if (failed && strcmp(pin, failed) == 0) {
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_ESIM, "Not retrying previously failed pin (%s)", failed);
+		else
+			syslog(LOG_CRIT, "%s: Not retrying previously failed PIN (%s)", state->modem.device_id, failed);
 		free(pin);
 		return;
 	}
@@ -587,6 +593,8 @@ static void udiald_enter_pin(struct udiald_state *state) {
 		udiald_config_set(state, "failed_pin", pin);
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_EUNLOCK, "PIN %s rejected (%s)", pin, udiald_tty_flatten_result(&r));
+		else
+			syslog(LOG_CRIT, "%s: PIN %s rejected (%s)", state->modem.device_id, pin, udiald_tty_flatten_result(&r));
 		free(pin);
 		return;
 	}
