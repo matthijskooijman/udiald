@@ -152,6 +152,7 @@ struct udiald_state {
 	struct uci_context *uci;
 	char uciname[32]; /*< The name of the uci config file to use */
 	char networkname[32]; /*< The name of the uci section to use */
+	char *pin; /*< PIN passed on the commandline, if any */
 	pid_t pppd;
 	struct list_head custom_profiles; /* Custom profiles loaded from uci */
 	enum udiald_app app;

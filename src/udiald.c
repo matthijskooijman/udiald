@@ -65,6 +65,7 @@ static int udiald_usage(const char *app) {
 			"					e.g. 1.2-1)\n"
 			"	-p, --profile <profilename>	Use the profile with the given name instead of autodetecting a\n"
 			"					profile to use. Run with -L to get a list of valid profiles.\n"
+			"       --pin <pin>                     Use the given pin, instead of loading it from the config file\n"
 			"	--usable			Only consider devices that are usable (i.e., for which a\n"
 			"					configuration profile is available). This is enabled by default\n"
 			"					with --connect, but disabled by default with the listing options.\n"
@@ -153,6 +154,7 @@ static void sleep_seconds(int seconds) {
 enum long_options {
 	UDIALD_OPT_USABLE = UCHAR_MAX + 1,
 	UDIALD_OPT_PROBE,
+	UDIALD_OPT_PIN,
 };
 
 static struct option longopts[] = {
@@ -174,6 +176,7 @@ static struct option longopts[] = {
 	{"format", true, NULL, 'f'},
 	{"usable", false, NULL, UDIALD_OPT_USABLE},
 	{"probe", false, NULL, UDIALD_OPT_PROBE},
+	{"pin", true, NULL, UDIALD_OPT_PIN},
 	{0},
 };
 
@@ -252,6 +255,9 @@ static enum udiald_app udiald_parse_cmdline(struct udiald_state *state, int argc
 				break;
 			case 'p':
 				state->filter.profile_name = strdup(optarg);
+				break;
+			case UDIALD_OPT_PIN:
+				state->pin = strdup(optarg);
 				break;
 			case 'f':
 				if (!strcmp(optarg, "json")) {
@@ -542,7 +548,10 @@ static void udiald_enter_puk(struct udiald_state *state, const char *puk, const 
  */
 static void udiald_enter_pin(struct udiald_state *state) {
 	//Try unlocking with PIN
-	char *pin = udiald_config_get(state, "udiald_pin");
+	char *pin = state->pin;
+	if (!pin)
+		pin = udiald_config_get(state, "udiald_pin");
+
 	char b[512] = {0};
 	if (!pin || !*pin) {
 		syslog(LOG_CRIT, "%s: No PIN configured", state->modem.device_id);
