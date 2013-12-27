@@ -41,6 +41,9 @@ static volatile int signaled = 0;
 static struct udiald_state state = {.uciname = "network", .networkname = "wan", .format = UDIALD_FORMAT_JSON};
 int verbose = 0;
 
+// UCI config section to use for global values
+#define UCI_SECTION_GLOBAL "udiald"
+
 static int udiald_usage(const char *app) {
 	fprintf(stderr,
 			"udiald - UMTS connection manager\n"
@@ -310,6 +313,7 @@ static void udiald_setup_uci(struct udiald_state *state) {
 	if (!(state->uci = ucix_init(state->uciname, 1))) {
 		exit(UDIALD_EINTERNAL);
 	}
+	ucix_add_section(state->uci, state->uciname, UCI_SECTION_GLOBAL, "udiald");
 	/* Reset errno, when running udiald unprivileged, setting up uci
 	 * might cause an ignored error, which could cloud debug
 	 * attempts */
@@ -572,7 +576,7 @@ static void udiald_enter_pin(struct udiald_state *state) {
 		return;
 	}
 
-	const char *failed = udiald_config_get(state, "failed_pin");
+	const char *failed = ucix_get_option(state->uci, state->uciname, UCI_SECTION_GLOBAL, "failed_pin");
 	if (failed && strcmp(pin, failed) == 0) {
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_ESIM, "Not retrying previously failed pin (%s)", failed);
@@ -590,7 +594,7 @@ static void udiald_enter_pin(struct udiald_state *state) {
 	tcflush(state->ctlfd, TCIFLUSH);
 	if (udiald_tty_put(state->ctlfd, b) < 0
 	|| udiald_tty_get(state->ctlfd, &r, NULL, 2500) != UDIALD_AT_OK) {
-		udiald_config_set(state, "failed_pin", pin);
+		ucix_add_option(state->uci, state->uciname, UCI_SECTION_GLOBAL, "failed_pin", pin);
 		if (state->app != UDIALD_APP_PROBE)
 			udiald_exitcode(UDIALD_EUNLOCK, "PIN %s rejected (%s)", pin, udiald_tty_flatten_result(&r));
 		else
