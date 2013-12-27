@@ -325,7 +325,7 @@ int udiald_modem_list_devices(const struct udiald_state *state, struct udiald_de
 		syslog(LOG_ERR, "Error while detecting devices");
 	}
 	if (state->format == UDIALD_FORMAT_JSON) {
-		printf("%s\n", json_object_to_json_string(data.data.dict));
+		printf("%s\n", json_object_to_json_string_ext(data.data.dict, JSON_C_TO_STRING_PRETTY));
 		json_object_put(data.data.dict);
 	}
 	return e;
@@ -437,7 +437,7 @@ int udiald_modem_list_profiles(const struct udiald_state *state) {
 			printf("%s\n", p->name);
 	}
 	if (state->format == UDIALD_FORMAT_JSON) {
-		printf("%s\n", json_object_to_json_string(dict));
+		printf("%s\n", json_object_to_json_string_ext(dict, JSON_C_TO_STRING_PRETTY));
 		json_object_put(dict);
 	}
 	return 0;
