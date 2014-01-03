@@ -1,5 +1,5 @@
 SFLAGS:=--std=gnu99
-WFLAGS:=-Wall -Werror -pedantic
+WFLAGS:=-Wall -Werror
 BINARY:=udiald
 SOURCES:=$(wildcard src/*.c)
 HEADERS:=$(wildcard src/*.h)
